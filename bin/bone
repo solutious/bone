@@ -6,10 +6,37 @@ lib_dir = File.join(BASE_PATH, 'lib')
 $:.unshift lib_dir
 
 require 'drydock'
-require 'bone/api'
+require 'bone/cli'
 
 # Command-line interface for bin/stella
 class Bone::CLI::Definition
   extend Drydock
   
+  trawler :get
+  
+  global :D, :debug, "Enable debug mode" do
+    Drydock.debug true
+  end
+  
+  command :get => Bone::CLI
+  
+  command :set => Bone::CLI
 end
+
+begin
+  Drydock.run!(ARGV, STDIN) if Drydock.run? && !Drydock.has_run?
+rescue Drydock::ArgError, Drydock::OptError => ex
+  STDERR.puts ex.message
+  STDERR.puts ex.usage
+rescue Drydock::InvalidArgument => ex
+  STDERR.puts ex.message
+rescue Drydock::UnknownCommand => ex
+  STDERR.puts "Unknown command: %s" % ex.name
+rescue Interrupt
+  puts $/, "Exiting... "
+  exit 1
+rescue => ex
+  STDERR.puts "ERROR (#{ex.class.to_s}): #{ex.message}"
+  STDERR.puts ex.backtrace if Drydock.debug?
+end
+
