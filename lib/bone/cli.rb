@@ -10,8 +10,12 @@ class Bone::CLI < Drydock::Command
   end
   
   def set
-    #puts "KEYS: " << @argv.inspect
-    puts Bone.set(@argv[0], @argv[1])
+    opts = {}
+    if File.exists?(@argv[1]) && !@option.string
+      @argv[1] = File.readlines(@argv[1]).join
+      opts[:file] = true
+    end
+    puts Bone.set(@argv[0], @argv[1], opts)
   end
   
 end

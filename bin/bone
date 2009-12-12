@@ -21,6 +21,7 @@ class Bone::CLI::Definition
   
   command :get => Bone::CLI
   
+  option :s, :string, "Assume value is a string even if file name exists"
   command :set => Bone::CLI
 end
 

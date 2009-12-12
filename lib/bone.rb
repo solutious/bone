@@ -25,12 +25,8 @@ module Bone
   
   def set(key, value, opts={})
     cid = opts[:cid] || CID
-    if File.exists?(value)
-      value = File.readlines(value).join
-      opts[:file] = true
-    end
     opts[:value] = value
-    response *request( :set, cid, key, opts)
+    response *request(:set, cid, key, opts)
   end
   
   private
