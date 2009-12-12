@@ -1,3 +1,6 @@
+unless defined?(BONE_HOME)
+  BONE_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..') )
+end
 
 module Bone
   extend self
@@ -58,6 +61,23 @@ module Bone
     STDERR.puts ex.message, ex.backtrace# if Drydock.debug?
     exit 1
   end
+  
+  # <tt>require</tt> a library from the vendor directory.
+  # The vendor directory should be organized such
+  # that +name+ and +version+ can be used to create
+  # the path to the library. 
+  #
+  # e.g.
+  # 
+  #     vendor/httpclient-2.1.5.2/httpclient
+  #
+  def self.require_vendor(name, version)
+    path = File.join(BONE_HOME, 'vendor', "#{name}-#{version}", 'lib')
+    $:.unshift path
+    Bone.ld "REQUIRE VENDOR: ", path
+    require name
+  end
+  
   
   module Aware
     def bone(key)

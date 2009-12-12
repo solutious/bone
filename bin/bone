@@ -5,7 +5,10 @@ BASE_PATH = File.expand_path File.join(File.dirname(__FILE__), '..')
 lib_dir = File.join(BASE_PATH, 'lib')
 $:.unshift lib_dir
 
-require 'drydock'
+require 'bone'
+
+Bone.require_vendor 'drydock', '0.6.8'
+
 require 'bone/cli'
 
 # Command-line interface for bin/stella
@@ -19,8 +22,12 @@ class Bone::CLI::Definition
     Bone.enable_debug
   end
   
+  usage "bone get keyname"
+  usage "bone keyname"
   command :get => Bone::CLI
   
+  usage "bone set keyname keyvalue"
+  usage "bone set keyname path/2/file"
   option :s, :string, "Assume value is a string even if file name exists"
   command :set => Bone::CLI
 end
