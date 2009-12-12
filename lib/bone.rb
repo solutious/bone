@@ -1,6 +1,7 @@
 
 module Bone
   extend self
+  APIVERSION = 'v1'.freeze
   
   @debug = false
   class << self
@@ -19,27 +20,46 @@ module Bone
   
   def get(key, opts={})
     cid = opts[:cid] || CID
-    resp = request :get, cid, key
+    response *request(:get, cid, key)
   end
   
   def set(key, value, opts={})
     cid = opts[:cid] || CID
-    value = File.readlines(value).join if File.exists?(value)
-    resp = request :set, cid, key, :value => URI.encode(value)
-    value
+    if File.exists?(value)
+      value = File.readlines(value).join
+      opts[:file] = true
+    end
+    opts[:value] = value
+    response *request( :set, cid, key, opts)
+  end
+  
+  private
+  
+  def response(*args)
+    resp, body = *args
+    Bone.ld resp.inspect, body.inspect
+    if Net::HTTPBadRequest === resp
+      puts body
+      exit 1
+    else
+      body
+    end
   end
   
   def request(action, cid, key, params={})
     params[:cid] = cid
-    uri = "http://#{SOURCE}/#{action}/#{key}?"
+    path = "/#{APIVERSION}/#{action}/#{key}?"
     args = []
-    params.each_pair {|n,v| args << "#{n}=#{URI.encode(v)}" }
-    uri = URI.parse(uri << args.join('&'))
-    Bone.ld "URI: #{uri}"
-    Net::HTTP.get(uri)
-  rescue SocketError => ex
+    params.each_pair {|n,v| args << "#{n}=#{URI.encode(v.to_s)}" }
+    path << args.join('&')
+    Bone.ld "URI: #{path}"
+    host, port = *SOURCE.split(':')
+    req = Net::HTTP.new(host, port || 6043)
+    a, b = req.get(path)
+    [a, b]
+  rescue => ex
     STDERR.puts "No boned"
-    STDERR.puts ex.message, ex.backtrace if Drydock.debug?
+    STDERR.puts ex.message, ex.backtrace# if Drydock.debug?
     exit 1
   end
   
