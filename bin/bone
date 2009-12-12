@@ -30,6 +30,11 @@ class Bone::CLI::Definition
   usage "bone set keyname path/2/file"
   option :s, :string, "Assume value is a string even if file name exists"
   command :set => Bone::CLI
+  
+  usage "bone keys"
+  usage "bone keys keyname"
+  command :keys => Bone::CLI
+  
 end
 
 begin

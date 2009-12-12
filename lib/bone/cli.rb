@@ -18,4 +18,8 @@ class Bone::CLI < Drydock::Command
     puts Bone.set(@argv[0], @argv[1], opts)
   end
   
+  def keys
+    puts Bone.keys @argv[0]
+  end
+  
 end

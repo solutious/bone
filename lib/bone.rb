@@ -1,3 +1,6 @@
+require 'uri'
+require 'net/http'
+
 unless defined?(BONE_HOME)
   BONE_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..') )
 end
@@ -19,31 +22,50 @@ module Bone
   end
   
   SOURCE = (ENV['BONE_SOURCE'] || "localhost:6043").freeze
-  CID = ENV['BONE_CID'].freeze
+  TOKEN = ENV['BONE_TOKEN'].freeze
   
   def get(key, opts={})
-    cid = opts[:cid] || CID
+    cid = opts[:cid] || ENV['BONE_TOKEN'] || TOKEN
     response *request(:get, cid, key)
   end
   
   def set(key, value, opts={})
-    cid = opts[:cid] || CID
+    cid = opts[:cid] || ENV['BONE_TOKEN'] || TOKEN
     opts[:value] = value
     response *request(:set, cid, key, opts)
   end
   
-  private
-  
-  def response(*args)
-    resp, body = *args
-    Bone.ld resp.inspect, body.inspect
-    if Net::HTTPBadRequest === resp
-      puts body
-      exit 1
-    else
-      body
-    end
+  def [](keyname)
+    get(keyname)
   end
+  
+  def []=(keyname, value)
+    set(keyname, value)
+  end
+  
+  def keys(keyname=nil, opts={})
+    cid = opts[:cid] || ENV['BONE_TOKEN'] || TOKEN
+    response *request(:keys, cid, keyname, opts)
+  end
+  
+  # <tt>require</tt> a library from the vendor directory.
+  # The vendor directory should be organized such
+  # that +name+ and +version+ can be used to create
+  # the path to the library. 
+  #
+  # e.g.
+  # 
+  #     vendor/httpclient-2.1.5.2/httpclient
+  #
+  def require_vendor(name, version)
+    path = File.join(BONE_HOME, 'vendor', "#{name}-#{version}", 'lib')
+    $:.unshift path
+    Bone.ld "REQUIRE VENDOR: ", path
+    require name
+  end
+  
+  
+  private
   
   def request(action, cid, key, params={})
     params[:cid] = cid
@@ -58,31 +80,21 @@ module Bone
     [a, b]
   rescue => ex
     STDERR.puts "No boned"
-    STDERR.puts ex.message, ex.backtrace# if Drydock.debug?
+    STDERR.puts ex.message, ex.backtrace if Bone.debug?
     exit 1
   end
   
-  # <tt>require</tt> a library from the vendor directory.
-  # The vendor directory should be organized such
-  # that +name+ and +version+ can be used to create
-  # the path to the library. 
-  #
-  # e.g.
-  # 
-  #     vendor/httpclient-2.1.5.2/httpclient
-  #
-  def self.require_vendor(name, version)
-    path = File.join(BONE_HOME, 'vendor', "#{name}-#{version}", 'lib')
-    $:.unshift path
-    Bone.ld "REQUIRE VENDOR: ", path
-    require name
-  end
-  
-  
-  module Aware
-    def bone(key)
+  def response(*args)
+    resp, body = *args
+    Bone.ld resp.inspect, body.inspect
+    if Net::HTTPBadRequest === resp
+      puts body
+      exit 1
+    else
+      body
     end
   end
   
+
 end
 
