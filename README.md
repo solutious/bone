@@ -25,6 +25,9 @@
     $ bone redis_conf
     config/redis-server.conf
     
+    # Show all available keys
+    $ bone keys
+    
     
 == Ruby Example
 
