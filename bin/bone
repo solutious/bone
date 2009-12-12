@@ -1,0 +1,15 @@
+#!/usr/bin/ruby
+
+# Put our local lib in first place
+BASE_PATH = File.expand_path File.join(File.dirname(__FILE__), '..')
+lib_dir = File.join(BASE_PATH, 'lib')
+$:.unshift lib_dir
+
+require 'drydock'
+require 'bone/api'
+
+# Command-line interface for bin/stella
+class Bone::CLI::Definition
+  extend Drydock
+  
+end
