@@ -16,6 +16,7 @@ class Bone::CLI::Definition
   
   global :D, :debug, "Enable debug mode" do
     Drydock.debug true
+    Bone.enable_debug
   end
   
   command :get => Bone::CLI
