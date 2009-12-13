@@ -1,5 +1,12 @@
 BONE, CHANGES
 
+#### 0.2.1 (2009-12-13) ###############################
+
+* FIXED: Force token generate now works
+* ADDED: Friendly message when no keys
+* ADDED: Quiet mode
+
+
 #### 0.2.0 (2009-12-13) ###############################
 
 * CHANGE: Use POST for set command

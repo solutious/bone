@@ -38,6 +38,7 @@ class Bone::CLI::Definition
   
   about "Set a new key/value pair"
   usage "bone set keyname keyvalue"
+  usage "bone set keyname=keyvalue"
   usage "bone set keyname path/2/file"
   option :s, :string, "Assume value is a string even if file name exists"
   command :set => Bone::CLI

@@ -30,13 +30,30 @@ class Bone::CLI < Drydock::Command
   
   def keys
     check!
-    puts Bone.keys @argv[0]
+    list = Bone.keys(@argv[0])
+    if list.empty? 
+      return if @global.quiet
+      puts "No keys" 
+      puts "Try: bone set keyname=keyvalue"
+    else
+      puts list
+    end
   end
   
   def token
     check!  
-    puts @token
+    if @option.force
+      generate_token_dialog
+    else
+      puts @token
+    end
   rescue Bone::BadBone => ex
+    generate_token_dialog
+    exit 1
+  end
+  
+  private 
+  def generate_token_dialog
     newtoken = Bone.generate_token
     puts newtoken and return if @global.quiet
     puts "Set the BONE_TOKEN environment variable with the following token"

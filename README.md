@@ -33,7 +33,7 @@
 
     require 'bone'
     
-    ENV['BONE_TOKEN'] = Digest::SHA256.hexdigest(rand)
+    ENV['BONE_TOKEN'] = Bone.generate_token
     
     Bone[:cust_id] = 'c397d204aa4e94f566d7f78c'
     Bone[:redis_conf] = File.read('config/redis-server.conf')
@@ -41,6 +41,8 @@
     
 == Installation
 
+    $ sudo gem install bone
+    
 
 == More Information
 
