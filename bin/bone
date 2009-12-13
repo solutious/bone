@@ -15,6 +15,7 @@ require 'bone/cli'
 class Bone::CLI::Definition
   extend Drydock
   
+  default :keys
   trawler :get
   
   global :v, :version, "Display version" do
