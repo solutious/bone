@@ -5,6 +5,7 @@ BONE, CHANGES
 * FIXED: Force token generate now works
 * ADDED: Friendly message when no keys
 * ADDED: Quiet mode
+* ADDED: Support for deleting keys
 
 
 #### 0.2.0 (2009-12-13) ###############################

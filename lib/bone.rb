@@ -32,15 +32,19 @@ module Bone
   
   def get(key, opts={})
     token = opts[:token] || ENV['BONE_TOKEN'] || TOKEN
-    request(:get, token, key)
-    key
+    request(:get, token, key) # returns the response body
   end
   
   def set(key, value, opts={})
     token = opts[:token] || ENV['BONE_TOKEN'] || TOKEN
     opts[:value] = value
     request(:set, token, key, opts)
-    key
+    key # return the key b/c it could be a binary file
+  end
+  
+  def del(key, opts={})
+    token = opts[:token] || ENV['BONE_TOKEN'] || TOKEN
+    request(:del, token, key, opts) # returns the response body
   end
   
   def [](keyname)
@@ -104,17 +108,23 @@ module Bone
     Bone.ld "URI: #{path}"
     Bone.ld "PARAMS: " << params.inspect
     
-    if action == :set
+    case action
+    when :del
+      headers = { 'X-BONE_TOKEN' => token }
+      req = Net::HTTP::Delete.new(path, headers)
+    when :set
       query = {}
       params.each_pair {|n,v| query[n.to_s] = v } 
       req = Net::HTTP::Post.new(path)
       req.set_form_data query
-    else
+    when :get, :keys
       args = []
       params.each_pair {|n,v| args << "#{n}=#{URI.encode(v.to_s)}" }     
       query = [path, args.join('&')].join('?') 
       Bone.ld "GET: #{query}"
       req = Net::HTTP::Get.new(query)
+    else
+      raise Bone::Problem, "Unknown action: #{action}"
     end
     res = Net::HTTP.start(host, port) {|http| http.request(req) }
     case res

@@ -43,6 +43,12 @@ class Bone::CLI::Definition
   option :s, :string, "Assume value is a string even if file name exists"
   command :set => Bone::CLI
   
+  about "Delete a key/value pair"
+  usage "bone del keyname"
+  command :del => Bone::CLI
+  command_alias :del, :rem
+  command_alias :del, :delete
+  
   about "Display all available keys"
   usage "bone keys"
   usage "bone keys keyname"

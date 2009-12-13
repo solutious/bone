@@ -15,6 +15,12 @@ class Bone::CLI < Drydock::Command
     puts Bone.get(@argv.first)
   end
   
+  def del
+    check!
+    raise "No key specified" unless @argv.first
+    puts Bone.del(@argv.first)
+  end
+  
   def set
     check!
     opts = {:token => @token }
