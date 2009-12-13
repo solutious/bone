@@ -17,6 +17,11 @@ class Bone::CLI::Definition
   
   trawler :get
   
+  global :v, :version, "Display version" do
+    puts "Bone: #{Bone::VERSION} (api: #{Bone::APIVERSION})"
+    exit
+  end
+  
   global :D, :debug, "Enable debug mode" do
     Drydock.debug true
     Bone.enable_debug

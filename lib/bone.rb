@@ -7,6 +7,7 @@ end
 
 module Bone
   extend self
+  VERSION = "0.1.0"
   APIVERSION = 'v1'.freeze
   
   @debug = false
