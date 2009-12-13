@@ -12,6 +12,8 @@ class Bone::CLI < Drydock::Command
   def set
     opts = {}
     keyname, value = *(@argv.size == 1 ? @argv.first.split('=') : @argv)
+    raise "No key specified" unless keyname
+    raise "No value specified" unless value
     if File.exists?(value) && !@option.string
       value = File.readlines(value).join
       opts[:file] = true
