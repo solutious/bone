@@ -1,5 +1,15 @@
 BONE, CHANGES
 
-#### 0.1.0 (2009-12-??) ###############################
+#### 0.2.0 (2009-12-13) ###############################
+
+* CHANGE: Use POST for set command
+* CHANGE: Set command returns key name instead of value
+* ADDED: Better error handling
+* ADDED: Friendly message when no token available.
+* ADDED: bone token command
+* ADDED: Bone.digest for generating valid tokens
+
+
+#### 0.1.0 (2009-12-12) ###############################
 
 Initial release

@@ -7,11 +7,16 @@ end
 
 module Bone
   extend self
-  VERSION = "0.1.0"
+  VERSION = "0.2.0"
   APIVERSION = 'v1'.freeze
   
+  class Problem < RuntimeError; end
+  class BadBone < Problem; end
+  
+  @digest_type = nil  # set at the end
   @debug = false
   class << self
+    attr_accessor :digest_type
     def enable_debug()  @debug = true  end
     def disable_debug() @debug = false end
     def debug?()        @debug == true end
@@ -26,14 +31,16 @@ module Bone
   TOKEN = ENV['BONE_TOKEN'].freeze
   
   def get(key, opts={})
-    cid = opts[:cid] || ENV['BONE_TOKEN'] || TOKEN
-    response *request(:get, cid, key)
+    token = opts[:token] || ENV['BONE_TOKEN'] || TOKEN
+    request(:get, token, key)
+    key
   end
   
   def set(key, value, opts={})
-    cid = opts[:cid] || ENV['BONE_TOKEN'] || TOKEN
+    token = opts[:token] || ENV['BONE_TOKEN'] || TOKEN
     opts[:value] = value
-    response *request(:set, cid, key, opts)
+    request(:set, token, key, opts)
+    key
   end
   
   def [](keyname)
@@ -45,8 +52,8 @@ module Bone
   end
   
   def keys(keyname=nil, opts={})
-    cid = opts[:cid] || ENV['BONE_TOKEN'] || TOKEN
-    response *request(:keys, cid, keyname, opts)
+    token = opts[:token] || ENV['BONE_TOKEN'] || TOKEN
+    request(:keys, token, keyname, opts)
   end
   
   # <tt>require</tt> a library from the vendor directory.
@@ -65,37 +72,69 @@ module Bone
     require name
   end
   
+  def valid_token?(val)
+    is_sha256? val
+  end
+  
+  def is_sha1?(val)
+    val.to_s.match /\A[0-9a-f]{40}\z/
+  end
+  
+  def is_sha256?(val)
+    val.to_s.match /\A[0-9a-f]{64}\z/
+  end
+  
+  def digest(val)
+    @digest_type.hexdigest val
+  end
+  
+  def generate_token
+    srand
+    digest [`hostname`, `w`, Time.now, rand].join(':')
+  end
   
   private
   
-  def request(action, cid, key, params={})
-    params[:cid] = cid
-    path = "/#{APIVERSION}/#{action}/#{key}?"
-    args = []
-    params.each_pair {|n,v| args << "#{n}=#{URI.encode(v.to_s)}" }
-    path << args.join('&')
-    Bone.ld "URI: #{path}"
+  def request(action, token, key, params={})
+    params[:token] = token
+    path = "/#{APIVERSION}/#{action}/#{key}"
     host, port = *SOURCE.split(':')
-    req = Net::HTTP.new(host, port || 6043)
-    a, b = req.get(path)
-    [a, b]
-  rescue => ex
-    STDERR.puts "No boned"
-    STDERR.puts ex.message, ex.backtrace if Bone.debug?
-    exit 1
-  end
-  
-  def response(*args)
-    resp, body = *args
-    Bone.ld resp.inspect, body.inspect
-    if Net::HTTPBadRequest === resp
-      puts body
-      exit 1
+    port ||= 6043
+    
+    Bone.ld "URI: #{path}"
+    Bone.ld "PARAMS: " << params.inspect
+    
+    if action == :set
+      query = {}
+      params.each_pair {|n,v| query[n.to_s] = v } 
+      req = Net::HTTP::Post.new(path)
+      req.set_form_data query
     else
-      body
+      args = []
+      params.each_pair {|n,v| args << "#{n}=#{URI.encode(v.to_s)}" }     
+      query = [path, args.join('&')].join('?') 
+      Bone.ld "GET: #{query}"
+      req = Net::HTTP::Get.new(query)
+    end
+    res = Net::HTTP.start(host, port) {|http| http.request(req) }
+    case res
+    when Net::HTTPSuccess, Net::HTTPRedirection
+      res.body
+    else
+      raise Bone::Problem, "#{res.body} (#{res.code} #{res.message})"
     end
   end
   
-
+  def determine_digest_type
+    if RUBY_PLATFORM == "java"
+      require 'openssl'
+      Bone.digest_type = OpenSSL::Digest::SHA256
+    else
+      require 'digest'
+      Bone.digest_type = Digest::SHA256
+    end
+  end
+  
+  @digest_type = determine_digest_type
 end
 

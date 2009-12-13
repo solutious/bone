@@ -18,6 +18,9 @@ class Bone::CLI::Definition
   default :keys
   trawler :get
   
+  global :t, :token, String, "Specify a bone token (override BONE_TOKEN environment variable)"
+  global :q, :quiet, "Less output"
+  
   global :v, :version, "Display version" do
     puts "Bone: #{Bone::VERSION} (api: #{Bone::APIVERSION})"
     exit
@@ -28,23 +31,40 @@ class Bone::CLI::Definition
     Bone.enable_debug
   end
   
+  about "Get a value for the given key"
   usage "bone get keyname"
   usage "bone keyname"
   command :get => Bone::CLI
   
+  about "Set a new key/value pair"
   usage "bone set keyname keyvalue"
   usage "bone set keyname path/2/file"
   option :s, :string, "Assume value is a string even if file name exists"
   command :set => Bone::CLI
   
+  about "Display all available keys"
   usage "bone keys"
   usage "bone keys keyname"
   command :keys => Bone::CLI
+  
+  about "Display the token or generate a new one"
+  usage "bone token"
+  option :f, :force, "Force generating a new token"
+  command :token => Bone::CLI
   
 end
 
 begin
   Drydock.run!(ARGV, STDIN) if Drydock.run? && !Drydock.has_run?
+rescue Bone::BadBone => ex
+  puts "Invalid token: #{ex.message}"
+  puts "Run the following command to generate a new one:", "$ #{$0} token"
+  STDERR.puts ex.backtrace if Bone.debug?
+  exit 1
+rescue Bone::Problem => ex
+  puts ex.message
+  STDERR.puts ex.backtrace if Bone.debug?
+  exit 1
 rescue Drydock::ArgError, Drydock::OptError => ex
   STDERR.puts ex.message
   STDERR.puts ex.usage
