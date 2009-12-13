@@ -2,12 +2,12 @@
 
 **Bones it!**
 
-== Features
+## Features
 
 * Store variables and files remotely
 * Simple interface
 
-== CLI Example
+## CLI Example
     
     # Specify arbitrary keys and values. 
     $ bone set cust_id c397d204aa4e94f566d7f78c
@@ -29,7 +29,7 @@
     $ bone keys
     
     
-== Ruby Example
+## Ruby Example
 
     require 'bone'
     
@@ -39,24 +39,24 @@
     Bone[:redis_conf] = File.read('config/redis-server.conf')
     
     
-== Installation
+## Installation
 
     $ sudo gem install bone
     
 
-== More Information
+## More Information
 
 
-== Credits
+## Credits
 
 * Delano Mandelbaum (http://solutious.com)
 
 
-== Thanks 
+## Thanks 
 
 * Kalin Harvey for the early feedback. 
 
 
-== License
+## License
 
 See LICENSE.txt
