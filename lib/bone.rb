@@ -7,7 +7,7 @@ end
 
 module Bone
   extend self
-  VERSION = "0.2.0"
+  VERSION = "0.2.1"
   APIVERSION = 'v1'.freeze
   
   class Problem < RuntimeError; end

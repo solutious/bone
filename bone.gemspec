@@ -1,7 +1,7 @@
 @spec = Gem::Specification.new do |s|
   s.name = "bone"
   s.rubyforge_project = 'bone'
-  s.version = "0.2.0"
+  s.version = "0.2.1"
   s.summary = "Get Bones"
   s.description = s.summary
   s.author = "Delano Mandelbaum"
@@ -21,6 +21,8 @@
   CHANGES.txt
   LICENSE.txt
   README.md
+  Rakefile
+  Rudyfile
   bin/bone
   bone.gemspec
   lib/bone.rb
