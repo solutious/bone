@@ -18,7 +18,26 @@
   # = MANIFEST =
   # git ls-files
   s.files = %w(
-  
+  CHANGES.txt
+  LICENSE.txt
+  README.md
+  bin/bone
+  bone.gemspec
+  lib/bone.rb
+  lib/bone/cli.rb
+  try/bone.rb
+  vendor/drydock-0.6.8/CHANGES.txt
+  vendor/drydock-0.6.8/LICENSE.txt
+  vendor/drydock-0.6.8/README.rdoc
+  vendor/drydock-0.6.8/Rakefile
+  vendor/drydock-0.6.8/bin/example
+  vendor/drydock-0.6.8/drydock.gemspec
+  vendor/drydock-0.6.8/lib/drydock.rb
+  vendor/drydock-0.6.8/lib/drydock/console.rb
+  vendor/drydock-0.6.8/lib/drydock/mixins.rb
+  vendor/drydock-0.6.8/lib/drydock/mixins/object.rb
+  vendor/drydock-0.6.8/lib/drydock/mixins/string.rb
+  vendor/drydock-0.6.8/lib/drydock/screen.rb
   )
 
   
