@@ -21,7 +21,7 @@ class Bone::CLI::Definition
   global :t, :token, String, "Specify a bone token (override BONE_TOKEN environment variable)"
   global :q, :quiet, "Less output"
   
-  global :v, :version, "Display version" do
+  global :V, :version, "Display version" do
     puts "Bone: #{Bone::VERSION} (api: #{Bone::APIVERSION})"
     exit
   end
