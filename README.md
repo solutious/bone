@@ -27,13 +27,14 @@
     
     # Show all available keys
     $ bone keys
-    
+    cust_id
+    redis_conf
     
 ## Ruby Example
 
     require 'bone'
     
-    ENV['BONE_TOKEN'] = Bone.generate_token
+    ENV['BONE_TOKEN'] ||= Bone.generate_token
     
     Bone[:cust_id] = 'c397d204aa4e94f566d7f78c'
     Bone[:redis_conf] = File.read('config/redis-server.conf')

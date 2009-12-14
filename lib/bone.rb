@@ -133,6 +133,8 @@ module Bone
     else
       raise Bone::Problem, "#{res.body} (#{res.code} #{res.message})"
     end
+  rescue Errno::ECONNREFUSED => ex
+    raise Bone::Problem, "No boned"
   end
   
   def determine_digest_type
