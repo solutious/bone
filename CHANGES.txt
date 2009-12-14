@@ -1,5 +1,10 @@
 BONE, CHANGES
 
+#### 0.2.2 (2009-12-??) ###############################
+
+* CHANGE: Friendly error when no boned
+
+
 #### 0.2.1 (2009-12-13) ###############################
 
 * FIXED: Force token generate now works
