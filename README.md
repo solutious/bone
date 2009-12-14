@@ -38,12 +38,19 @@
     Bone[:cust_id] = 'c397d204aa4e94f566d7f78c'
     Bone[:redis_conf] = File.read('config/redis-server.conf')
     
+    Bone[:cust_id]                    # => "c397d204aa4e94f566d7f78c"
+    Bone[:redis_conf]                 # => "# Redis configuration file example..."
+    
     
 ## Installation
 
     $ sudo gem install bone
+    $ bone token
+    $ export BONE_TOKEN=YOURTOKEN
     
+You also need to running instance of [boned](http://github.com/solutious/boned) (the bone daemon).
 
+    
 ## More Information
 
 
