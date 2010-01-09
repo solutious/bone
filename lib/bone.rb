@@ -7,7 +7,7 @@ end
 
 module Bone
   extend self
-  VERSION = "0.2.2"
+  VERSION = "0.2.3"
   APIVERSION = 'v1'.freeze
   
   class Problem < RuntimeError; end
@@ -30,7 +30,17 @@ module Bone
   SOURCE = (ENV['BONE_SOURCE'] || "localhost:6043").freeze
   TOKEN = ENV['BONE_TOKEN'].freeze
   
+  # Get a key from the boned server. Same as `get!`  
+  # but does not raise an exception for an unknown key.
   def get(key, opts={})
+    get! key, opts
+  rescue Bone::Problem
+    nil
+  end
+  
+  # Get a key from the boned server. Raises an exception 
+  # for an unknown key.
+  def get!(key, opts={})
     token = opts[:token] || ENV['BONE_TOKEN'] || TOKEN
     request(:get, token, key) # returns the response body
   end
