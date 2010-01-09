@@ -7,7 +7,7 @@ end
 
 module Bone
   extend self
-  VERSION = "0.2.1"
+  VERSION = "0.2.2"
   APIVERSION = 'v1'.freeze
   
   class Problem < RuntimeError; end
@@ -57,7 +57,8 @@ module Bone
   
   def keys(keyname=nil, opts={})
     token = opts[:token] || ENV['BONE_TOKEN'] || TOKEN
-    request(:keys, token, keyname, opts)
+    k = request(:keys, token, keyname, opts)
+    k.split($/)
   end
   
   # <tt>require</tt> a library from the vendor directory.
@@ -96,6 +97,7 @@ module Bone
     srand
     digest [`hostname`, `w`, Time.now, rand].join(':')
   end
+  alias_method :token, :generate_token
   
   private
   

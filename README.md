@@ -1,6 +1,6 @@
 ## Bone - 0.2 ##
 
-**Bones it!**
+**Environment variables in the "visible mass of condensed water vapour floating in the atmosphere, typically high above the ground."**
 
 ## Features
 
