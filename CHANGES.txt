@@ -3,7 +3,9 @@ BONE, CHANGES
 #### 0.2.3 (2010-01-09) ###############################
 
 * CHANGE: Bone.get and Bone[] no longer raise an exception for unknown keys
+* CHANGE: Bone.set and Bone[]= no longer raise an exception for unknown keys
 * ADDED: Bone.get! to raise exception for unknown keys. 
+* ADDED: Bone.set! to raise exception for unknown keys. 
 
 
 #### 0.2.2 (2010-01-08) ###############################

@@ -46,6 +46,12 @@ module Bone
   end
   
   def set(key, value, opts={})
+    set! key, value, opts
+  rescue Bone::Problem
+    nil
+  end
+  
+  def set!(key, value, opts={})
     token = opts[:token] || ENV['BONE_TOKEN'] || TOKEN
     opts[:value] = value
     request(:set, token, key, opts)
