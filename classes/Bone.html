@@ -48,19 +48,21 @@
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000008">[]</a></li>
-              <li><a href="#M000009">[]=</a></li>
-              <li><a href="#M000007">del</a></li>
-              <li><a href="#M000015">digest</a></li>
-              <li><a href="#M000016">generate_token</a></li>
+              <li><a href="#M000010">[]</a></li>
+              <li><a href="#M000011">[]=</a></li>
+              <li><a href="#M000009">del</a></li>
+              <li><a href="#M000017">digest</a></li>
+              <li><a href="#M000018">generate_token</a></li>
               <li><a href="#M000005">get</a></li>
-              <li><a href="#M000013">is_sha1?</a></li>
-              <li><a href="#M000014">is_sha256?</a></li>
-              <li><a href="#M000010">keys</a></li>
-              <li><a href="#M000011">require_vendor</a></li>
-              <li><a href="#M000006">set</a></li>
-              <li><a href="#M000017">token</a></li>
-              <li><a href="#M000012">valid_token?</a></li>
+              <li><a href="#M000006">get!</a></li>
+              <li><a href="#M000015">is_sha1?</a></li>
+              <li><a href="#M000016">is_sha256?</a></li>
+              <li><a href="#M000012">keys</a></li>
+              <li><a href="#M000013">require_vendor</a></li>
+              <li><a href="#M000007">set</a></li>
+              <li><a href="#M000008">set!</a></li>
+              <li><a href="#M000019">token</a></li>
+              <li><a href="#M000014">valid_token?</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -77,7 +79,7 @@
                   <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>VERSION</td>
                     <td>=</td>
-                    <td class='context-item-value'>&quot;0.2.2&quot;</td>
+                    <td class='context-item-value'>&quot;0.2.3&quot;</td>
                   </tr>
                   <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>APIVERSION</td>
@@ -164,69 +166,69 @@
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000008'>
-                <a name='M000008'>      </a>
+              <div class='method public-instance' id='method-M000010'>
+                <a name='M000010'>      </a>
                 <div class='synopsis'>
                   <span class='name'>[]</span>
                   <span class='arguments'>(keyname)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000008-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000010-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000008-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 50</span>&#x000A;50:   <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">keyname</span>)&#x000A;51:     <span class="ruby-identifier">get</span>(<span class="ruby-identifier">keyname</span>)&#x000A;52:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000010-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 66</span>&#x000A;66:   <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">keyname</span>)&#x000A;67:     <span class="ruby-identifier">get</span>(<span class="ruby-identifier">keyname</span>)&#x000A;68:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000009'>
-                <a name='M000009'>      </a>
+              <div class='method public-instance' id='method-M000011'>
+                <a name='M000011'>      </a>
                 <div class='synopsis'>
                   <span class='name'>[]=</span>
                   <span class='arguments'>(keyname, value)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000009-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000011-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000009-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 54</span>&#x000A;54:   <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">keyname</span>, <span class="ruby-identifier">value</span>)&#x000A;55:     <span class="ruby-identifier">set</span>(<span class="ruby-identifier">keyname</span>, <span class="ruby-identifier">value</span>)&#x000A;56:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000011-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 70</span>&#x000A;70:   <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">keyname</span>, <span class="ruby-identifier">value</span>)&#x000A;71:     <span class="ruby-identifier">set</span>(<span class="ruby-identifier">keyname</span>, <span class="ruby-identifier">value</span>)&#x000A;72:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000007'>
-                <a name='M000007'>      </a>
+              <div class='method public-instance' id='method-M000009'>
+                <a name='M000009'>      </a>
                 <div class='synopsis'>
                   <span class='name'>del</span>
                   <span class='arguments'>(key, opts={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000007-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000009-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000007-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 45</span>&#x000A;45:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">del</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">opts</span>={})&#x000A;46:     <span class="ruby-identifier">token</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:token</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'BONE_TOKEN'</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">TOKEN</span>&#x000A;47:     <span class="ruby-identifier">request</span>(<span class="ruby-identifier">:del</span>, <span class="ruby-identifier">token</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">opts</span>) <span class="ruby-comment cmt"># returns the response body</span>&#x000A;48:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000009-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 61</span>&#x000A;61:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">del</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">opts</span>={})&#x000A;62:     <span class="ruby-identifier">token</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:token</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'BONE_TOKEN'</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">TOKEN</span>&#x000A;63:     <span class="ruby-identifier">request</span>(<span class="ruby-identifier">:del</span>, <span class="ruby-identifier">token</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">opts</span>) <span class="ruby-comment cmt"># returns the response body</span>&#x000A;64:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000015'>
-                <a name='M000015'>      </a>
+              <div class='method public-instance' id='method-M000017'>
+                <a name='M000017'>      </a>
                 <div class='synopsis'>
                   <span class='name'>digest</span>
                   <span class='arguments'>(val)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000015-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000017-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000015-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 92</span>&#x000A;92:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">digest</span>(<span class="ruby-identifier">val</span>)&#x000A;93:     <span class="ruby-ivar">@digest_type</span>.<span class="ruby-identifier">hexdigest</span> <span class="ruby-identifier">val</span>&#x000A;94:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000017-source'>     <span class="ruby-comment cmt"># File lib/bone.rb, line 108</span>&#x000A;108:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">digest</span>(<span class="ruby-identifier">val</span>)&#x000A;109:     <span class="ruby-ivar">@digest_type</span>.<span class="ruby-identifier">hexdigest</span> <span class="ruby-identifier">val</span>&#x000A;110:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000016'>
-                <a name='M000016'>      </a>
+              <div class='method public-instance' id='method-M000018'>
+                <a name='M000018'>      </a>
                 <div class='synopsis'>
                   <span class='name'>generate_token</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000016-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000018-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000016-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 96</span>&#x000A;96:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">generate_token</span>&#x000A;97:     <span class="ruby-identifier">srand</span>&#x000A;98:     <span class="ruby-identifier">digest</span> [<span class="ruby-value">`hostname`</span>, <span class="ruby-value">`w`</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>, <span class="ruby-identifier">rand</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">':'</span>)&#x000A;99:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000018-source'>     <span class="ruby-comment cmt"># File lib/bone.rb, line 112</span>&#x000A;112:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">generate_token</span>&#x000A;113:     <span class="ruby-identifier">srand</span>&#x000A;114:     <span class="ruby-identifier">digest</span> [<span class="ruby-value">`hostname`</span>, <span class="ruby-value">`w`</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>, <span class="ruby-identifier">rand</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">':'</span>)&#x000A;115:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-M000005'>
@@ -235,54 +237,78 @@
                   <span class='name'>get</span>
                   <span class='arguments'>(key, opts={})</span>
                 </div>
+                <div class='description'>
+                  <p>
+                  Get a key from the boned server. Same as `get!` but does not raise an
+                  exception for an unknown key.
+                  </p>
+                </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000005-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000005-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 33</span>&#x000A;33:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">opts</span>={})&#x000A;34:     <span class="ruby-identifier">token</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:token</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'BONE_TOKEN'</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">TOKEN</span>&#x000A;35:     <span class="ruby-identifier">request</span>(<span class="ruby-identifier">:get</span>, <span class="ruby-identifier">token</span>, <span class="ruby-identifier">key</span>) <span class="ruby-comment cmt"># returns the response body</span>&#x000A;36:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000005-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 35</span>&#x000A;35:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">opts</span>={})&#x000A;36:     <span class="ruby-identifier">get!</span> <span class="ruby-identifier">key</span>, <span class="ruby-identifier">opts</span>&#x000A;37:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">Problem</span>&#x000A;38:     <span class="ruby-keyword kw">nil</span>&#x000A;39:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000013'>
-                <a name='M000013'>      </a>
+              <div class='method public-instance' id='method-M000006'>
+                <a name='M000006'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>get!</span>
+                  <span class='arguments'>(key, opts={})</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Get a key from the boned server. Raises an exception for an unknown key.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000006-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000006-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 43</span>&#x000A;43:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get!</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">opts</span>={})&#x000A;44:     <span class="ruby-identifier">token</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:token</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'BONE_TOKEN'</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">TOKEN</span>&#x000A;45:     <span class="ruby-identifier">request</span>(<span class="ruby-identifier">:get</span>, <span class="ruby-identifier">token</span>, <span class="ruby-identifier">key</span>) <span class="ruby-comment cmt"># returns the response body</span>&#x000A;46:   <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000015'>
+                <a name='M000015'>      </a>
                 <div class='synopsis'>
                   <span class='name'>is_sha1?</span>
                   <span class='arguments'>(val)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000013-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000015-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000013-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 84</span>&#x000A;84:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_sha1?</span>(<span class="ruby-identifier">val</span>)&#x000A;85:     <span class="ruby-identifier">val</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">match</span> <span class="ruby-regexp re">/\A[0-9a-f]{40}\z/</span>&#x000A;86:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000015-source'>     <span class="ruby-comment cmt"># File lib/bone.rb, line 100</span>&#x000A;100:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_sha1?</span>(<span class="ruby-identifier">val</span>)&#x000A;101:     <span class="ruby-identifier">val</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">match</span> <span class="ruby-regexp re">/\A[0-9a-f]{40}\z/</span>&#x000A;102:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000014'>
-                <a name='M000014'>      </a>
+              <div class='method public-instance' id='method-M000016'>
+                <a name='M000016'>      </a>
                 <div class='synopsis'>
                   <span class='name'>is_sha256?</span>
                   <span class='arguments'>(val)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000014-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000016-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000014-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 88</span>&#x000A;88:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_sha256?</span>(<span class="ruby-identifier">val</span>)&#x000A;89:     <span class="ruby-identifier">val</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">match</span> <span class="ruby-regexp re">/\A[0-9a-f]{64}\z/</span>&#x000A;90:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000016-source'>     <span class="ruby-comment cmt"># File lib/bone.rb, line 104</span>&#x000A;104:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_sha256?</span>(<span class="ruby-identifier">val</span>)&#x000A;105:     <span class="ruby-identifier">val</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">match</span> <span class="ruby-regexp re">/\A[0-9a-f]{64}\z/</span>&#x000A;106:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000010'>
-                <a name='M000010'>      </a>
+              <div class='method public-instance' id='method-M000012'>
+                <a name='M000012'>      </a>
                 <div class='synopsis'>
                   <span class='name'>keys</span>
                   <span class='arguments'>(keyname=nil, opts={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000010-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000012-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000010-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 58</span>&#x000A;58:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keys</span>(<span class="ruby-identifier">keyname</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">opts</span>={})&#x000A;59:     <span class="ruby-identifier">token</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:token</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'BONE_TOKEN'</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">TOKEN</span>&#x000A;60:     <span class="ruby-identifier">k</span> = <span class="ruby-identifier">request</span>(<span class="ruby-identifier">:keys</span>, <span class="ruby-identifier">token</span>, <span class="ruby-identifier">keyname</span>, <span class="ruby-identifier">opts</span>)&#x000A;61:     <span class="ruby-identifier">k</span>.<span class="ruby-identifier">split</span>(<span class="ruby-identifier">$/</span>)&#x000A;62:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000012-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 74</span>&#x000A;74:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keys</span>(<span class="ruby-identifier">keyname</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">opts</span>={})&#x000A;75:     <span class="ruby-identifier">token</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:token</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'BONE_TOKEN'</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">TOKEN</span>&#x000A;76:     <span class="ruby-identifier">k</span> = <span class="ruby-identifier">request</span>(<span class="ruby-identifier">:keys</span>, <span class="ruby-identifier">token</span>, <span class="ruby-identifier">keyname</span>, <span class="ruby-identifier">opts</span>)&#x000A;77:     <span class="ruby-identifier">k</span>.<span class="ruby-identifier">split</span>(<span class="ruby-identifier">$/</span>)&#x000A;78:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000011'>
-                <a name='M000011'>      </a>
+              <div class='method public-instance' id='method-M000013'>
+                <a name='M000013'>      </a>
                 <div class='synopsis'>
                   <span class='name'>require_vendor</span>
                   <span class='arguments'>(name, version)</span>
@@ -299,48 +325,61 @@
                   <pre>vendor/httpclient-2.1.5.2/httpclient</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000011-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000013-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000011-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 73</span>&#x000A;73:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">require_vendor</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">version</span>)&#x000A;74:     <span class="ruby-identifier">path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">BONE_HOME</span>, <span class="ruby-value str">'vendor'</span>, <span class="ruby-node">&quot;#{name}-#{version}&quot;</span>, <span class="ruby-value str">'lib'</span>)&#x000A;75:     <span class="ruby-identifier">$:</span>.<span class="ruby-identifier">unshift</span> <span class="ruby-identifier">path</span>&#x000A;76:     <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">ld</span> <span class="ruby-value str">&quot;REQUIRE VENDOR: &quot;</span>, <span class="ruby-identifier">path</span>&#x000A;77:     <span class="ruby-identifier">require</span> <span class="ruby-identifier">name</span>&#x000A;78:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000013-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 89</span>&#x000A;89:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">require_vendor</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">version</span>)&#x000A;90:     <span class="ruby-identifier">path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">BONE_HOME</span>, <span class="ruby-value str">'vendor'</span>, <span class="ruby-node">&quot;#{name}-#{version}&quot;</span>, <span class="ruby-value str">'lib'</span>)&#x000A;91:     <span class="ruby-identifier">$:</span>.<span class="ruby-identifier">unshift</span> <span class="ruby-identifier">path</span>&#x000A;92:     <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">ld</span> <span class="ruby-value str">&quot;REQUIRE VENDOR: &quot;</span>, <span class="ruby-identifier">path</span>&#x000A;93:     <span class="ruby-identifier">require</span> <span class="ruby-identifier">name</span>&#x000A;94:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000006'>
-                <a name='M000006'>      </a>
+              <div class='method public-instance' id='method-M000007'>
+                <a name='M000007'>      </a>
                 <div class='synopsis'>
                   <span class='name'>set</span>
                   <span class='arguments'>(key, value, opts={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000006-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000007-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000006-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 38</span>&#x000A;38:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>, <span class="ruby-identifier">opts</span>={})&#x000A;39:     <span class="ruby-identifier">token</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:token</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'BONE_TOKEN'</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">TOKEN</span>&#x000A;40:     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:value</span>] = <span class="ruby-identifier">value</span>&#x000A;41:     <span class="ruby-identifier">request</span>(<span class="ruby-identifier">:set</span>, <span class="ruby-identifier">token</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">opts</span>)&#x000A;42:     <span class="ruby-identifier">key</span> <span class="ruby-comment cmt"># return the key b/c it could be a binary file</span>&#x000A;43:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000007-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 48</span>&#x000A;48:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>, <span class="ruby-identifier">opts</span>={})&#x000A;49:     <span class="ruby-identifier">set!</span> <span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>, <span class="ruby-identifier">opts</span>&#x000A;50:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">Problem</span>&#x000A;51:     <span class="ruby-keyword kw">nil</span>&#x000A;52:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000017'>
-                <a name='M000017'>      </a>
+              <div class='method public-instance' id='method-M000008'>
+                <a name='M000008'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>set!</span>
+                  <span class='arguments'>(key, value, opts={})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000008-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000008-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 54</span>&#x000A;54:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set!</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>, <span class="ruby-identifier">opts</span>={})&#x000A;55:     <span class="ruby-identifier">token</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:token</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'BONE_TOKEN'</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">TOKEN</span>&#x000A;56:     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:value</span>] = <span class="ruby-identifier">value</span>&#x000A;57:     <span class="ruby-identifier">request</span>(<span class="ruby-identifier">:set</span>, <span class="ruby-identifier">token</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">opts</span>)&#x000A;58:     <span class="ruby-identifier">key</span> <span class="ruby-comment cmt"># return the key b/c it could be a binary file</span>&#x000A;59:   <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000019'>
+                <a name='M000019'>      </a>
                 <div class='synopsis'>
                   <span class='name'>token</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Alias for <a href="Bone.html#M000016">generate_token</a>
+                  Alias for <a href="Bone.html#M000018">generate_token</a>
                   </p>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000012'>
-                <a name='M000012'>      </a>
+              <div class='method public-instance' id='method-M000014'>
+                <a name='M000014'>      </a>
                 <div class='synopsis'>
                   <span class='name'>valid_token?</span>
                   <span class='arguments'>(val)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000012-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000014-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000012-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 80</span>&#x000A;80:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_token?</span>(<span class="ruby-identifier">val</span>)&#x000A;81:     <span class="ruby-identifier">is_sha256?</span> <span class="ruby-identifier">val</span>&#x000A;82:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000014-source'>    <span class="ruby-comment cmt"># File lib/bone.rb, line 96</span>&#x000A;96:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_token?</span>(<span class="ruby-identifier">val</span>)&#x000A;97:     <span class="ruby-identifier">is_sha256?</span> <span class="ruby-identifier">val</span>&#x000A;98:   <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
