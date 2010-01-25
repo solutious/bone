@@ -15,7 +15,7 @@
   
   s.executables = %w[bone]
   
-  s.add_dependency 'boned',    '= 0.2.0'
+  s.add_dependency 'boned',    '= 0.2.4'
   
   # = MANIFEST =
   # git ls-files

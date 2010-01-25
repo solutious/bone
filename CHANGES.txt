@@ -1,5 +1,11 @@
 BONE, CHANGES
 
+#### 0.2.4 (2010-01-25) ###############################
+
+* CHANGE: URI path starts with /bone/v1 instead of just /v1
+* CHANGE: Depends on Boned 0.2.4
+
+
 #### 0.2.3 (2010-01-09) ###############################
 
 * CHANGE: Bone.get and Bone[] no longer raise an exception for unknown keys

@@ -119,7 +119,7 @@ module Bone
   
   def request(action, token, key, params={})
     params[:token] = token
-    path = "/#{APIVERSION}/#{action}/#{key}"
+    path = "/bone/#{APIVERSION}/#{action}/#{key}"
     host, port = *SOURCE.split(':')
     port ||= 6043
     
