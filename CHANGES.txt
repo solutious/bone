@@ -1,5 +1,9 @@
 BONE, CHANGES
 
+#### 0.2.5 (2010-01-25) ###############################
+
+* ADDED: Support for HTTPS
+
 #### 0.2.4 (2010-01-25) ###############################
 
 * CHANGE: URI path starts with /bone/v1 instead of just /v1
