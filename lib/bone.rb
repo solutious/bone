@@ -153,6 +153,7 @@ module Bone
     end
     http = Net::HTTP.new(host, port)
     http.use_ssl = true if uri.scheme == 'https'
+    http.verify_mode = OpenSSL::SSL::VERIFY_PEER 
     res = http.request(req) 
     case res
     when Net::HTTPSuccess, Net::HTTPRedirection
