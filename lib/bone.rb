@@ -1,5 +1,6 @@
 require 'uri'
 require 'net/http'
+require 'net/https'
 
 unless defined?(BONE_HOME)
   BONE_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..') )
@@ -27,7 +28,7 @@ module Bone
     end
   end
   
-  SOURCE = (ENV['BONE_SOURCE'] || "localhost:6043").freeze
+  SOURCE = (ENV['BONE_SOURCE'] || "http://localhost:6043").freeze
   TOKEN = ENV['BONE_TOKEN'].freeze
   
   # Get a key from the boned server. Same as `get!`  
@@ -120,9 +121,15 @@ module Bone
   def request(action, token, key, params={})
     params[:token] = token
     path = "/bone/#{APIVERSION}/#{action}/#{key}"
-    host, port = *SOURCE.split(':')
-    port ||= 6043
+    source = SOURCE
+    unless source.match(/\Ahttp/)
+      source = ['http:', SOURCE].join('//')
+    end
+    uri = URI.parse source
+    host, port = uri.host, uri.port
+    port ||= (uri.scheme == 'https' ? 443 : 6043)
     
+    Bone.ld "SOURCE: #{uri.to_s}"
     Bone.ld "URI: #{path}"
     Bone.ld "PARAMS: " << params.inspect
     
@@ -144,7 +151,9 @@ module Bone
     else
       raise Bone::Problem, "Unknown action: #{action}"
     end
-    res = Net::HTTP.start(host, port) {|http| http.request(req) }
+    http = Net::HTTP.new(host, port)
+    http.use_ssl = true if uri.scheme == 'https'
+    res = http.request(req) 
     case res
     when Net::HTTPSuccess, Net::HTTPRedirection
       res.body
