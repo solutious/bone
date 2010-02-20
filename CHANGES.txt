@@ -1,5 +1,11 @@
 BONE, CHANGES
 
+#### 0.2.6 (2010-02-20) ###############################
+
+* CHANGE: Remove hanna dependency
+* CHANGE: Remove boned dependency
+
+
 #### 0.2.5 (2010-01-25) ###############################
 
 * ADDED: Support for HTTPS
