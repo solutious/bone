@@ -21,23 +21,35 @@ end
 
 module Bone
   APIVERSION = 'v2'.freeze unless defined?(Bone::APIVERSION)
+  @source = URI.parse(ENV['BONE_SOURCE'] || 'https://api.bonery.com')
   
   class << self
     attr_accessor :debug
+    attr_reader :source, :api
+    
+    def source=(v)
+      @source = URI.parse v
+      select_api
+    end
+    
+    def info *msg
+      STDERR.puts *msg
+    end
     
     def ld *msg
-      STDERR.puts *msg if debug
+      info *msg if debug
     end
     
+    # /v2/[name]
     def get(name)
       carefully do
-        Bone::API.get name
+        Bone.api.get name
       end
     end
+    alias_method :[], :get
     
     def carefully
       begin
-        Bone::API.debug_output $stderr if Bone.debug
         yield
       rescue => ex
         Bone.ld "#{ex.class}: #{ex.message}", ex.backtrace
@@ -45,27 +57,47 @@ module Bone
       end
     end
     
-    alias_method :[], :get
-    
+    def select_api
+      begin
+        case Bone.source.scheme
+        when 'redis'
+          @api = Bone::API::Redis
+        when 'http'
+          @api = Bone::API::HTTP
+        else
+          raise RuntimeError, "Bad source: #{Bone.source}"
+        end
+      rescue => ex
+        Bone.info Bone.source, "#{ex.class}: #{ex.message}", ex.backtrace
+        exit
+      end
+    end
   end
   
   module API
-    include HTTParty
-    
-    base_uri ENV['BONE_SOURCE'] || 'https://api.bonery.com'
-    
-    class << self 
-      
-      def get(name, query={})
-        super(path(APIVERSION, name), :query => query)
-      end
-      
-      private 
+    class << self
       def path(*parts)
-        '/' << parts.flatten.join('/')
+        "/#{APIVERSION}/" << parts.flatten.join('/')
+      end
+    end
+    
+    module HTTP
+      include HTTParty
+      base_uri Bone.source.to_s
+      class << self 
+        def get(name, query={})
+          debug_output $stderr if Bone.debug
+          super(Bone::API.path(name), :query => query)
+        end
+      end
+    end
+    
+    module Redis
+      module InstanceMethods
       end
     end
     
   end
   
+  select_api
 end

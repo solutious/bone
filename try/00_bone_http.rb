@@ -1,4 +1,4 @@
-# try try/00_bone.rb
+# try try/00_bone_http.rb
 
 ENV['BONE_SOURCE'] = 'http://bogus:3073'
 require 'bone'
@@ -7,13 +7,18 @@ require 'bone'
 
 ## Can set the base uri via ENV 
 ## (NOTE: must be set before the require)
-Bone::API.base_uri
+Bone.source.to_s
 #=> 'http://bogus:3073'
 
 ## Can set the base uri directly
-Bone::API.base_uri "http://localhost:3073"
-Bone::API.base_uri
+Bone.source = "http://localhost:3073"
+Bone.source.to_s
 #=> "http://localhost:3073"
+
+## Knows to use the redis HTTP
+Bone.api
+#=> Bone::API::HTTP
+
 
 ## Empty key returns nil
 Bone['bogus']
