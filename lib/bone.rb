@@ -26,7 +26,7 @@ module Bone
   class << self
     attr_accessor :debug
     attr_reader :apis, :api, :source
-    attr_writer :token
+    attr_writer :token, :secret
     
     def source=(v)
       @source = URI.parse v
@@ -34,7 +34,11 @@ module Bone
     end
     
     def token
-      @token || ENV['BONE_TOKEN']
+      @token || @source.user || ENV['BONE_TOKEN']
+    end
+    
+    def secret 
+      @secret || @source.password || ENV['BONE_SECRET']
     end
     
     def info *msg
@@ -103,9 +107,28 @@ module Bone
         end
       end
       
+      def register_token(token, secret)
+        carefully do
+          Bone.api.register_token token, secret
+        end
+      end
+      
+      def unregister_token(token)
+        carefully do
+          Bone.api.unregister_token token
+        end
+      end
+      
+      def token?(token)
+        carefully do
+          Bone.api.token? token
+        end
+      end
+      
       private 
       def raise_errors
         raise RuntimeError, "No token" unless Bone.token
+        raise RuntimeError, "Invalid token" unless Bone.api.token?(Bone.token)
       end
     end
     
@@ -113,8 +136,14 @@ module Bone
       def path(*parts)
         "/#{APIVERSION}/" << parts.flatten.join('/')
       end
-      def fullkey(name)
+      def bonekey(name)
         [APIVERSION, 'bone', Bone.token, name, 'value'].join(':')
+      end
+      def tokenskey
+        [APIVERSION, 'bone', 'tokens'].join(':')
+      end
+      def tokenkey(token)
+        [APIVERSION, 'bone', 'token', token].join(':')
       end
     end
     extend Bone::API::Helpers
@@ -138,16 +167,29 @@ module Bone
       extend self
       attr_accessor :redis
       def get(name)
-        redis.get Bone::API.fullkey(name)
+        redis.get Bone::API.bonekey(name)
       end
       def set(name, value)
-        redis.set Bone::API.fullkey(name), value
+        redis.set Bone::API.bonekey(name), value
       end
       def keys(filter='*')
-        redis.keys Bone::API.fullkey(filter)
+        redis.keys Bone::API.bonekey(filter)
       end
       def key?(name)
-        redis.exists Bone::API.fullkey(name)
+        redis.exists Bone::API.bonekey(name)
+      end
+      def unregister_token(token)
+        redis.zrem Bone::API.tokenskey, token
+        redis.del Bone::API.tokenkey(token)
+      end
+      def register_token(token, secret)
+        raise RuntimeError, "Token exists" if token?(token)
+        redis.zadd Bone::API.tokenskey, Time.now.utc.to_i, token
+        redis.set Bone::API.tokenkey(token), secret
+        true
+      end
+      def token?(token)
+        redis.exists Bone::API.tokenkey(token)
       end
       def connect
         require 'redis'
@@ -159,20 +201,31 @@ module Bone
     
     module Memory
       extend self
-      @data = {}
+      @data, @tokens = {}, {}
       def get(name)
-        @data[Bone::API.fullkey(name)]
+        @data[Bone::API.bonekey(name)]
       end
       def set(name, value)
-        @data[Bone::API.fullkey(name)] = value.to_s
+        @data[Bone::API.bonekey(name)] = value.to_s
       end
       def keys(filter='*')
         filter = '.+' if filter == '*'
-        filter = Bone::API.fullkey(filter)
+        filter = Bone::API.bonekey(filter)
         @data.keys.select { |name| name =~ /#{filter}/ }
       end
       def key?(name)
-        @data.has_key?(Bone::API.fullkey(name))
+        @data.has_key?(Bone::API.bonekey(name))
+      end
+      def unregister_token(token)
+        @tokens.delete token
+      end
+      def register_token(token, secret)
+        raise RuntimeError, "Token exists" if token?(token)
+        @tokens[token] = secret
+        true
+      end
+      def token?(token)
+        @tokens.key?(token)
       end
       def connect
       end

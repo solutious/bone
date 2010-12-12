@@ -1,6 +1,6 @@
-# try try/11_bone_redis.rb
+# try try/12_bone_memory.rb
 
-ENV['BONE_SOURCE'] = 'redis://testtoken@bogus1:8045'
+ENV['BONE_SOURCE'] = 'memory://testtoken@bogus1'
 require 'bone'
 Bone.debug = true
 Bone.unregister_token 'testtoken'
@@ -8,16 +8,16 @@ Bone.unregister_token 'testtoken'
 ## Can set the base uri via ENV 
 ## (NOTE: must be set before the require)
 Bone.source.to_s
-#=> 'redis://testtoken@bogus1:8045'
+#=> 'memory://testtoken@bogus1'
 
 ## Can set the base uri directly
-Bone.source = 'redis://testtoken@localhost:8045'
+Bone.source = 'memory://testtoken@localhost'
 Bone.source.to_s
-#=> "redis://testtoken@localhost:8045"
+#=> "memory://testtoken@localhost"
 
 ## Knows to use the redis API
 Bone.api
-#=> Bone::API::Redis
+#=> Bone::API::Memory
 
 ## Can register a token
 Bone.unregister_token 'testtoken'
