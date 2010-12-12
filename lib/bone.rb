@@ -26,7 +26,7 @@ module Bone
   class << self
     attr_accessor :debug
     attr_reader :apis, :api, :source
-    attr_writer :token, :secret
+    attr_writer :token, :secret, :digest_type
     
     def source=(v)
       @source = URI.parse v
@@ -49,6 +49,22 @@ module Bone
       info *msg if debug
     end
     
+    def is_sha1?(val)
+      val.to_s.match /\A[0-9a-f]{40}\z/
+    end
+
+    def is_sha256?(val)
+      val.to_s.match /\A[0-9a-f]{64}\z/
+    end
+
+    def digest(val)
+      @digest_type.hexdigest val
+    end
+
+    def random_digest
+      digest [$$, self.object_id, `hostname`, `w`, Time.now.to_f].join(':')
+    end
+    
     def carefully
       begin
         yield
@@ -66,6 +82,16 @@ module Bone
       rescue => ex
         Bone.info "#{ex.class}: #{ex.message}", ex.backtrace
         exit
+      end
+    end
+    
+    def select_digest_type
+      if RUBY_PLATFORM == "java"
+        require 'openssl'
+        @digest_type = OpenSSL::Digest::SHA1
+      else
+        require 'digest'
+        @digest_type = Digest::SHA1
       end
     end
     
@@ -107,15 +133,15 @@ module Bone
         end
       end
       
-      def register_token(token, secret)
+      def generate_token(secret)
         carefully do
-          Bone.api.register_token token, secret
+          Bone.api.generate_token secret
         end
       end
       
-      def unregister_token(token)
+      def destroy_token(token)
         carefully do
-          Bone.api.unregister_token token
+          Bone.api.destroy_token token
         end
       end
       
@@ -178,15 +204,17 @@ module Bone
       def key?(name)
         redis.exists Bone::API.bonekey(name)
       end
-      def unregister_token(token)
+      def destroy_token(token)
         redis.zrem Bone::API.tokenskey, token
         redis.del Bone::API.tokenkey(token)
       end
-      def register_token(token, secret)
-        raise RuntimeError, "Token exists" if token?(token)
+      def generate_token(secret)
+        begin 
+          token = Bone.random_digest
+        end while token?(token)
         redis.zadd Bone::API.tokenskey, Time.now.utc.to_i, token
         redis.set Bone::API.tokenkey(token), secret
-        true
+        token
       end
       def token?(token)
         redis.exists Bone::API.tokenkey(token)
@@ -216,13 +244,15 @@ module Bone
       def key?(name)
         @data.has_key?(Bone::API.bonekey(name))
       end
-      def unregister_token(token)
+      def destroy_token(token)
         @tokens.delete token
       end
-      def register_token(token, secret)
-        raise RuntimeError, "Token exists" if token?(token)
+      def generate_token(secret)
+        begin 
+          token = Bone.random_digest
+        end while token?(token)
         @tokens[token] = secret
-        true
+        token
       end
       def token?(token)
         @tokens.key?(token)
@@ -236,4 +266,5 @@ module Bone
   
   extend Bone::API::ClassMethods
   select_api
+  select_digest_type
 end

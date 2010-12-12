@@ -1,31 +1,30 @@
 # try try/11_bone_redis.rb
 
-ENV['BONE_SOURCE'] = 'redis://testtoken@bogus1:8045'
+ENV['BONE_SOURCE'] = 'redis://localhost:8045'
 require 'bone'
 Bone.debug = true
-Bone.unregister_token 'testtoken'
 
 ## Can set the base uri via ENV 
 ## (NOTE: must be set before the require)
 Bone.source.to_s
-#=> 'redis://testtoken@bogus1:8045'
-
-## Can set the base uri directly
-Bone.source = 'redis://testtoken@localhost:8045'
-Bone.source.to_s
-#=> "redis://testtoken@localhost:8045"
+#=> 'redis://localhost:8045'
 
 ## Knows to use the redis API
 Bone.api
 #=> Bone::API::Redis
 
 ## Can register a token
-Bone.unregister_token 'testtoken'
-Bone.register_token 'testtoken', :secret
-#=> true
+@token = Bone.generate_token :secret
+@token.size
+#=> 40
+
+## Can set the base uri directly
+Bone.source = "redis://#{@token}@localhost:8045"
+Bone.source.to_s
+#=> "redis://#{@token}@localhost:8045"
 
 ## Knows a valid token
-Bone.token? 'testtoken'
+Bone.token? @token
 #=> true
 
 ## Knows an invalid token
@@ -51,7 +50,7 @@ Bone['valid']
 
 ## Knows all keys
 Bone.keys
-#=> ['v2:bone:testtoken:valid:value']
+#=> ["v2:bone:#{@token}:valid:value"]
 
 ## Knows when a key exists
 Bone.key? :valid
@@ -60,3 +59,6 @@ Bone.key? :valid
 ## Knows when a key doesn't exist
 Bone.key? :bogus
 #=> false
+
+
+Bone.destroy_token @token
