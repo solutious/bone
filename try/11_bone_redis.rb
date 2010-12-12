@@ -22,5 +22,26 @@ Bone['bogus']
 #=> nil
 
 ## Make request to API directly
-Bone::API.get 'bogus'
-##=> nil
+Bone.api.get 'bogus'
+#=> nil
+
+## Set a value
+Bone['valid'] = true
+Bone['valid']
+#=> 'true'
+
+## Get a value
+Bone['valid']
+#=> 'true'
+
+## Knows all keys
+Bone.keys
+#=> ['v2:bone:valid:value']
+
+## Knows when a key exists
+Bone.key? :valid
+#=> true
+
+## Knows when a key doesn't exist
+Bone.key? :bogus
+#=> false

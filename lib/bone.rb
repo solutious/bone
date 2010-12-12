@@ -40,14 +40,6 @@ module Bone
       info *msg if debug
     end
     
-    # /v2/[name]
-    def get(name)
-      carefully do
-        Bone.api.get name
-      end
-    end
-    alias_method :[], :get
-    
     def carefully
       begin
         yield
@@ -60,6 +52,7 @@ module Bone
     def select_api
       begin
         @api = Bone.apis[Bone.source.scheme.to_sym]
+        @api.connect
         raise RuntimeError, "Bad source: #{Bone.source}" if api.nil?
       rescue => ex
         Bone.info "#{ex.class}: #{ex.message}", ex.backtrace
@@ -72,20 +65,54 @@ module Bone
     end
   end
   
+  
   module API
-    class << self
+    module ClassMethods
+      def get(name)
+        carefully do
+          Bone.api.get name
+        end
+      end
+      alias_method :[], :get
+
+      def set(name, value)
+        carefully do
+          Bone.api.set name, value
+        end
+      end
+      alias_method :[]=, :set
+
+      def keys(filter='*')
+        carefully do
+          Bone.api.keys filter
+        end
+      end
+      
+      def key?(name)
+        carefully do
+          Bone.api.key? name
+        end
+      end
+      
+    end
+    
+    module Helpers
       def path(*parts)
         "/#{APIVERSION}/" << parts.flatten.join('/')
       end
     end
+    include Bone::API::Helpers
     
     module HTTP
       include HTTParty
       base_uri Bone.source.to_s
       class << self 
+        # /v2/[name]
         def get(name, query={})
           debug_output $stderr if Bone.debug
           super(Bone::API.path(name), :query => query)
+        end
+        def connect
         end
       end
       Bone.register_api :http, self
@@ -93,19 +120,38 @@ module Bone
     
     module Redis
       extend self
-      
+      attr_accessor :redis
+      def get(name)
+        redis.get rediskey(name)
+      end
+      def set(name, value)
+        redis.set rediskey(name),  value
+      end
+      def keys(filter='*')
+        redis.keys rediskey(filter)
+      end
+      def key?(name)
+        redis.exists rediskey(name)
+      end
+      def connect
+        require 'redis'
+        require 'uri/redis'
+        self.redis = ::Redis.connect(:url => Bone.source.to_s)
+      end
+      def rediskey(name)
+        [APIVERSION, 'bone', name, 'value'].join(':')
+      end
       Bone.register_api :redis, self
     end
     
     module Memory
       extend self
       @data = {}
-      attr_reader :data
       def get(name)
         @data[name.to_s]
       end
       def set(name, value)
-        @data[name.to_s] = value
+        @data[name.to_s] = value.to_s
       end
       def keys
         @data.keys
@@ -113,11 +159,13 @@ module Bone
       def key?(name)
         @data.has_key?(name.to_s)
       end
-
+      def connect
+      end
       Bone.register_api :memory, self
     end
     
   end
   
+  extend Bone::API::ClassMethods
   select_api
 end
