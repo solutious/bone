@@ -1,5 +1,6 @@
 # try try/11_bone_redis.rb
 
+ENV['BONE_TOKEN'] = 'testtoken'
 ENV['BONE_SOURCE'] = 'redis://bogus1:8045'
 require 'bone'
 
@@ -36,7 +37,7 @@ Bone['valid']
 
 ## Knows all keys
 Bone.keys
-#=> ['v2:bone:valid:value']
+#=> ['v2:bone:testtoken:valid:value']
 
 ## Knows when a key exists
 Bone.key? :valid

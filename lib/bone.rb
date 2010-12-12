@@ -25,11 +25,16 @@ module Bone
   @apis = {}
   class << self
     attr_accessor :debug
-    attr_reader :source, :api, :apis
+    attr_reader :apis, :api, :source
+    attr_writer :token
     
     def source=(v)
       @source = URI.parse v
       select_api
+    end
+    
+    def token
+      @token || ENV['BONE_TOKEN']
     end
     
     def info *msg
@@ -70,6 +75,7 @@ module Bone
     module ClassMethods
       def get(name)
         carefully do
+          raise_errors
           Bone.api.get name
         end
       end
@@ -77,6 +83,7 @@ module Bone
 
       def set(name, value)
         carefully do
+          raise_errors
           Bone.api.set name, value
         end
       end
@@ -84,24 +91,33 @@ module Bone
 
       def keys(filter='*')
         carefully do
+          raise_errors
           Bone.api.keys filter
         end
       end
       
       def key?(name)
         carefully do
+          raise_errors
           Bone.api.key? name
         end
       end
       
+      private 
+      def raise_errors
+        raise RuntimeError, "No token" unless Bone.token
+      end
     end
     
     module Helpers
       def path(*parts)
         "/#{APIVERSION}/" << parts.flatten.join('/')
       end
+      def fullkey(name)
+        [APIVERSION, 'bone', Bone.token, name, 'value'].join(':')
+      end
     end
-    include Bone::API::Helpers
+    extend Bone::API::Helpers
     
     module HTTP
       include HTTParty
@@ -122,24 +138,21 @@ module Bone
       extend self
       attr_accessor :redis
       def get(name)
-        redis.get rediskey(name)
+        redis.get Bone::API.fullkey(name)
       end
       def set(name, value)
-        redis.set rediskey(name),  value
+        redis.set Bone::API.fullkey(name), value
       end
       def keys(filter='*')
-        redis.keys rediskey(filter)
+        redis.keys Bone::API.fullkey(filter)
       end
       def key?(name)
-        redis.exists rediskey(name)
+        redis.exists Bone::API.fullkey(name)
       end
       def connect
         require 'redis'
         require 'uri/redis'
         self.redis = ::Redis.connect(:url => Bone.source.to_s)
-      end
-      def rediskey(name)
-        [APIVERSION, 'bone', name, 'value'].join(':')
       end
       Bone.register_api :redis, self
     end
@@ -148,16 +161,18 @@ module Bone
       extend self
       @data = {}
       def get(name)
-        @data[name.to_s]
+        @data[Bone::API.fullkey(name)]
       end
       def set(name, value)
-        @data[name.to_s] = value.to_s
+        @data[Bone::API.fullkey(name)] = value.to_s
       end
-      def keys
-        @data.keys
+      def keys(filter='*')
+        filter = '.+' if filter == '*'
+        filter = Bone::API.fullkey(filter)
+        @data.keys.select { |name| name =~ /#{filter}/ }
       end
       def key?(name)
-        @data.has_key?(name.to_s)
+        @data.has_key?(Bone::API.fullkey(name))
       end
       def connect
       end
