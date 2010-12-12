@@ -22,10 +22,10 @@ end
 module Bone
   APIVERSION = 'v2'.freeze unless defined?(Bone::APIVERSION)
   @source = URI.parse(ENV['BONE_SOURCE'] || 'https://api.bonery.com')
-  
+  @apis = {}
   class << self
     attr_accessor :debug
-    attr_reader :source, :api
+    attr_reader :source, :api, :apis
     
     def source=(v)
       @source = URI.parse v
@@ -59,18 +59,16 @@ module Bone
     
     def select_api
       begin
-        case Bone.source.scheme
-        when 'redis'
-          @api = Bone::API::Redis
-        when 'http'
-          @api = Bone::API::HTTP
-        else
-          raise RuntimeError, "Bad source: #{Bone.source}"
-        end
+        @api = Bone.apis[Bone.source.scheme.to_sym]
+        raise RuntimeError, "Bad source: #{Bone.source}" if api.nil?
       rescue => ex
-        Bone.info Bone.source, "#{ex.class}: #{ex.message}", ex.backtrace
+        Bone.info "#{ex.class}: #{ex.message}", ex.backtrace
         exit
       end
+    end
+    
+    def register_api(scheme, klass)
+      Bone.apis[scheme.to_sym] = klass
     end
   end
   
@@ -90,11 +88,33 @@ module Bone
           super(Bone::API.path(name), :query => query)
         end
       end
+      Bone.register_api :http, self
     end
     
     module Redis
-      module InstanceMethods
+      extend self
+      
+      Bone.register_api :redis, self
+    end
+    
+    module Memory
+      extend self
+      @data = {}
+      attr_reader :data
+      def get(name)
+        @data[name.to_s]
       end
+      def set(name, value)
+        @data[name.to_s] = value
+      end
+      def keys
+        @data.keys
+      end
+      def key?(name)
+        @data.has_key?(name.to_s)
+      end
+
+      Bone.register_api :memory, self
     end
     
   end
