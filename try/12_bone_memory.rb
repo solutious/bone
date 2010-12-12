@@ -36,7 +36,7 @@ Bone['bogus']
 #=> nil
 
 ## Make request to API directly
-Bone.api.get 'bogus'
+Bone.api.get Bone.token, 'bogus'
 #=> nil
 
 ## Set a value

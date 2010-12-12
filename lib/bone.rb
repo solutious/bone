@@ -4,7 +4,7 @@ unless defined?(BONE_HOME)
   BONE_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..') )
 end
 
-module Bone
+class Bone
   module VERSION
     def self.to_s
       load_config
@@ -19,7 +19,7 @@ module Bone
 end
 
 
-module Bone
+class Bone
   APIVERSION = 'v2'.freeze unless defined?(Bone::APIVERSION)
   @source = URI.parse(ENV['BONE_SOURCE'] || 'https://api.bonery.com')
   @apis = {}
@@ -65,15 +65,6 @@ module Bone
       digest [$$, self.object_id, `hostname`, `w`, Time.now.to_f].join(':')
     end
     
-    def carefully
-      begin
-        yield
-      rescue => ex
-        Bone.ld "#{ex.class}: #{ex.message}", ex.backtrace
-        nil
-      end
-    end
-    
     def select_api
       begin
         @api = Bone.apis[Bone.source.scheme.to_sym]
@@ -104,9 +95,38 @@ module Bone
   module API
     module ClassMethods
       def get(name)
+        new(Bone.token).get name
+      end
+      alias_method :[], :get
+      def set(name, value)
+        new(Bone.token).set name, value
+      end
+      alias_method :[]=, :set
+      def keys(filter='*')
+        new(Bone.token).keys filter
+      end
+      def key?(name)
+        new(Bone.token).key? name
+      end
+      def generate_token(secret)
+        new(Bone.token).generate_token secret
+      end
+      def destroy_token(token)
+        new(Bone.token).destroy_token token
+      end
+      def token?(token)
+        new(Bone.token).token? token
+      end
+    end
+    module InstanceMethods
+      attr_accessor :token
+      def initialize(t)
+        @token = t
+      end
+      def get(name)
         carefully do
           raise_errors
-          Bone.api.get name
+          Bone.api.get token, name
         end
       end
       alias_method :[], :get
@@ -114,7 +134,7 @@ module Bone
       def set(name, value)
         carefully do
           raise_errors
-          Bone.api.set name, value
+          Bone.api.set token, name, value
         end
       end
       alias_method :[]=, :set
@@ -122,14 +142,14 @@ module Bone
       def keys(filter='*')
         carefully do
           raise_errors
-          Bone.api.keys filter
+          Bone.api.keys token, filter
         end
       end
       
       def key?(name)
         carefully do
           raise_errors
-          Bone.api.key? name
+          Bone.api.key? token, name
         end
       end
       
@@ -153,8 +173,16 @@ module Bone
       
       private 
       def raise_errors
-        raise RuntimeError, "No token" unless Bone.token
-        raise RuntimeError, "Invalid token" unless Bone.api.token?(Bone.token)
+        raise RuntimeError, "No token" unless token
+        raise RuntimeError, "Invalid token (#{token})" if !Bone.api.token?(token)
+      end
+      def carefully
+        begin
+          yield
+        rescue => ex
+          Bone.ld "#{ex.class}: #{ex.message}", ex.backtrace
+          nil
+        end
       end
     end
     
@@ -162,8 +190,8 @@ module Bone
       def path(*parts)
         "/#{APIVERSION}/" << parts.flatten.join('/')
       end
-      def bonekey(name)
-        [APIVERSION, 'bone', Bone.token, name, 'value'].join(':')
+      def bonekey(token, name)
+        [APIVERSION, 'bone', token, name, 'value'].join(':')
       end
       def tokenskey
         [APIVERSION, 'bone', 'tokens'].join(':')
@@ -179,7 +207,7 @@ module Bone
       base_uri Bone.source.to_s
       class << self 
         # /v2/[name]
-        def get(name, query={})
+        def get(token, name, query={})
           debug_output $stderr if Bone.debug
           super(Bone::API.path(name), :query => query)
         end
@@ -192,17 +220,18 @@ module Bone
     module Redis
       extend self
       attr_accessor :redis
-      def get(name)
-        redis.get Bone::API.bonekey(name)
+      def get(token, name)
+        redis.get Bone::API.bonekey(token, name)
       end
-      def set(name, value)
-        redis.set Bone::API.bonekey(name), value
+      def set(token, name, value)
+        redis.set Bone::API.bonekey(token, name), value.to_s
+        value.to_s
       end
-      def keys(filter='*')
-        redis.keys Bone::API.bonekey(filter)
+      def keys(token, filter='*')
+        redis.keys Bone::API.bonekey(token, filter)
       end
-      def key?(name)
-        redis.exists Bone::API.bonekey(name)
+      def key?(token, name)
+        redis.exists Bone::API.bonekey(token, name)
       end
       def destroy_token(token)
         redis.zrem Bone::API.tokenskey, token
@@ -230,19 +259,19 @@ module Bone
     module Memory
       extend self
       @data, @tokens = {}, {}
-      def get(name)
-        @data[Bone::API.bonekey(name)]
+      def get(token, name)
+        @data[Bone::API.bonekey(token, name)]
       end
-      def set(name, value)
-        @data[Bone::API.bonekey(name)] = value.to_s
+      def set(token, name, value)
+        @data[Bone::API.bonekey(token, name)] = value.to_s
       end
-      def keys(filter='*')
+      def keys(token, filter='*')
         filter = '.+' if filter == '*'
-        filter = Bone::API.bonekey(filter)
+        filter = Bone::API.bonekey(token, filter)
         @data.keys.select { |name| name =~ /#{filter}/ }
       end
-      def key?(name)
-        @data.has_key?(Bone::API.bonekey(name))
+      def key?(token, name)
+        @data.has_key?(Bone::API.bonekey(token, name))
       end
       def destroy_token(token)
         @tokens.delete token
@@ -264,6 +293,7 @@ module Bone
     
   end
   
+  include Bone::API::InstanceMethods
   extend Bone::API::ClassMethods
   select_api
   select_digest_type
