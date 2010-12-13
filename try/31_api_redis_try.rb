@@ -1,4 +1,4 @@
-# try try/11_bone_redis.rb
+# try try/31_api_redis_try.rb
 
 ENV['BONE_SOURCE'] = 'redis://localhost:8045'
 require 'bone'

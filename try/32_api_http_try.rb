@@ -1,4 +1,4 @@
-# try try/00_bone_http.rb
+# try try/32_api_http_try.rb
 
 ENV['BONE_TOKEN'] = 'testtoken'
 ENV['BONE_SOURCE'] = 'http://bogus:3073'

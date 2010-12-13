@@ -1,4 +1,4 @@
-# try try/11_bone_redis.rb
+# try try/30_api_redis_try.rb
 
 ENV['BONE_SOURCE'] = 'memory://localhost'
 require 'bone'
