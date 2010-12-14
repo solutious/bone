@@ -11,10 +11,15 @@ Bone.source = 'redis://localhost:8045'
 Bone.api
 #=> Bone::API::Redis
 
-## Can register a token
-@token = Bone.generate_token :secret
-@token.size
+## Can generate a token
+t = Bone.generate_token :secret
+t.size
 #=> 40
+
+## Can register a token
+@token = Bone.register_token 'atoken', :secret
+@token
+#=> 'atoken'
 
 ## Can set the base uri directly
 Bone.source = "redis://#{@token}@localhost:8045"

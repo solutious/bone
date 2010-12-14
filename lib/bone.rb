@@ -116,6 +116,9 @@ class Bone
       def key?(name)
         new(Bone.token).key? name
       end
+      def register_token(token, secret)
+        new(Bone.token).register_token token, secret
+      end
       def generate_token(secret)
         new(Bone.token).generate_token secret
       end
@@ -158,6 +161,12 @@ class Bone
         carefully do
           raise_errors
           Bone.api.key? token, name
+        end
+      end
+      
+      def register_token(token, secret)
+        carefully do
+          Bone.api.register_token token, secret
         end
       end
       
@@ -215,8 +224,6 @@ class Bone
           debug_output $stderr if Bone.debug
           super(Bone::API.path(name), :query => query)
         end
-        def connect
-        end
       end
       Bone.register_api :http, self
       Bone.register_api :https, self
@@ -243,10 +250,18 @@ class Bone
         Token.tokens.delete token
         Token.new(token).secret.destroy!
       end
+      def register_token(token, secret)
+        raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
+        Token.tokens.add Time.now.utc.to_i, token
+        t = Token.new(token).secret = secret
+        token
+      end
       def generate_token(secret)
         begin 
           token = Bone.random_digest
-        end while token?(token)
+          attempts ||= 10
+        end while token?(token) && !(attempts -= 1).zero?
+        raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
         Token.tokens.add Time.now.utc.to_i, token
         t = Token.new(token).secret = secret
         token
@@ -277,10 +292,13 @@ class Bone
         string :secret
         zset :keys
         class_zset :tokens
-        attr_reader :token
-        def initialize(token)
-          @token = token
+        attr_reader :token, :bucket
+        def initialize(token, bucket=:global)
+          @token, @bucket = token, bucket
           initialize_redis_objects
+        end
+        def index
+          [token, bucket].join(':')
         end
       end
       Bone.register_api :redis, self
@@ -306,10 +324,16 @@ class Bone
       def destroy_token(token)
         @tokens.delete token
       end
+      def register_token(token, secret)
+        raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
+        @tokens[token] = secret
+        token
+      end
       def generate_token(secret)
         begin 
           token = Bone.random_digest
-        end while token?(token)
+          attemps ||= 10
+        end while token?(token) && !(attempts -= 1).zero?
         @tokens[token] = secret
         token
       end

@@ -13,10 +13,15 @@ Bone.source.to_s
 Bone.api
 #=> Bone::API::Memory
 
-## Can register a token
-@token = Bone.generate_token :secret
-@token.size
+## Can generate a token
+t = Bone.generate_token :secret
+t.size
 #=> 40
+
+## Can register a token
+@token = Bone.register_token 'atoken', :secret
+@token
+#=> 'atoken'
 
 ## Can set the base uri directly
 Bone.source = "memory://#{@token}@localhost"
