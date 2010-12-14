@@ -198,9 +198,6 @@ class Bone
       def path(*parts)
         "/#{APIVERSION}/" << parts.flatten.join('/')
       end
-      def bonekey(token, name)
-        [prefix, token, name, 'value'].join(':')
-      end
       def prefix(*parts)
         parts.flatten!
         parts.unshift *[APIVERSION, 'bone']
@@ -293,18 +290,18 @@ class Bone
       extend self
       @data, @tokens = {}, {}
       def get(token, name)
-        @data[Bone::API.bonekey(token, name)]
+        @data[Bone::API.prefix(token, name)]
       end
       def set(token, name, value)
-        @data[Bone::API.bonekey(token, name)] = value.to_s
+        @data[Bone::API.prefix(token, name)] = value.to_s
       end
       def keys(token, filter='*')
         filter = '.+' if filter == '*'
-        filter = Bone::API.bonekey(token, filter)
+        filter = Bone::API.prefix(token, filter)
         @data.keys.select { |name| name =~ /#{filter}/ }
       end
       def key?(token, name)
-        @data.has_key?(Bone::API.bonekey(token, name))
+        @data.has_key?(Bone::API.prefix(token, name))
       end
       def destroy_token(token)
         @tokens.delete token

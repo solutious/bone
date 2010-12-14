@@ -50,7 +50,7 @@ Bone['valid']
 
 ## Knows all keys
 Bone.keys
-#=> ["v2:bone:#{@token}:valid:value"]
+#=> ["v2:bone:#{@token}:valid"]
 
 ## Knows when a key exists
 Bone.key? :valid
