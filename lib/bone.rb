@@ -1,8 +1,16 @@
-require 'httparty'
 
 unless defined?(BONE_HOME)
   BONE_HOME = File.expand_path(File.join(File.dirname(__FILE__), '..') )
 end
+
+local_libs = %w{familia}
+local_libs.each { |dir| 
+  a = File.join(BONE_HOME, '..', '..', 'opensource', dir, 'lib')
+  $:.unshift a
+}
+
+require 'httparty'
+require 'familia'
 
 class Bone
   module VERSION
@@ -68,8 +76,8 @@ class Bone
     def select_api
       begin
         @api = Bone.apis[Bone.source.scheme.to_sym]
-        @api.connect
         raise RuntimeError, "Bad source: #{Bone.source}" if api.nil?
+        @api.connect
       rescue => ex
         Bone.info "#{ex.class}: #{ex.message}", ex.backtrace
         exit
@@ -174,7 +182,7 @@ class Bone
       private 
       def raise_errors
         raise RuntimeError, "No token" unless token
-        raise RuntimeError, "Invalid token (#{token})" if !Bone.api.token?(token)
+        #raise RuntimeError, "Invalid token (#{token})" if !Bone.api.token?(token)
       end
       def carefully
         begin
@@ -191,13 +199,12 @@ class Bone
         "/#{APIVERSION}/" << parts.flatten.join('/')
       end
       def bonekey(token, name)
-        [APIVERSION, 'bone', token, name, 'value'].join(':')
+        [prefix, token, name, 'value'].join(':')
       end
-      def tokenskey
-        [APIVERSION, 'bone', 'tokens'].join(':')
-      end
-      def tokenkey(token)
-        [APIVERSION, 'bone', 'token', token].join(':')
+      def prefix(*parts)
+        parts.flatten!
+        parts.unshift *[APIVERSION, 'bone']
+        parts.join(':')
       end
     end
     extend Bone::API::Helpers
@@ -215,43 +222,69 @@ class Bone
         end
       end
       Bone.register_api :http, self
+      Bone.register_api :https, self
     end
     
     module Redis
       extend self
       attr_accessor :redis
       def get(token, name)
-        redis.get Bone::API.bonekey(token, name)
+        Key.new(token, name).value.get   # get returns nil if not set
       end
       def set(token, name, value)
-        redis.set Bone::API.bonekey(token, name), value.to_s
+        Key.new(token, name).value = value
+        Token.new(token).keys.add Time.now.utc.to_f, name
         value.to_s
       end
       def keys(token, filter='*')
-        redis.keys Bone::API.bonekey(token, filter)
+        Token.new(token).keys.to_a
       end
       def key?(token, name)
-        redis.exists Bone::API.bonekey(token, name)
+        Key.new(token, name).value.exists?
       end
       def destroy_token(token)
-        redis.zrem Bone::API.tokenskey, token
-        redis.del Bone::API.tokenkey(token)
+        Token.tokens.delete token
+        Token.new(token).secret.destroy!
       end
       def generate_token(secret)
         begin 
           token = Bone.random_digest
         end while token?(token)
-        redis.zadd Bone::API.tokenskey, Time.now.utc.to_i, token
-        redis.set Bone::API.tokenkey(token), secret
+        Token.tokens.add Time.now.utc.to_i, token
+        t = Token.new(token).secret = secret
         token
       end
       def token?(token)
-        redis.exists Bone::API.tokenkey(token)
+        Token.tokens.member?(token)
       end
       def connect
-        require 'redis'
-        require 'uri/redis'
-        self.redis = ::Redis.connect(:url => Bone.source.to_s)
+        Familia.uri = Bone.source
+      end
+      class Key
+        include Familia
+        prefix Bone::API.prefix(:key)
+        string :value
+        attr_reader :token, :name, :bucket
+        def initialize(token, name, bucket=:global)
+          @token, @name, @bucket = token, name, bucket
+          initialize_redis_objects
+        end
+        def index
+          [token, bucket, name].join(':')
+        end
+      end
+      class Token
+        include Familia
+        prefix Bone::API.prefix(:token)
+        index :token
+        string :secret
+        zset :keys
+        class_zset :tokens
+        attr_reader :token
+        def initialize(token)
+          @token = token
+          initialize_redis_objects
+        end
       end
       Bone.register_api :redis, self
     end
@@ -298,3 +331,5 @@ class Bone
   select_api
   select_digest_type
 end
+
+

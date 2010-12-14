@@ -1,12 +1,10 @@
 # try try/31_api_redis_try.rb
 
-ENV['BONE_SOURCE'] = 'redis://localhost:8045'
 require 'bone'
 Bone.debug = true
 
-## Can set the base uri via ENV 
-## (NOTE: must be set before the require)
-Bone.source.to_s
+## Can set the base uri without a token
+Bone.source = 'redis://localhost:8045'
 #=> 'redis://localhost:8045'
 
 ## Knows to use the redis API
@@ -40,20 +38,20 @@ Bone.api.get Bone.token, 'bogus'
 #=> nil
 
 ## Set a value
-Bone['valid'] = true
-Bone['valid']
-#=> 'true'
+Bone['akey1'] = 'value1'
+Bone['akey1']
+#=> 'value1'
 
 ## Get a value
-Bone['valid']
-#=> 'true'
+Bone['akey1']
+#=> 'value1'
 
 ## Knows all keys
 Bone.keys
-#=> ["v2:bone:#{@token}:valid:value"]
+#=> ["akey1"]
 
 ## Knows when a key exists
-Bone.key? :valid
+Bone.key? :akey1
 #=> true
 
 ## Knows when a key doesn't exist
