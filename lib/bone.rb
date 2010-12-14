@@ -9,7 +9,6 @@ local_libs.each { |dir|
   $:.unshift a
 }
 
-require 'httparty'
 require 'familia'
 
 class Bone
@@ -216,14 +215,98 @@ class Bone
     extend Bone::API::Helpers
     
     module HTTP
-      include HTTParty
-      base_uri Bone.source.to_s
       class << self 
         # /v2/[name]
-        def get(token, name, query={})
-          debug_output $stderr if Bone.debug
-          super(Bone::API.path(name), :query => query)
+        def get(token, name)
+          path = Bone::API.path(token, 'key', name)
+          query = {}
+          http_request :get, path, query
         end
+        def set(token, name, value)
+          path = Bone::API.path(token, 'key', name)
+          query = {}
+          http_request :post, path, query, value
+          :poop
+        end
+        def keys(token, filter='*')
+          path = Bone::API.path(token, 'keys')
+          ret = http_request :get, path, {} || []
+          ret.split $/
+        end
+        def key?(token, name)
+          !get(token, name).nil?
+        end
+        def destroy_token(token)
+          query = {}
+          path = Bone::API.path('destroy', token)
+          http_request :delete, path, query, 'secret'
+        end
+        def register_token(token, secret)
+          query = {}
+          path = Bone::API.path('register', token)
+          http_request :post, path, query, secret
+        end
+        def generate_token(secret)
+          path = Bone::API.path('generate')
+          http_request :post, path, {}, secret
+        end
+        def token?(token)
+          path = Bone::API.path(token)
+          query = {}
+          ret = http_request :get, path, query
+          !ret.nil?
+        end
+        def connect
+          require 'em-http-request'
+          @external_em = EM.reactor_running?
+          #@retry_delay, @redirects, @max_retries, @performed_retries = 2, 1, 2, 0
+        end
+        
+        private 
+        
+        # based on: https://github.com/EmmanuelOga/firering/blob/master/lib/firering/connection.rb
+        def http_request meth, path, query={}, body=nil
+          uri = Bone.source.clone
+          uri.path = path
+          Bone.ld "#{meth} #{uri} (#{query})"
+          content, status, headers = nil
+          handler = Proc.new do |http|
+            content, status, headers = http.response, http.response_header.status, http.response_header
+          end
+          if @external_em
+            http_request_proc meth, uri, query, body, &handler
+          else
+            EM.run {
+              http_request_proc meth, uri, query, body, &handler
+            }
+          end
+          if status >= 400
+            Bone.ld "Request failed: #{status} #{content}"
+            nil
+          else
+            content
+          end
+        end
+        
+        def http_request_proc method, uri, query, body, &blk
+          args = { :query => query, :timeout => 10 }
+          args[:body] = body.to_s unless body.nil?
+          http = EventMachine::HttpRequest.new(uri).send(method, args)
+          #http.errback do
+          #  perform_retry(http) do
+          #    http(method, path, data, &callback)
+          #  end
+          #  EventMachine.stop
+          #end
+          http.callback {
+            Bone.ld "#{http.response_header.status}: #{http.response_header.inspect}"
+            #reset_retries_counter
+            blk.call(http) if blk
+            EventMachine.stop unless @external_em
+          }
+          http
+        end
+
       end
       Bone.register_api :http, self
       Bone.register_api :https, self
@@ -251,6 +334,7 @@ class Bone
         Token.new(token).secret.destroy!
       end
       def register_token(token, secret)
+        Bone.ld "register_token: #{token}: #{token?(token)}"
         raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
         Token.tokens.add Time.now.utc.to_i, token
         t = Token.new(token).secret = secret
@@ -267,7 +351,7 @@ class Bone
         token
       end
       def token?(token)
-        Token.tokens.member?(token)
+        Token.tokens.member?(token.to_s)
       end
       def connect
         Familia.uri = Bone.source
@@ -276,29 +360,26 @@ class Bone
         include Familia
         prefix Bone::API.prefix(:key)
         string :value
+        index :gibbler                  # the method to call.
+        gibbler :token, :bucket, :name  # the properties to digest.
         attr_reader :token, :name, :bucket
         def initialize(token, name, bucket=:global)
-          @token, @name, @bucket = token, name, bucket
+          @token, @name, @bucket = token.to_s, name.to_s, bucket.to_s
           initialize_redis_objects
-        end
-        def index
-          [token, bucket, name].join(':')
         end
       end
       class Token
         include Familia
         prefix Bone::API.prefix(:token)
-        index :token
         string :secret
         zset :keys
         class_zset :tokens
+        index :gibbler                  # the method to call.
+        gibbler :token, :bucket         # the properties to digest.
         attr_reader :token, :bucket
         def initialize(token, bucket=:global)
-          @token, @bucket = token, bucket
+          @token, @bucket = token.to_s, bucket.to_s
           initialize_redis_objects
-        end
-        def index
-          [token, bucket].join(':')
         end
       end
       Bone.register_api :redis, self
