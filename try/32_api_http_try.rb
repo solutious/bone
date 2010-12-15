@@ -60,8 +60,9 @@ Bone.key? :bogus
 #=> false
 
 ## Bone.register_token
-token = Bone.generate_token :secret
-token.size
+@token2 = Bone.generate_token :secret
+@token2.size
 #=> 40
 
 Bone.destroy_token @token
+Bone.destroy_token @token2

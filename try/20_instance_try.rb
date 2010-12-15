@@ -2,7 +2,7 @@
 
 ENV['BONE_SOURCE'] = 'memory://localhost'
 require 'bone'
-Bone.debug = true
+#Bone.debug = true
 
 @token = Bone.generate_token :secret
 

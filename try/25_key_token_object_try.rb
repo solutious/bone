@@ -1,7 +1,7 @@
 
 ENV['BONE_SOURCE'] = 'redis://localhost:8045'
 require 'bone'
-Bone.debug = true
+#Bone.debug = true
 
 
 ## Bone::API::Redis::Token.redis_objects
@@ -15,7 +15,7 @@ Bone::API::Redis::Token.class_redis_objects.keys
 ## Bone::API::Redis::Token.new
 @tobj = Bone::API::Redis::Token.new :atoken
 @tobj.rediskey
-#=> 'v2:bone:token:ce1ca70e0c4d4aaf62bc7341f3112efa88c54124:object'
+#=> 'v2:bone:token:atoken:object'
 
 ## Bone::API::Redis::Token#secret
 @tobj.secret.class
@@ -40,7 +40,7 @@ Bone::API::Redis::Key.redis_objects.keys
 ## Bone::API::Redis::Key.new
 @kobj = Bone::API::Redis::Key.new :atoken, :akey
 @kobj.rediskey
-#=> 'v2:bone:key:99eefd8109759221fe17707b97b304781e5d0f75:object'
+#=> 'v2:bone:key:atoken:global:akey:object'
 
 ## Bone::API::Redis::Key#value
 @kobj.value.class

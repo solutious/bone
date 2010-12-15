@@ -2,7 +2,7 @@
 
 ENV['BONE_SOURCE'] = 'memory://localhost'
 require 'bone'
-Bone.debug = true
+#Bone.debug = true
 
 ## Can set the base uri via ENV 
 ## (NOTE: must be set before the require)

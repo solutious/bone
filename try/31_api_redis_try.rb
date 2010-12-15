@@ -1,7 +1,7 @@
 # try try/31_api_redis_try.rb
 
 require 'bone'
-Bone.debug = true
+#Bone.debug = true
 
 ## Can set the base uri without a token
 Bone.source = 'redis://localhost:8045'

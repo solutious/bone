@@ -334,7 +334,6 @@ class Bone
         Token.new(token).secret.destroy!
       end
       def register_token(token, secret)
-        Bone.ld "register_token: #{token}: #{token?(token)}"
         raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
         Token.tokens.add Time.now.utc.to_i, token
         t = Token.new(token).secret = secret
@@ -360,12 +359,13 @@ class Bone
         include Familia
         prefix Bone::API.prefix(:key)
         string :value
-        index :gibbler                  # the method to call.
-        gibbler :token, :bucket, :name  # the properties to digest.
         attr_reader :token, :name, :bucket
         def initialize(token, name, bucket=:global)
           @token, @name, @bucket = token.to_s, name.to_s, bucket.to_s
           initialize_redis_objects
+        end
+        def index
+          [token, bucket, name].join ':'
         end
       end
       class Token
@@ -374,11 +374,10 @@ class Bone
         string :secret
         zset :keys
         class_zset :tokens
-        index :gibbler                  # the method to call.
-        gibbler :token, :bucket         # the properties to digest.
-        attr_reader :token, :bucket
-        def initialize(token, bucket=:global)
-          @token, @bucket = token.to_s, bucket.to_s
+        index :token
+        attr_reader :token
+        def initialize(token)
+          @token = token.to_s
           initialize_redis_objects
         end
       end
