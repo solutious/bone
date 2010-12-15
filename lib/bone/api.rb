@@ -28,12 +28,12 @@ module Bone::API
       def destroy_token(token, secret)
         query = {}
         path = Bone::API.path('destroy', token)
-        http_request token, secret, :delete, path, query, 'secret'
+        http_request token, secret, :delete, path, query
       end
       def register_token(token, secret)
         query = {}
         path = Bone::API.path('register', token)
-        http_request token, secret, :post, path, query
+        http_request token, secret, :post, path, query, secret
       end
       def generate_token(secret)
         path = Bone::API.path('generate')
