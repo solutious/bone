@@ -1,8 +1,7 @@
 
-ENV['BONE_SOURCE'] = 'redis://localhost:8045'
 require 'bone'
 #Bone.debug = true
-
+Bone.source = 'redis://localhost:8045'
 
 ## Bone::API::Redis::Token.redis_objects
 Bone::API::Redis::Token.redis_objects.keys.collect(&:to_s).sort

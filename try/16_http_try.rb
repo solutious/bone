@@ -1,9 +1,9 @@
 # try try/20_instance_try.rb
 
-ENV['BONE_TOKEN'] = "atoken"
-ENV['BONE_SOURCE'] = 'memory://localhost'
 require 'bone'
 #Bone.debug = true
+Bone.token = 'atoken'
+Bone.source = 'memory://localhost'
 
 @secret = "wHLJ3PskyzcxN9A9fYdQKltxDhsw2E%2B%2BUoL%2BbfOp2DM"
 @path = "/#{Bone::APIVERSION}/#{Bone.token}/keys"

@@ -1,8 +1,8 @@
 # try try/30_api_redis_try.rb
 
-ENV['BONE_SOURCE'] = 'memory://localhost'
 require 'bone'
-Bone.debug = true
+#Bone.debug = true
+Bone.source = 'memory://localhost'
 
 ## Can set the base uri via ENV 
 ## (NOTE: must be set before the require)

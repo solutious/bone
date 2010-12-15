@@ -1,8 +1,8 @@
 # try try/20_instance_try.rb
 
-ENV['BONE_SOURCE'] = 'memory://localhost'
 require 'bone'
 #Bone.debug = true
+Bone.source = 'memory://localhost'
 
 @token = Bone.generate_token :secret
 
