@@ -135,8 +135,8 @@ class Bone
         end
         def keys(token, secret, filter='*')
           path = Bone::API.path(token, 'keys')
-          ret = http_request token, secret, :get, path, {} || []
-          ret.split $/
+          ret = http_request token, secret, :get, path, {}
+          (ret || '').split $/
         end
         def key?(token, secret, name)
           !get(token, secret, name).nil?
@@ -144,7 +144,8 @@ class Bone
         def destroy_token(token, secret)
           query = {}
           path = Bone::API.path('destroy', token)
-          http_request token, secret, :delete, path, query
+          ret = http_request token, secret, :delete, path, query
+          !ret.nil?  # errors return nil
         end
         def register_token(token, secret)
           query = {}
