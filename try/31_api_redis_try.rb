@@ -18,7 +18,7 @@ Bone.api
 #=> 40
 
 ## Can register a token
-token = Bone.register_token @token, :secret
+token = Bone.register @token, :secret
 #=> 'atoken'
 
 ## Can set token directly

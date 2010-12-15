@@ -14,8 +14,8 @@ Bone.source.to_s
 Bone.api
 #=> Bone::API::HTTP
 
-## Bone.register_token
-Bone.register_token Bone.token, Bone.secret
+## Bone.register
+Bone.register Bone.token, Bone.secret
 #=> 'atoken'
 
 ## Bone.token? knows when a token exists

@@ -16,8 +16,8 @@ class Bone
       def key?(name)
         new(Bone.token, Bone.secret).key? name
       end
-      def register_token(token, secret)
-        new(Bone.token, Bone.secret).register_token token, secret
+      def register(token, secret)
+        new(Bone.token, Bone.secret).register token, secret
       end
       def generate
         new(Bone.token, Bone.secret).generate
@@ -64,9 +64,9 @@ class Bone
         end
       end
 
-      def register_token(this_token, this_secret)
+      def register(this_token, this_secret)
         carefully do
-          Bone.api.register_token this_token, this_secret
+          Bone.api.register this_token, this_secret
         end
       end
 
@@ -147,7 +147,7 @@ class Bone
           ret = http_request token, secret, :delete, path, query
           !ret.nil?  # errors return nil
         end
-        def register_token(token, secret)
+        def register(token, secret)
           query = {}
           path = Bone::API.path('register', token)
           http_request token, secret, :post, path, query, secret
@@ -299,7 +299,7 @@ class Bone
         Token.tokens.delete token
         Token.new(token).secret.destroy!
       end
-      def register_token(token, secret)
+      def register(token, secret)
         raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
         Token.tokens.add Time.now.utc.to_i, token
         t = Token.new(token).secret = secret
@@ -371,7 +371,7 @@ class Bone
       def destroy_token(token, secret)
         @tokens.delete token
       end
-      def register_token(token, secret)
+      def register(token, secret)
         raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
         @tokens[token] = secret
         token

@@ -1,5 +1,7 @@
 require 'bone'
 
+# TODO: finish this
+
 class Bone::CLI < Drydock::Command
   
   def check!
