@@ -150,30 +150,30 @@ class Bone
   module API
     module ClassMethods
       def get(name)
-        new(Bone.token).get name
+        new(Bone.token, Bone.secret).get name
       end
       alias_method :[], :get
       def set(name, value)
-        new(Bone.token).set name, value
+        new(Bone.token, Bone.secret).set name, value
       end
       alias_method :[]=, :set
       def keys(filter='*')
-        new(Bone.token).keys filter
+        new(Bone.token, Bone.secret).keys filter
       end
       def key?(name)
-        new(Bone.token).key? name
+        new(Bone.token, Bone.secret).key? name
       end
       def register_token(token, secret)
-        new(Bone.token).register_token token, secret
+        new(Bone.token, Bone.secret).register_token token, secret
       end
       def generate_token(secret)
-        new(Bone.token).generate_token secret
+        new(Bone.token, Bone.secret).generate_token secret
       end
       def destroy_token(token)
-        new(Bone.token).destroy_token token
+        new(Bone.token, Bone.secret).destroy_token token
       end
       def token?(token)
-        new(Bone.token).token? token
+        new(Bone.token, Bone.secret).token? token
       end
     end
     module InstanceMethods
