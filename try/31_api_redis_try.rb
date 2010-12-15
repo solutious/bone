@@ -13,8 +13,8 @@ Bone.api
 #=> Bone::API::Redis
 
 ## Can generate a token
-t = Bone.generate_token(:secret) || ''
-t.size
+@generated_token, secret = *Bone.generate
+@generated_token.size
 #=> 40
 
 ## Can register a token
@@ -63,10 +63,6 @@ Bone.key? :akey1
 Bone.key? :bogus
 #=> false
 
-## Bone.generate_token
-@token2 = Bone.generate_token(:secret) || ''
-@token2.size
-#=> 40
 
 Bone.destroy_token @token
-Bone.destroy_token @token2
+Bone.destroy_token @generated_token

@@ -19,8 +19,8 @@ class Bone
       def register_token(token, secret)
         new(Bone.token, Bone.secret).register_token token, secret
       end
-      def generate_token(secret)
-        new(Bone.token, Bone.secret).generate_token secret
+      def generate
+        new(Bone.token, Bone.secret).generate
       end
       def destroy_token(token)
         new(Bone.token, Bone.secret).destroy_token token
@@ -53,7 +53,7 @@ class Bone
       def keys(filter='*')
         carefully do
           raise_errors
-          Bone.api.keys token, secret, filter
+          Bone.api.keys(token, secret, filter) || []
         end
       end
 
@@ -70,9 +70,9 @@ class Bone
         end
       end
 
-      def generate_token(this_secret)
+      def generate
         carefully do
-          Bone.api.generate_token this_secret
+          Bone.api.generate || []
         end
       end
 
@@ -136,7 +136,7 @@ class Bone
         def keys(token, secret, filter='*')
           path = Bone::API.path(token, 'keys')
           ret = http_request token, secret, :get, path, {}
-          (ret || '').split $/
+          (ret || '').split($/)
         end
         def key?(token, secret, name)
           !get(token, secret, name).nil?
@@ -152,9 +152,10 @@ class Bone
           path = Bone::API.path('register', token)
           http_request token, secret, :post, path, query, secret
         end
-        def generate_token(secret)
+        def generate
           path = Bone::API.path('generate')
-          http_request '', secret, :post, path, {}
+          ret = http_request '', '', :post, path, {}
+          ret.nil? ? nil : ret.split($/)
         end
         def token?(token, secret)
           path = Bone::API.path(token)
@@ -304,15 +305,16 @@ class Bone
         t = Token.new(token).secret = secret
         token
       end
-      def generate_token(secret)
+      def generate
         begin 
           token = Bone.random_digest
           attempts ||= 10
         end while token?(token) && !(attempts -= 1).zero?
+        secret = Bone.random_digest [token, token.object_id]
         raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
         Token.tokens.add Time.now.utc.to_i, token
         t = Token.new(token).secret = secret
-        token
+        [token, secret]
       end
       def token?(token, secret=nil)
         Token.tokens.member?(token.to_s)
@@ -374,13 +376,14 @@ class Bone
         @tokens[token] = secret
         token
       end
-      def generate_token(secret)
+      def generate
         begin 
           token = Bone.random_digest
+          secret = Bone.random_digest [token, token.object_id]
           attemps ||= 10
         end while token?(token) && !(attempts -= 1).zero?
         @tokens[token] = secret
-        token
+        [token, secret]
       end
       def token?(token, secret=nil)
         @tokens.key?(token)

@@ -14,8 +14,8 @@ Bone.api
 #=> Bone::API::Memory
 
 ## Can generate a token
-t = Bone.generate_token :secret
-t.size
+@generated_token, secret = *Bone.generate
+@generated_token.size
 #=> 40
 
 ## Can register a token
@@ -65,5 +65,6 @@ Bone.key? :valid
 Bone.key? :bogus
 #=> false
 
-
 Bone.destroy_token @token
+Bone.destroy_token @generated_token
+

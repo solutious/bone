@@ -53,7 +53,7 @@ class Bone::CLI < Drydock::Command
   end
   
   def generate
-    puts Bone.generate_token(:tmp)
+    puts Bone.generate
   #rescue Bone::NoToken => ex
   #  update_token_dialog
   #  exit 1
@@ -61,7 +61,7 @@ class Bone::CLI < Drydock::Command
   
   private 
   def update_token_dialog
-    newtoken = Bone.generate_token
+    newtoken = Bone.generate
     puts newtoken and return if @global.quiet
     puts "Set the BONE_TOKEN environment variable with the following value"
     puts newtoken

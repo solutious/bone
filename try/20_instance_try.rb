@@ -4,7 +4,7 @@ require 'bone'
 #Bone.debug = true
 Bone.source = 'memory://localhost'
 
-@token = Bone.generate_token :secret
+@token, @secret = *Bone.generate
 
 ## create bone instance
 @bone = Bone.new @token

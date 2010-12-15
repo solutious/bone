@@ -107,12 +107,15 @@ class Bone
       val.to_s.match /\A[0-9a-f]{64}\z/
     end
 
-    def digest(val)
-      @digest_type.hexdigest val
+    def digest val, type=nil
+      type ||= @digest_type
+      type.hexdigest val
     end
 
-    def random_digest
-      digest [$$, self.object_id, `hostname`, `w`, Time.now.to_f].join(':')
+    def random_digest extra=nil, type=nil
+      junk = [$$, self.object_id, `hostname`, `w`, Time.now.to_f]
+      junk.push *extra unless extra.nil?
+      digest junk.join(':'), type
     end
     
     def select_api
