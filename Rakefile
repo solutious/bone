@@ -1,60 +1,65 @@
-
-require 'rake/clean'
-require 'rake/gempackagetask'
-require 'rake/testtask'
-require 'rake/runtest'
-require 'fileutils'
-include FileUtils
+require "rubygems"
+require "rake"
+require "rake/clean"
+require 'yaml'
 
 begin
   require 'hanna/rdoctask'
 rescue LoadError
   require 'rake/rdoctask'
 end
-
-
-task :default => :test
-
-
-# PACKAGE =============================================================
-
+ 
+config = YAML.load_file("VERSION.yml")
+task :default => ["build"]
+CLEAN.include [ 'pkg', 'doc' ]
 name = "bone"
-load "#{name}.gemspec"
 
-version = @spec.version
-
-Rake::GemPackageTask.new(@spec) do |p|
-  p.need_tar = true if RUBY_PLATFORM !~ /mswin/
+begin
+  require "jeweler"
+  Jeweler::Tasks.new do |gem|
+    gem.version = "#{config[:MAJOR]}.#{config[:MINOR]}.#{config[:PATCH]}"
+    gem.name = name
+    gem.rubyforge_project = gem.name
+    gem.summary = "A simple store for remote environment variables"
+    gem.description = gem.summary
+    gem.email = "delano@solutious.com"
+    gem.homepage = "https://github.com/solutious/bone"
+    gem.authors = ["Delano Mandelbaum"]
+    gem.add_dependency("familia",            ">= 0.6.0")
+    gem.add_dependency("em-http-request")
+  end
+  Jeweler::GemcutterTasks.new
+rescue LoadError
+  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
 end
 
-task :test do
-  puts "Success!"
+
+Rake::RDocTask.new do |rdoc|
+  version = "#{config[:MAJOR]}.#{config[:MINOR]}.#{config[:PATCH]}.#{config[:BUILD]}"
+  rdoc.rdoc_dir = "doc"
+  rdoc.title = "#{name} #{version}"
+  rdoc.rdoc_files.include("README*")
+  rdoc.rdoc_files.include("LICENSE.txt")
+  rdoc.rdoc_files.include("bin/*.rb")
+  rdoc.rdoc_files.include("lib/**/*.rb")
 end
 
-task :install => [ :rdoc, :package ] do
-	sh %{sudo gem install pkg/#{name}-#{version}.gem}
+
+# Rubyforge Release / Publish Tasks ==================================
+
+#about 'Publish website to rubyforge'
+task 'publish:rdoc' => 'doc/index.html' do
+  #sh "scp -rp doc/* rubyforge.org:/var/www/gforge-projects/#{name}/"
 end
 
-task :uninstall => [ :clean ] do
-	sh %{sudo gem uninstall #{name}}
+#about 'Public release to rubyforge'
+task 'publish:gem' => [:package] do |t|
+  sh <<-end
+    rubyforge add_release -o Any -a CHANGES.txt -f -n README.md #{name} #{name} #{@spec.version} pkg/#{name}-#{@spec.version}.gem &&
+    rubyforge add_file -o Any -a CHANGES.txt -f -n README.md #{name} #{name} #{@spec.version} pkg/#{name}-#{@spec.version}.tgz 
+  end
 end
 
-
-
-Rake::RDocTask.new do |t|
-	t.rdoc_dir = 'doc'
-	t.title    = @spec.summary
-	t.options << '--line-numbers' <<  '-A cattr_accessor=object'
-	t.options << '--charset' << 'utf-8'
-	t.rdoc_files.include('LICENSE.txt')
-	t.rdoc_files.include('README.md')
-	t.rdoc_files.include('CHANGES.txt')
-	#t.rdoc_files.include('Rudyfile')  # why is the formatting f'd?
-	t.rdoc_files.include('bin/*')
-	t.rdoc_files.include('lib/**/*.rb')
-end
-
-CLEAN.include [ 'pkg', '*.gem', '.config', 'doc', 'coverage*' ]
 
 
 

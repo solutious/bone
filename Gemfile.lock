@@ -1,0 +1,26 @@
+GIT
+  remote: git://github.com/delano/familia.git
+  revision: df5752a573b7a68d26aa940fad2edf4c25f7018f
+  branch: 0.6
+  specs:
+    familia (0.6.0)
+      gibbler (>= 0.8.4)
+      redis (>= 2.1.0)
+      storable (>= 0.8.3)
+      uri-redis (>= 0.4.1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    attic (0.5.2)
+    gibbler (0.8.4)
+      attic (>= 0.4.0)
+    redis (2.1.1)
+    storable (0.8.3)
+    uri-redis (0.4.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  familia (= 0.6.0)!

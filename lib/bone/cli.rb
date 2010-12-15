@@ -1,5 +1,4 @@
 require 'bone'
-require 'net/http'
 
 class Bone::CLI < Drydock::Command
   
