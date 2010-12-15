@@ -59,9 +59,9 @@ module Bone::API
         }.merge query
       end
       
+      # Based on / stolen from: https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb
       def sign_query token, secret, meth, path, query
         sig = generate_signature secret, Bone.source.host, meth, path, query
-        
         query = query.sort {|x,y| x[0].to_s <=> y[0].to_s }.collect { |param|
           [Bone.uri_escape(param[0]), Bone.uri_escape(param[1])].join '='
         }
@@ -69,15 +69,13 @@ module Bone::API
         query.join "&"
       end
       
-      
-      # Set the Authorization header using AWS signed header authentication
       def generate_signature secret, host, meth, path, query
         str = canonical_sig_string host, meth, path, query
         encode secret, str
       end
       
       def canonical_time now=Time.now
-        now.getutc.iso8601
+        now.utc.iso8601
       end
       
       # Builds the canonical string for signing requests. This strips out all '&', '?', and '='
@@ -97,13 +95,8 @@ module Bone::API
           # should not be encoded
           encoded = encoded.gsub('%7E', '~')
         end
-        sigquery = encoded_params.join("&")
-        # Generate the request description string
-        req_desc =
-          meth.to_s + "\n" +
-          host + "\n" +
-          path + "\n" +
-          sigquery
+        querystr = encoded_params.join '&'
+        [meth, host, path, querystr].join "\n"
       end
       
       # Encodes the given string with the secret_access_key by taking the
@@ -111,10 +104,7 @@ module Bone::API
       # url encode the result of that to protect the string if it's going to
       # be used as a query string parameter.
       #
-      # @param [String] secret_access_key the user's secret access key for signing.
-      # @param [String] str the string to be hashed and encoded.
-      # @param [Boolean] urlencode whether or not to url encode the result., true or false
-      # @return [String] the signed and encoded string.
+      # Based on / stolen from: https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb
       def encode(secret_access_key, str, encode=true)
         digest_type = OpenSSL::Digest::Digest.new('sha256')
         digest = OpenSSL::HMAC.digest(digest_type, secret_access_key, str)
