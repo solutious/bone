@@ -30,6 +30,8 @@ class Bone
   APIVERSION = 'v2'.freeze unless defined?(Bone::APIVERSION)
   @source = URI.parse(ENV['BONE_SOURCE'] || 'https://api.bonery.com')
   @apis = {}
+  class Problem < RuntimeError; end
+  class NoToken < Problem; end  
   class << self
     attr_accessor :debug
     attr_reader :apis, :api, :source
@@ -95,6 +97,22 @@ class Bone
     
     def register_api(scheme, klass)
       Bone.apis[scheme.to_sym] = klass
+    end
+    
+    # <tt>require</tt> a library from the vendor directory.
+    # The vendor directory should be organized such
+    # that +name+ and +version+ can be used to create
+    # the path to the library. 
+    #
+    # e.g.
+    # 
+    #     vendor/httpclient-2.1.5.2/httpclient
+    #
+    def require_vendor(name, version)
+      path = File.join(BONE_HOME, 'vendor', "#{name}-#{version}", 'lib')
+      $:.unshift path
+      Bone.ld "REQUIRE VENDOR: ", path
+      require name
     end
   end
   
@@ -226,7 +244,6 @@ class Bone
           path = Bone::API.path(token, 'key', name)
           query = {}
           http_request :post, path, query, value
-          :poop
         end
         def keys(token, filter='*')
           path = Bone::API.path(token, 'keys')

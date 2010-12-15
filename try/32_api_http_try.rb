@@ -59,7 +59,7 @@ Bone.key? :akey1
 Bone.key? :bogus
 #=> false
 
-## Bone.register_token
+## Bone.generate_token
 @token2 = Bone.generate_token :secret
 @token2.size
 #=> 40

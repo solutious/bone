@@ -4,34 +4,36 @@ require 'net/http'
 class Bone::CLI < Drydock::Command
   
   def check!
-    @token = @global.t || ENV['BONE_TOKEN']
-    raise Bone::BadBone, @token unless Bone.valid_token?(@token)
+    @token = @global.token || ENV['BONE_TOKEN']
+    raise Bone::NoToken, @token unless Bone.token?(@token)
+    Bone.token = @token
   end
   
   def get
     check!
     @argv.unshift @alias unless @alias == 'get'
     raise "No key specified" unless @argv.first
-    puts Bone.get(@argv.first)
+    ret = Bone.get(@argv.first)
+    puts ret unless ret.nil? 
   end
   
   def del
     check!
     raise "No key specified" unless @argv.first
-    puts Bone.del(@argv.first)
+    puts Bone.delete(@argv.first)
   end
   
   def set
     check!
     opts = {:token => @token }
-    keyname, value = *(@argv.size == 1 ? @argv.first.split('=') : @argv)
-    raise "No key specified" unless keyname
+    name, value = *(@argv.size == 1 ? @argv.first.split('=') : @argv)
+    raise "No key specified" unless name
     raise "No value specified" unless value
     if File.exists?(value) && !@option.string
       value = File.readlines(value).join
       opts[:file] = true
     end
-    puts Bone.set(keyname, value, opts)
+    puts Bone[name] = value
   end
   
   def keys
@@ -47,22 +49,22 @@ class Bone::CLI < Drydock::Command
   end
   
   def token
-    check!  
-    if @option.force
-      generate_token_dialog
-    else
-      puts @token
-    end
-  rescue Bone::BadBone => ex
-    generate_token_dialog
-    exit 1
+    check!
+    puts Bone.token
+  end
+  
+  def generate
+    puts Bone.generate_token(:tmp)
+  #rescue Bone::NoToken => ex
+  #  update_token_dialog
+  #  exit 1
   end
   
   private 
-  def generate_token_dialog
+  def update_token_dialog
     newtoken = Bone.generate_token
     puts newtoken and return if @global.quiet
-    puts "Set the BONE_TOKEN environment variable with the following token"
+    puts "Set the BONE_TOKEN environment variable with the following value"
     puts newtoken
   end
   

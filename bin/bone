@@ -28,7 +28,7 @@ class Bone::CLI::Definition
   
   global :D, :debug, "Enable debug mode" do
     Drydock.debug true
-    Bone.enable_debug
+    Bone.debug = true
   end
   
   about "Get a value for the given key"
@@ -43,11 +43,11 @@ class Bone::CLI::Definition
   option :s, :string, "Assume value is a string even if file name exists"
   command :set => Bone::CLI
   
-  about "Delete a key/value pair"
-  usage "bone del keyname"
-  command :del => Bone::CLI
-  command_alias :del, :rem
-  command_alias :del, :delete
+  #about "Delete a key/value pair"
+  #usage "bone del keyname"
+  #command :del => Bone::CLI
+  #command_alias :del, :rem
+  #command_alias :del, :delete
   
   about "Display all available keys"
   usage "bone keys"
@@ -56,21 +56,26 @@ class Bone::CLI::Definition
   
   about "Display the token or generate a new one"
   usage "bone token"
-  option :f, :force, "Force generating a new token"
   command :token => Bone::CLI
+
+  about "Generate a new token"
+  usage "bone generate"
+  command :generate => Bone::CLI
   
 end
 
 begin
   Drydock.run!(ARGV, STDIN) if Drydock.run? && !Drydock.has_run?
-rescue Bone::BadBone => ex
+rescue Bone::NoToken => ex
   puts "Invalid token: #{ex.message}"
-  puts "Run the following command to generate a new one:", "$ #{$0} token"
-  STDERR.puts ex.backtrace if Bone.debug?
+  puts "Create a token with one of the following commands:", 
+       "bone generate", 
+       "bone register TOKEN SECRET"
+  STDERR.puts ex.backtrace if Bone.debug
   exit 1
 rescue Bone::Problem => ex
   puts ex.message
-  STDERR.puts ex.backtrace if Bone.debug?
+  STDERR.puts ex.backtrace if Bone.debug
   exit 1
 rescue Drydock::ArgError, Drydock::OptError => ex
   STDERR.puts ex.message
@@ -84,6 +89,6 @@ rescue Interrupt
   exit 1
 rescue => ex
   STDERR.puts "ERROR (#{ex.class.to_s}): #{ex.message}"
-  STDERR.puts ex.backtrace if Drydock.debug?
+  STDERR.puts ex.backtrace if Drydock.debug
 end
 
