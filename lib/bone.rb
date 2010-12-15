@@ -45,6 +45,17 @@ class Bone
       @source = URI.parse v
       select_api
     end
+    alias_method :src=, :source=
+    alias_method :src, :source
+    
+    # e.g.
+    #
+    #  Bone.cred = 'token:secret'
+    #
+    def credentials= token
+      @token, @secret = *token.split(':')
+    end
+    alias_method :cred=, :credentials=
     
     def token
       @token || @source.user || ENV['BONE_TOKEN']
