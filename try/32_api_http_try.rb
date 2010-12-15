@@ -18,11 +18,6 @@ Bone.api
 Bone.register_token Bone.token, Bone.secret
 #=> 'atoken'
 
-## Can set the base uri directly
-Bone.source = "http://#{Bone.token}@localhost:3073"
-Bone.source.to_s
-#=> "http://#{Bone.token}@localhost:3073"
-
 ## Bone.token? knows when a token exists
 Bone.token? Bone.token
 #=> true

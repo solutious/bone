@@ -23,10 +23,10 @@ t.size
 @token
 #=> 'atoken'
 
-## Can set the base uri directly
-Bone.source = "memory://#{@token}@localhost"
-Bone.source.to_s
-#=> "memory://#{@token}@localhost"
+## Can set token directly
+Bone.token = @token
+Bone.token
+#=> @token
 
 ## Knows a valid token
 Bone.token? @token

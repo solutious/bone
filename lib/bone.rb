@@ -58,11 +58,11 @@ class Bone
     alias_method :cred=, :credentials=
     
     def token
-      @token || @source.user || ENV['BONE_TOKEN']
+      @token || ENV['BONE_TOKEN']
     end
     
     def secret 
-      @secret || @source.password || ENV['BONE_SECRET']
+      @secret || ENV['BONE_SECRET']
     end
     
     def info *msg

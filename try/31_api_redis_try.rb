@@ -21,10 +21,10 @@ t.size
 token = Bone.register_token @token, :secret
 #=> 'atoken'
 
-## Can set the base uri directly
-Bone.source = "redis://#{@token}@localhost:8045"
-Bone.source.to_s
-#=> "redis://#{@token}@localhost:8045"
+## Can set token directly
+Bone.token = @token
+Bone.token
+#=> @token
 
 ## Knows a valid token
 Bone.token? @token
