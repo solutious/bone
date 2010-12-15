@@ -1,7 +1,8 @@
 # try try/31_api_redis_try.rb
 
 require 'bone'
-#Bone.debug = true
+Bone.debug = true
+@token = 'atoken'
 
 ## Can set the base uri without a token
 Bone.source = 'redis://localhost:8045'
@@ -17,8 +18,7 @@ t.size
 #=> 40
 
 ## Can register a token
-@token = Bone.register_token 'atoken', :secret
-@token
+token = Bone.register_token @token, :secret
 #=> 'atoken'
 
 ## Can set the base uri directly
@@ -39,7 +39,7 @@ Bone['bogus']
 #=> nil
 
 ## Make request to API directly
-Bone.api.get Bone.token, 'bogus'
+Bone.api.get Bone.token, Bone.secret, 'bogus'
 #=> nil
 
 ## Set a value

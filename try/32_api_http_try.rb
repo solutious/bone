@@ -1,8 +1,9 @@
 # try try/32_api_http_try.rb
 
 require 'bone'
-#Bone.debug = true
-@token = 'atoken'
+Bone.debug = true
+Bone.token = 'atoken'
+Bone.secret = :crystal
 
 ## Can set the base uri directly
 Bone.source = "http://localhost:3073"
@@ -14,19 +15,19 @@ Bone.api
 #=> Bone::API::HTTP
 
 ## Bone.register_token
-Bone.register_token @token, :crystal2
-#=> @token
+Bone.register_token Bone.token, Bone.secret
+#=> 'atoken'
 
 ## Can set the base uri directly
-Bone.source = "http://#{@token}@localhost:3073"
+Bone.source = "http://#{Bone.token}@localhost:3073"
 Bone.source.to_s
-#=> "http://#{@token}@localhost:3073"
+#=> "http://#{Bone.token}@localhost:3073"
 
-## Knows a valid token
-Bone.token? @token
+## Bone.token? knows when a token exists
+Bone.token? Bone.token
 #=> true
 
-## Knows an invalid token
+## Bone.token? returns false when it doesn't exist
 Bone.token? 'bogus'
 #=> false
 
@@ -35,7 +36,7 @@ Bone['bogus']
 #=> nil
 
 ## Make request to API directly
-Bone.api.get Bone.token, 'bogus'
+Bone.api.get Bone.token, Bone.secret, 'bogus'
 #=> nil
 
 ## Set a value
@@ -60,7 +61,7 @@ Bone.key? :bogus
 #=> false
 
 ## Bone.generate_token
-@token2 = Bone.generate_token :secret
+@token2 = Bone.generate_token Bone.secret
 @token2.size
 #=> 40
 

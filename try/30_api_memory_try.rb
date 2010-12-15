@@ -2,7 +2,7 @@
 
 ENV['BONE_SOURCE'] = 'memory://localhost'
 require 'bone'
-#Bone.debug = true
+Bone.debug = true
 
 ## Can set the base uri via ENV 
 ## (NOTE: must be set before the require)
@@ -41,7 +41,7 @@ Bone['bogus']
 #=> nil
 
 ## Make request to API directly
-Bone.api.get Bone.token, 'bogus'
+Bone.api.get Bone.token, Bone.secret, 'bogus'
 #=> nil
 
 ## Set a value

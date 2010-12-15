@@ -177,14 +177,14 @@ class Bone
       end
     end
     module InstanceMethods
-      attr_accessor :token
-      def initialize(t)
-        @token = t
+      attr_accessor :token, :secret
+      def initialize(t, s=nil)
+        @token, @secret = t, s
       end
       def get(name)
         carefully do
           raise_errors
-          Bone.api.get token, name
+          Bone.api.get token, secret, name
         end
       end
       alias_method :[], :get
@@ -192,7 +192,7 @@ class Bone
       def set(name, value)
         carefully do
           raise_errors
-          Bone.api.set token, name, value
+          Bone.api.set token, secret, name, value
         end
       end
       alias_method :[]=, :set
@@ -200,38 +200,38 @@ class Bone
       def keys(filter='*')
         carefully do
           raise_errors
-          Bone.api.keys token, filter
+          Bone.api.keys token, secret, filter
         end
       end
       
       def key?(name)
         carefully do
           raise_errors
-          Bone.api.key? token, name
+          Bone.api.key? token, secret, name
         end
       end
       
-      def register_token(token, secret)
+      def register_token(this_token, this_secret)
         carefully do
-          Bone.api.register_token token, secret
+          Bone.api.register_token this_token, this_secret
         end
       end
       
-      def generate_token(secret)
+      def generate_token(this_secret)
         carefully do
-          Bone.api.generate_token secret
+          Bone.api.generate_token this_secret
         end
       end
       
       def destroy_token(token)
         carefully do
-          Bone.api.destroy_token token
+          Bone.api.destroy_token token, secret
         end
       end
       
       def token?(token)
         carefully do
-          Bone.api.token? token
+          Bone.api.token? token, secret
         end
       end
       

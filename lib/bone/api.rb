@@ -7,42 +7,42 @@ module Bone::API
     
     class << self 
       # /v2/[name]
-      def get(token, name)
+      def get(token, secret, name)
         path = Bone::API.path(token, 'key', name)
         query = {}
-        http_request :get, path, query
+        http_request token, secret, :get, path, query
       end
-      def set(token, name, value)
+      def set(token, secret, name, value)
         path = Bone::API.path(token, 'key', name)
         query = {}
-        http_request :post, path, query, value
+        http_request token, secret, :post, path, query, value
       end
-      def keys(token, filter='*')
+      def keys(token, secret, filter='*')
         path = Bone::API.path(token, 'keys')
-        ret = http_request :get, path, {} || []
+        ret = http_request token, secret, :get, path, {} || []
         ret.split $/
       end
-      def key?(token, name)
-        !get(token, name).nil?
+      def key?(token, secret, name)
+        !get(token, secret, name).nil?
       end
-      def destroy_token(token)
+      def destroy_token(token, secret)
         query = {}
         path = Bone::API.path('destroy', token)
-        http_request :delete, path, query, 'secret'
+        http_request token, secret, :delete, path, query, 'secret'
       end
       def register_token(token, secret)
         query = {}
         path = Bone::API.path('register', token)
-        http_request :post, path, query, secret
+        http_request token, secret, :post, path, query
       end
       def generate_token(secret)
         path = Bone::API.path('generate')
-        http_request :post, path, {}, secret
+        http_request '', secret, :post, path, {}
       end
-      def token?(token)
+      def token?(token, secret)
         path = Bone::API.path(token)
         query = {}
-        ret = http_request :get, path, query
+        ret = http_request token, secret, :get, path, query
         !ret.nil?
       end
       def connect
@@ -51,24 +51,12 @@ module Bone::API
         #@retry_delay, @redirects, @max_retries, @performed_retries = 2, 1, 2, 0
       end
       
-      def prepare_query query={}, token=Bone.token, stamp=canonical_time
-        { "sigversion" => SIGVERSION,
-          "apiversion" => Bone::APIVERSION,
-          "token"      => token,
-          "stamp"      => stamp
-        }.merge query
+      def sign_query token, secret, meth, path, query
+        sig = generate_signature secret, Bone.source.host, meth, path, query
+        { 'sig' => sig }.merge query
       end
       
       # Based on / stolen from: https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb
-      def sign_query token, secret, meth, path, query
-        sig = generate_signature secret, Bone.source.host, meth, path, query
-        query = query.sort {|x,y| x[0].to_s <=> y[0].to_s }.collect { |param|
-          [Bone.uri_escape(param[0]), Bone.uri_escape(param[1])].join '='
-        }
-        query << "sig=#{sig}"
-        query.join "&"
-      end
-      
       def generate_signature secret, host, meth, path, query
         str = canonical_sig_string host, meth, path, query
         encode secret, str
@@ -88,7 +76,7 @@ module Bone::API
         # Sort, and encode parameters into a canonical string.
         sorted_params = query.sort {|x,y| x[0].to_s <=> y[0].to_s }
         encoded_params = sorted_params.collect do |p|
-          encoded = (Bone.uri_escape(p[0].to_s) + "=" + Bone.uri_escape(p[1].to_s))
+          encoded = [Bone.uri_escape(p[0]), Bone.uri_escape(p[1])].join '='
           # Ensure spaces are encoded as '%20', not '+'
           encoded = encoded.gsub('+', '%20')
           # According to RFC3986 (the scheme for values expected by signing requests), '~' 
@@ -105,29 +93,39 @@ module Bone::API
       # be used as a query string parameter.
       #
       # Based on / stolen from: https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb
-      def encode(secret_access_key, str, encode=true)
+      def encode(secret, str, encode=true)
         digest_type = OpenSSL::Digest::Digest.new('sha256')
-        digest = OpenSSL::HMAC.digest(digest_type, secret_access_key, str)
+        digest = OpenSSL::HMAC.digest(digest_type, secret.to_s, str.to_s)
         b64_hmac = Base64.encode64(digest).gsub("\n","")
         encode ? Bone.uri_escape(b64_hmac) : b64_hmac
+      end
+      
+      def prepare_query query={}, token=Bone.token, stamp=canonical_time
+        { "sigversion" => SIGVERSION,
+          "apiversion" => Bone::APIVERSION,
+          "token"      => token,
+          "stamp"      => stamp
+        }.merge query
       end
       
       private
       
       # based on: https://github.com/EmmanuelOga/firering/blob/master/lib/firering/connection.rb
-      def http_request meth, path, query={}, body=nil
+      def http_request token, secret, meth, path, query={}, body=nil
         uri = Bone.source.clone
         uri.path = path
+        query = prepare_query query, token
+        signed_query = sign_query token, secret, meth, path, query
         Bone.ld "#{meth} #{uri} (#{query})"
         content, status, headers = nil
         handler = Proc.new do |http|
           content, status, headers = http.response, http.response_header.status, http.response_header
         end
         if @external_em
-          em_request meth, uri, query, body, &handler
+          em_request meth, uri, signed_query, body, &handler
         else
           EM.run {
-            em_request meth, uri, query, body, &handler
+            em_request meth, uri, signed_query, body, &handler
           }
         end
         if status >= 400
@@ -165,21 +163,21 @@ module Bone::API
   module Redis
     extend self
     attr_accessor :redis
-    def get(token, name)
+    def get(token, secret, name)
       Key.new(token, name).value.get   # get returns nil if not set
     end
-    def set(token, name, value)
+    def set(token, secret, name, value)
       Key.new(token, name).value = value
       Token.new(token).keys.add Time.now.utc.to_f, name
       value.to_s
     end
-    def keys(token, filter='*')
+    def keys(token, secret, filter='*')
       Token.new(token).keys.to_a
     end
-    def key?(token, name)
+    def key?(token, secret, name)
       Key.new(token, name).value.exists?
     end
-    def destroy_token(token)
+    def destroy_token(token, secret)
       Token.tokens.delete token
       Token.new(token).secret.destroy!
     end
@@ -199,7 +197,7 @@ module Bone::API
       t = Token.new(token).secret = secret
       token
     end
-    def token?(token)
+    def token?(token, secret=nil)
       Token.tokens.member?(token.to_s)
     end
     def connect
@@ -237,21 +235,21 @@ module Bone::API
   module Memory
     extend self
     @data, @tokens = {}, {}
-    def get(token, name)
+    def get(token, secret, name)
       @data[Bone::API.prefix(token, name)]
     end
-    def set(token, name, value)
+    def set(token, secret, name, value)
       @data[Bone::API.prefix(token, name)] = value.to_s
     end
-    def keys(token, filter='*')
+    def keys(token, secret, filter='*')
       filter = '.+' if filter == '*'
       filter = Bone::API.prefix(token, filter)
       @data.keys.select { |name| name =~ /#{filter}/ }
     end
-    def key?(token, name)
+    def key?(token, secret, name)
       @data.has_key?(Bone::API.prefix(token, name))
     end
-    def destroy_token(token)
+    def destroy_token(token, secret)
       @tokens.delete token
     end
     def register_token(token, secret)
@@ -267,7 +265,7 @@ module Bone::API
       @tokens[token] = secret
       token
     end
-    def token?(token)
+    def token?(token, secret=nil)
       @tokens.key?(token)
     end
     def connect
