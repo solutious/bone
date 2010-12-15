@@ -58,7 +58,7 @@ You also need to running instance of [boned](http://github.com/solutious/boned) 
 ## Credits
 
 * Delano Mandelbaum (http://solutious.com)
-
+* Query signatures for the HTTP API are based on / stolen from: https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb
 
 ## Thanks 
 
@@ -67,4 +67,6 @@ You also need to running instance of [boned](http://github.com/solutious/boned) 
 
 ## License
 
-See LICENSE.txt
+Copyright (c) 2009-2011 Delano Mandelbaum, Solutious Inc.
+
+Distributes under the same terms as Ruby
