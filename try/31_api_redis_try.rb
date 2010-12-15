@@ -1,7 +1,7 @@
 # try try/31_api_redis_try.rb
 
 require 'bone'
-Bone.debug = true
+#Bone.debug = true
 @token = 'atoken'
 
 ## Can set the base uri without a token
@@ -13,7 +13,7 @@ Bone.api
 #=> Bone::API::Redis
 
 ## Can generate a token
-t = Bone.generate_token :secret
+t = Bone.generate_token(:secret) || ''
 t.size
 #=> 40
 
@@ -64,7 +64,7 @@ Bone.key? :bogus
 #=> false
 
 ## Bone.generate_token
-@token2 = Bone.generate_token :secret
+@token2 = Bone.generate_token(:secret) || ''
 @token2.size
 #=> 40
 
