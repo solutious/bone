@@ -147,6 +147,10 @@ class Bone
           ret = http_request token, secret, :delete, path, query
           !ret.nil?  # errors return nil
         end
+        def secret(token, secret)
+          path = Bone::API.path(token, 'secret')
+          ret = http_request token, secret, :get, path, {}
+        end
         def register(token, secret)
           query = {}
           path = Bone::API.path('register', token)
@@ -316,6 +320,9 @@ class Bone
         t = Token.new(token).secret = secret
         [token, secret]
       end
+      def secret token
+        Token.new(token).secret.value
+      end
       def token?(token, secret=nil)
         Token.tokens.member?(token.to_s)
       end
@@ -375,6 +382,9 @@ class Bone
         raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
         @tokens[token] = secret
         token
+      end
+      def secret
+        @tokens[token]
       end
       def generate
         begin 
