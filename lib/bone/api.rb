@@ -16,8 +16,8 @@ class Bone
       def key?(name)
         new(Bone.token, Bone.secret).key? name
       end
-      def register(token, secret)
-        new(Bone.token, Bone.secret).register token, secret
+      def register(this_token, this_secret)
+        new(Bone.token, Bone.secret).register this_token, this_secret
       end
       def generate
         new(Bone.token, Bone.secret).generate
@@ -383,7 +383,7 @@ class Bone
         @tokens[token] = secret
         token
       end
-      def secret
+      def secret(token)
         @tokens[token]
       end
       def generate

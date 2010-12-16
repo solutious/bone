@@ -3,6 +3,7 @@
 require 'bone'
 #Bone.debug = true
 @token = 'atoken'
+@secret = rand.gibbler
 
 ## Can set the base uri without a token
 Bone.source = 'redis://localhost:8045'
@@ -18,13 +19,17 @@ Bone.api
 #=> 40
 
 ## Can register a token
-token = Bone.register @token, :secret
+token = Bone.register @token, @secret
 #=> 'atoken'
 
 ## Can set token directly
 Bone.token = @token
 Bone.token
 #=> @token
+
+## Can check secret via API
+Bone.api.secret @token
+#=> @secret
 
 ## Knows a valid token
 Bone.token? @token
