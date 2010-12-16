@@ -25,6 +25,7 @@ class Bone::CLI < Drydock::Command
   end
   
   def set
+    # TODO: use STDIN instead of @option.string
     check!
     opts = {:token => @token }
     name, value = *(@argv.size == 1 ? @argv.first.split('=') : @argv)

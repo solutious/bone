@@ -105,7 +105,7 @@ class Bone
 
     module Helpers
       def path(*parts)
-        "/#{APIVERSION}/" << parts.flatten.join('/')
+        "/#{APIVERSION}/" << parts.flatten.collect { |v| Bone.uri_escape(v) }.join('/')
       end
       def prefix(*parts)
         parts.flatten!
