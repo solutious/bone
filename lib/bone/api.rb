@@ -174,7 +174,7 @@ class Bone
         end
       
         def sign_query token, secret, meth, path, query
-          sig = generate_signature secret, Bone.source.host, meth, path, query
+          sig = generate_signature secret, Bone.source, meth, path, query
           { 'sig' => sig }.merge query
         end
       
@@ -187,7 +187,15 @@ class Bone
         def canonical_time now=Time.now
           now.utc.iso8601
         end
-      
+        
+        def canonical_host host
+          if URI === host
+            host.port ||= 80
+            host = [host.host.to_s, host.port.to_s].join(':')
+          end
+          host.downcase
+        end
+        
         # Builds the canonical string for signing requests. This strips out all '&', '?', and '='
         # from the query string to be signed.  The parameters in the path passed in must already
         # be sorted in case-insensitive alphabetical order and must not be url encoded.
@@ -206,7 +214,7 @@ class Bone
             encoded = encoded.gsub('%7E', '~')
           end
           querystr = encoded_params.join '&'
-          [meth, host, path, querystr].join "\n"
+          [meth.to_s.downcase, canonical_host(host), path, querystr].join "\n"
         end
       
         # Encodes the given string with the secret_access_key by taking the
