@@ -60,5 +60,5 @@ Bone.key? :bogus
 @token2.size
 #=> 40
 
-Bone.destroy_token Bone.token
-Bone.destroy_token @token2 if @token2
+Bone.destroy Bone.token
+Bone.destroy @token2 if @token2

@@ -64,5 +64,5 @@ Bone.key? :bogus
 #=> false
 
 
-Bone.destroy_token @token
-Bone.destroy_token @generated_token
+Bone.destroy @token
+Bone.destroy @generated_token

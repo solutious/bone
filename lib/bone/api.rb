@@ -22,8 +22,8 @@ class Bone
       def generate
         new(Bone.token, Bone.secret).generate
       end
-      def destroy_token(token)
-        new(Bone.token, Bone.secret).destroy_token token
+      def destroy(token)
+        new(Bone.token, Bone.secret).destroy token
       end
       def token?(token)
         new(Bone.token, Bone.secret).token? token
@@ -76,9 +76,9 @@ class Bone
         end
       end
 
-      def destroy_token(token)
+      def destroy(token)
         carefully do
-          Bone.api.destroy_token token, secret
+          Bone.api.destroy token, secret
         end
       end
 
@@ -141,7 +141,7 @@ class Bone
         def key?(token, secret, name)
           !get(token, secret, name).nil?
         end
-        def destroy_token(token, secret)
+        def destroy(token, secret)
           query = {}
           path = Bone::API.path('destroy', token)
           ret = http_request token, secret, :delete, path, query
@@ -295,7 +295,7 @@ class Bone
       def key?(token, secret, name)
         Key.new(token, name).value.exists?
       end
-      def destroy_token(token, secret)
+      def destroy(token, secret)
         Token.tokens.delete token
         Token.new(token).secret.destroy!
       end
@@ -368,7 +368,7 @@ class Bone
       def key?(token, secret, name)
         @data.has_key?(Bone::API.prefix(token, name))
       end
-      def destroy_token(token, secret)
+      def destroy(token, secret)
         @tokens.delete token
       end
       def register(token, secret)
