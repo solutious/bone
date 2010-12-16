@@ -56,9 +56,13 @@ Bone.key? :bogus
 #=> false
 
 ## Bone.generate
-@token2, secret = *Bone.generate
+@token2, @secret2 = *Bone.generate
 @token2.size
 #=> 40
 
 Bone.destroy Bone.token
-Bone.destroy @token2 if @token2
+
+if @token2
+  bone = Bone.new @token2, @secret2
+  bone.destroy @token2 
+end
