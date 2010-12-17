@@ -1,7 +1,7 @@
 # try try/32_api_http_try.rb
 
 require 'bone'
-Bone.debug = true
+#Bone.debug = true
 Bone.token = 'atoken'
 Bone.secret = 'crystal'
 
@@ -58,7 +58,7 @@ Bone.key? :bogus
 ## Bone.generate
 @token2, @secret2 = *Bone.generate
 @token2.size
-#=> 40
+#=> 24
 
 Bone.destroy Bone.token
 

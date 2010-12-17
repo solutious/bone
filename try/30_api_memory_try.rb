@@ -16,7 +16,7 @@ Bone.api
 ## Can generate a token
 @generated_token, secret = *Bone.generate
 @generated_token.size
-#=> 40
+#=> 24
 
 ## Can register a token
 @token = Bone.register 'atoken', 'secret1'
