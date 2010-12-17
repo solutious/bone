@@ -34,7 +34,7 @@ class Bone
     APIVERSION = 'v2'.freeze 
     SECRETCHAR = [('a'..'z'),('A'..'Z'),(0..9)].map(&:to_a).flatten.freeze
   end
-  @source = URI.parse(ENV['BONE_SOURCE'] || 'https://api.bonery.com')
+  @source = URI.parse(ENV['BONE_SOURCE'] || 'redis://127.0.0.1:6379/')
   @apis = {}
   @digest_type = OpenSSL::Digest::SHA256
   class Problem < RuntimeError; end
@@ -44,7 +44,7 @@ class Bone
     attr_reader :apis, :api, :source, :digest_type
     attr_writer :token, :secret
     
-    def source=(v)
+    def source= v
       @source = URI.parse v
       select_api
     end
@@ -77,14 +77,14 @@ class Bone
     end
     
     # Stolen from Rack::Utils which stole it from Camping.
-    def uri_escape(s)
+    def uri_escape s
       s.to_s.gsub(/([^ a-zA-Z0-9_.-]+)/n) {
         '%'+$1.unpack('H2'*bytesize($1)).join('%').upcase
       }.tr(' ', '+')
     end
     
     # Stolen from Rack::Utils which stole it from Camping.
-    def uri_unescape(s)
+    def uri_unescape s
       s.tr('+', ' ').gsub(/((?:%[0-9a-fA-F]{2})+)/n){
         [$1.delete('%')].pack('H*')
       }
@@ -93,20 +93,20 @@ class Bone
     # Return the bytesize of String; uses String#size under Ruby 1.8 and
     # String#bytesize under 1.9.
     if ''.respond_to?(:bytesize)
-      def bytesize(string)
-        string.bytesize
+      def bytesize s
+        s.bytesize
       end
     else
-      def bytesize(string)
-        string.size
+      def bytesize s
+        s.size
       end
     end
     
-    def is_sha1?(val)
+    def is_sha1? val
       val.to_s.match /\A[0-9a-f]{40}\z/
     end
 
-    def is_sha256?(val)
+    def is_sha256? val
       val.to_s.match /\A[0-9a-f]{64}\z/
     end
 
@@ -141,7 +141,7 @@ class Bone
       end
     end
     
-    def register_api(scheme, klass)
+    def register_api scheme, klass
       Bone.apis[scheme.to_sym] = klass
     end
     
@@ -154,7 +154,7 @@ class Bone
     # 
     #     vendor/httpclient-2.1.5.2/httpclient
     #
-    def require_vendor(name, version)
+    def require_vendor name, version
       path = File.join(BONE_HOME, 'vendor', "#{name}-#{version}", 'lib')
       $:.unshift path
       Bone.ld "REQUIRE VENDOR: ", path
