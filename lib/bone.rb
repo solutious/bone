@@ -116,14 +116,17 @@ class Bone
     end
     
     def random_token
-      (0...24).map{ SECRETCHAR[rand(SECRETCHAR.length)] }.join.upcase;
+      p1 = (0...21).map{ SECRETCHAR[rand(SECRETCHAR.length)] }.join
+      p2 = Bone.api.token_suffix
+      p3 = (0...2).map{ SECRETCHAR[rand(SECRETCHAR.length)] }.join
+      [p1,p2,p3].join.upcase
     end
     
     def random_secret 
       src = [SECRETCHAR, %w'* ^ $ ! / . - _ + %'].flatten
-      p1 = (0...2).map{ SECRETCHAR[rand(SECRETCHAR.length)] }.join;
-      p2 = (0...60).map{ src[rand(src.length)] }.join;
-      p3 = (0...2).map{ SECRETCHAR[rand(SECRETCHAR.length)] }.join;
+      p1 = (0...2).map{ SECRETCHAR[rand(SECRETCHAR.length)] }.join
+      p2 = (0...60).map{ src[rand(src.length)] }.join
+      p3 = (0...2).map{ SECRETCHAR[rand(SECRETCHAR.length)] }.join      
       [p1,p2,p3].join
     end
     

@@ -112,8 +112,9 @@ class Bone
   
     module HTTP
       SIGVERSION = 'v2'.freeze unless defined?(Bone::API::HTTP::SIGVERSION)
-    
+      @token_suffix = 2.freeze
       class << self 
+        attr_reader :token_suffix
         # /v2/[name]
         def get(token, secret, name)
           path = Bone::API.path(token, 'key', name)
@@ -164,7 +165,7 @@ class Bone
           @external_em = EM.reactor_running?
           #@retry_delay, @redirects, @max_retries, @performed_retries = 2, 1, 2, 0
         end
-      
+        
         def canonical_time now=Time.now
           now.utc.to_i
         end
@@ -308,76 +309,79 @@ class Bone
     end
   
     module Redis
-      extend self
-      attr_accessor :redis
-      def get(token, secret, name)
-        Key.new(token, name).value.get   # get returns nil if not set
-      end
-      def set(token, secret, name, value)
-        Key.new(token, name).value = value
-        Token.new(token).keys.add Time.now.utc.to_f, name
-        value.to_s
-      end
-      def keys(token, secret, filter='*')
-        Token.new(token).keys.to_a
-      end
-      def key?(token, secret, name)
-        Key.new(token, name).value.exists?
-      end
-      def destroy(token, secret)
-        Token.tokens.delete token
-        Token.new(token).secret.destroy!
-      end
-      def register(token, secret)
-        raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
-        Token.tokens.add Time.now.utc.to_i, token
-        t = Token.new(token).secret = secret
-        token
-      end
-      def generate
-        begin 
-          token = Bone.random_token
-          attempts ||= 10
-        end while token?(token) && !(attempts -= 1).zero?
-        secret = Bone.random_secret
-        raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
-        Token.tokens.add Time.now.utc.to_i, token
-        t = Token.new(token).secret = secret
-        [token, secret]
-      end
-      def secret token
-        Token.new(token).secret.value
-      end
-      def token?(token, secret=nil)
-        Token.tokens.member?(token.to_s)
-      end
-      def connect
-        Familia.uri = Bone.source
-      end
-      class Key
-        include Familia
-        prefix Bone::API.prefix(:key)
-        string :value
-        attr_reader :token, :name, :bucket
-        def initialize(token, name, bucket=:global)
-          @token, @name, @bucket = token.to_s, name.to_s, bucket.to_s
-          initialize_redis_objects
+      @token_suffix = 1.freeze
+      class << self
+        attr_reader :token_suffix
+        attr_accessor :redis
+        def get(token, secret, name)
+          Key.new(token, name).value.get   # get returns nil if not set
         end
-        def index
-          [token, bucket, name].join ':'
+        def set(token, secret, name, value)
+          Key.new(token, name).value = value
+          Token.new(token).keys.add Time.now.utc.to_f, name
+          value.to_s
         end
-      end
-      class Token
-        include Familia
-        prefix Bone::API.prefix(:token)
-        string :secret
-        zset :keys
-        class_zset :tokens
-        index :token
-        attr_reader :token
-        def initialize(token)
-          @token = token.to_s
-          initialize_redis_objects
+        def keys(token, secret, filter='*')
+          Token.new(token).keys.to_a
+        end
+        def key?(token, secret, name)
+          Key.new(token, name).value.exists?
+        end
+        def destroy(token, secret)
+          Token.tokens.delete token
+          Token.new(token).secret.destroy!
+        end
+        def register(token, secret)
+          raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
+          Token.tokens.add Time.now.utc.to_i, token
+          t = Token.new(token).secret = secret
+          token
+        end
+        def generate
+          begin 
+            token = Bone.random_token
+            attempts ||= 10
+          end while token?(token) && !(attempts -= 1).zero?
+          secret = Bone.random_secret
+          raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
+          Token.tokens.add Time.now.utc.to_i, token
+          t = Token.new(token).secret = secret
+          [token, secret]
+        end
+        def secret token
+          Token.new(token).secret.value
+        end
+        def token?(token, secret=nil)
+          Token.tokens.member?(token.to_s)
+        end
+        def connect
+          Familia.uri = Bone.source
+        end
+        class Key
+          include Familia
+          prefix Bone::API.prefix(:key)
+          string :value
+          attr_reader :token, :name, :bucket
+          def initialize(token, name, bucket=:global)
+            @token, @name, @bucket = token.to_s, name.to_s, bucket.to_s
+            initialize_redis_objects
+          end
+          def index
+            [token, bucket, name].join ':'
+          end
+        end
+        class Token
+          include Familia
+          prefix Bone::API.prefix(:token)
+          string :secret
+          zset :keys
+          class_zset :tokens
+          index :token
+          attr_reader :token
+          def initialize(token)
+            @token = token.to_s
+            initialize_redis_objects
+          end
         end
       end
       Bone.register_api :redis, self
@@ -385,6 +389,8 @@ class Bone
   
     module Memory
       extend self
+      @token_suffix = 0.freeze
+      attr_reader :token_suffix
       @data, @tokens = {}, {}
       def get(token, secret, name)
         @data[Bone::API.prefix(token, name)]
