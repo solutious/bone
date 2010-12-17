@@ -311,83 +311,82 @@ class Bone
       Bone.register_api :http, self
       Bone.register_api :https, self
     end
-  
     module Redis
       @token_suffix = 1.freeze
-      class << self
-        attr_reader :token_suffix
-        attr_accessor :redis
-        def get(token, secret, name)
-          Key.new(token, name).value.get   # get returns nil if not set
+      extend self
+      attr_reader :token_suffix
+      attr_accessor :redis
+      def get(token, secret, name)
+        Key.new(token, name).value.get   # get returns nil if not set
+      end
+      def set(token, secret, name, value)
+        Key.new(token, name).value = value
+        Token.new(token).keys.add Time.now.utc.to_f, name
+        value.to_s
+      end
+      def keys(token, secret, filter='*')
+        Token.new(token).keys.to_a
+      end
+      def key?(token, secret, name)
+        Key.new(token, name).value.exists?
+      end
+      def destroy(token, secret)
+        Token.tokens.delete token
+        Token.new(token).secret.destroy!
+      end
+      def register(token, secret)
+        raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
+        Token.tokens.add Time.now.utc.to_i, token
+        t = Token.new(token).secret = secret
+        token
+      end
+      def generate
+        begin 
+          token = Bone.random_token
+          attempts ||= 10
+        end while token?(token) && !(attempts -= 1).zero?
+        secret = Bone.random_secret
+        raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
+        Token.tokens.add Time.now.utc.to_i, token
+        t = Token.new(token).secret = secret
+        [token, secret]
+      end
+      def secret token
+        Token.new(token).secret.value
+      end
+      def token?(token, secret=nil)
+        Token.tokens.member?(token.to_s)
+      end
+      def connect
+        Familia.uri = Bone.source
+      end
+      class Key
+        include Familia
+        prefix Bone::API.prefix(:key)
+        string :value
+        attr_reader :token, :name, :bucket
+        def initialize(token, name, bucket=:global)
+          @token, @name, @bucket = token.to_s, name.to_s, bucket.to_s
+          initialize_redis_objects
         end
-        def set(token, secret, name, value)
-          Key.new(token, name).value = value
-          Token.new(token).keys.add Time.now.utc.to_f, name
-          value.to_s
-        end
-        def keys(token, secret, filter='*')
-          Token.new(token).keys.to_a
-        end
-        def key?(token, secret, name)
-          Key.new(token, name).value.exists?
-        end
-        def destroy(token, secret)
-          Token.tokens.delete token
-          Token.new(token).secret.destroy!
-        end
-        def register(token, secret)
-          raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
-          Token.tokens.add Time.now.utc.to_i, token
-          t = Token.new(token).secret = secret
-          token
-        end
-        def generate
-          begin 
-            token = Bone.random_token
-            attempts ||= 10
-          end while token?(token) && !(attempts -= 1).zero?
-          secret = Bone.random_secret
-          raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
-          Token.tokens.add Time.now.utc.to_i, token
-          t = Token.new(token).secret = secret
-          [token, secret]
-        end
-        def secret token
-          Token.new(token).secret.value
-        end
-        def token?(token, secret=nil)
-          Token.tokens.member?(token.to_s)
-        end
-        def connect
-          Familia.uri = Bone.source
-        end
-        class Key
-          include Familia
-          prefix Bone::API.prefix(:key)
-          string :value
-          attr_reader :token, :name, :bucket
-          def initialize(token, name, bucket=:global)
-            @token, @name, @bucket = token.to_s, name.to_s, bucket.to_s
-            initialize_redis_objects
-          end
-          def index
-            [token, bucket, name].join ':'
-          end
-        end
-        class Token
-          include Familia
-          prefix Bone::API.prefix(:token)
-          string :secret
-          zset :keys
-          class_zset :tokens
-          index :token
-          attr_reader :token
-          def initialize(token)
-            @token = token.to_s
-            initialize_redis_objects
-          end
+        def index
+          [token, bucket, name].join ':'
         end
       end
+      class Token          
+        include Familia
+        prefix Bone::API.prefix(:token)
+        string :secret
+        zset :keys
+        class_zset :tokens
+        index :token
+        attr_reader :token
+        def initialize(token)
+          @token = token.to_s
+          initialize_redis_objects
+        end
+      end
+    
       Bone.register_api :redis, self
     end
   
