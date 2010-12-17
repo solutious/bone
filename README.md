@@ -1,58 +1,78 @@
-## Bone - 0.2 ##
+## Bone - 0.3 ##
 
-**Environment variables in the "visible mass of condensed water vapour floating in the atmosphere, typically high above the ground."**
+**Remote environment variables**
 
 ## Features
 
 * Store variables and files remotely
-* Simple interface
+* A command-line and ruby interface
+* Secure REST API (based on AWS sig)
+* Also supports direct Redis access.
 
 ## CLI Example
-    
+        
     # Specify arbitrary keys and values. 
     $ bone set cust_id c397d204aa4e94f566d7f78c
     $ bone cust_id
     c397d204aa4e94f566d7f78c
     
-    # File contents are read automatically...
-    $ bone set redis_conf config/redis-server.conf
+    # Set values from STDIN
+    $ >config/redis-server.conf bone set redis_conf 
     $ bone redis_conf 
-    # Redis configuration file example
-    ...
+    [content of redis-server.conf]
     
-    # unless you specify -s
-    $ bone set -s redis_conf config/redis-server.conf
-    $ bone redis_conf
-    config/redis-server.conf
+    # The data doesn't have to be text
+    $ >path/2/dog.jpg bone set dog_picture
+    $ bone dog_picture > dog.jpg 
+    $ open dog.jpg
     
     # Show all available keys
     $ bone keys
     cust_id
     redis_conf
+    dog_picture
     
 ## Ruby Example
 
     require 'bone'
     
-    ENV['BONE_TOKEN'] ||= Bone.generate
-    
     Bone[:cust_id] = 'c397d204aa4e94f566d7f78c'
     Bone[:redis_conf] = File.read('config/redis-server.conf')
     
     Bone[:cust_id]                    # => "c397d204aa4e94f566d7f78c"
-    Bone[:redis_conf]                 # => "# Redis configuration file example..."
+    Bone[:redis_conf]                 # => "[content of redis-server.conf]"
     
+    # OR
     
+    bone = Bone.new
+    bone[:latest_backup] = 'redis.rdb-2011-01-01'
+    bone.keys                         # => ['cust_id', 'latest_backup', 'redis_conf']
+    
+## Setting BONE_SOURCE ##
+
+Bone can store data via a REST API or directly to Redis. The default source is redis://127.0.0.1:6379. 
+
+### Redis ###
+
+If you are running Redis at a different address or port, you can change it by setting the BONE_SOURCE environment variable or by explicitly setting in Ruby with `Bone.source='redis://anotherhost:6379'`.
+
+### HTTP ###
+
+If you want to use the REST API, you need to run an instance of [boned](http://github.com/solutious/boned) (the bone daemon).You'd then set your bone source to something like `https://somehost:3073`. **Note: unless your bone client and server are on a private network, it is highly recommended to use HTTPS.**
+
+
 ## Installation
 
     $ sudo gem install bone
-    $ bone token
-    $ export BONE_TOKEN=YOURTOKEN
     
-You also need to running instance of [boned](http://github.com/solutious/boned) (the bone daemon).
-
+    $ bone generate
+    # Your token for http://localhost:3073
+    BONE_TOKEN=LBL6PEGVWLFR3PJIOFQG01GN
+    BONE_SECRET=tXvhnban0HD.Aqj$goK9a2oW$T/L8le9460cfXR1t^RfMXq.5vQ2^lHd-c.WND6V
     
-## More Information
+    [Add BONE_TOKEN and BONE_SECRET to your .bashrc or equivalent]
+    
+    $ bone
 
 
 ## Credits
@@ -60,9 +80,10 @@ You also need to running instance of [boned](http://github.com/solutious/boned) 
 * Delano Mandelbaum (http://solutious.com)
 * Query signatures for the HTTP API are based on / stolen from: https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb
 
+
 ## Thanks 
 
-* Kalin Harvey for the early feedback. 
+* Kalin Harvey and Marc-André Cournoyer for the early feedback.
 
 
 ## License
