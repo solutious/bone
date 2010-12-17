@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Bone::API::Helpers [bone 0.3.0.]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          Bone::API::Helpers
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../files/lib/bone/api_rb.html">lib/bone/api.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000040">path</a></li>
+              <li><a href="#M000041">prefix</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='method public-instance' id='method-M000040'>
+                <a name='M000040'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>path</span>
+                  <span class='arguments'>(*parts)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 102</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">path</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">parts</span>)&#x000A;        <span class="ruby-node">&quot;/#{APIVERSION}/&quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">uri_escape</span>(<span class="ruby-identifier">v</span>) }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">'/'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000041'>
+                <a name='M000041'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>prefix</span>
+                  <span class='arguments'>(*parts)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000041-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000041-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 105</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prefix</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">parts</span>)&#x000A;        <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">flatten!</span>&#x000A;        <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">unshift</span> <span class="ruby-operator">*</span>[<span class="ruby-constant">APIVERSION</span>, <span class="ruby-value str">'bone'</span>]&#x000A;        <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">':'</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

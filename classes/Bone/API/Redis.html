@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Bone::API::Redis [bone 0.3.0.]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          Bone::API::Redis
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../files/lib/bone/api_rb.html">lib/bone/api.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000069">connect</a></li>
+              <li><a href="#M000064">destroy</a></li>
+              <li><a href="#M000066">generate</a></li>
+              <li><a href="#M000060">get</a></li>
+              <li><a href="#M000063">key?</a></li>
+              <li><a href="#M000062">keys</a></li>
+              <li><a href="#M000065">register</a></li>
+              <li><a href="#M000067">secret</a></li>
+              <li><a href="#M000061">set</a></li>
+              <li><a href="#M000068">token?</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='class-list'>
+              <h2>Classes and Modules</h2>
+              Class <a href="Redis/Key.html" class="link">Bone::API::Redis::Key</a><br />
+              Class <a href="Redis/Token.html" class="link">Bone::API::Redis::Token</a><br />
+            </div>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>redis</td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>token_suffix</td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='method public-instance' id='method-M000069'>
+                <a name='M000069'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>connect</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000069-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000069-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 360</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">connect</span>&#x000A;        <span class="ruby-constant">Familia</span>.<span class="ruby-identifier">uri</span> = <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">source</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000064'>
+                <a name='M000064'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>destroy</span>
+                  <span class='arguments'>(token, secret)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000064-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000064-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 333</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>)&#x000A;        <span class="ruby-constant">Token</span>.<span class="ruby-identifier">tokens</span>.<span class="ruby-identifier">delete</span> <span class="ruby-identifier">token</span>&#x000A;        <span class="ruby-constant">Token</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">token</span>).<span class="ruby-identifier">secret</span>.<span class="ruby-identifier">destroy!</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000066'>
+                <a name='M000066'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>generate</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000066-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000066-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 343</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">generate</span>&#x000A;        <span class="ruby-keyword kw">begin</span> &#x000A;          <span class="ruby-identifier">token</span> = <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">random_token</span>&#x000A;          <span class="ruby-identifier">attempts</span> <span class="ruby-operator">||=</span> <span class="ruby-value">10</span>&#x000A;        <span class="ruby-keyword kw">end</span> <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">token?</span>(<span class="ruby-identifier">token</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span>(<span class="ruby-identifier">attempts</span> <span class="ruby-operator">-=</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">zero?</span>&#x000A;        <span class="ruby-identifier">secret</span> = <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">random_secret</span>&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">RuntimeError</span>, <span class="ruby-value str">&quot;Could not generate token&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">token</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">token?</span>(<span class="ruby-identifier">token</span>)&#x000A;        <span class="ruby-constant">Token</span>.<span class="ruby-identifier">tokens</span>.<span class="ruby-identifier">add</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">utc</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">token</span>&#x000A;        <span class="ruby-identifier">t</span> = <span class="ruby-constant">Token</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">token</span>).<span class="ruby-identifier">secret</span> = <span class="ruby-identifier">secret</span>&#x000A;        [<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000060'>
+                <a name='M000060'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>get</span>
+                  <span class='arguments'>(token, secret, name)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000060-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000060-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 319</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-constant">Key</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">name</span>).<span class="ruby-identifier">value</span>.<span class="ruby-identifier">get</span>   <span class="ruby-comment cmt"># get returns nil if not set</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000063'>
+                <a name='M000063'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>key?</span>
+                  <span class='arguments'>(token, secret, name)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000063-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000063-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 330</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">key?</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">name</span>)&#x000A;        <span class="ruby-constant">Key</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">name</span>).<span class="ruby-identifier">value</span>.<span class="ruby-identifier">exists?</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000062'>
+                <a name='M000062'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>keys</span>
+                  <span class='arguments'>(token, secret, filter='*')</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000062-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000062-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 327</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keys</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">filter</span>=<span class="ruby-value str">'*'</span>)&#x000A;        <span class="ruby-constant">Token</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">token</span>).<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">to_a</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000065'>
+                <a name='M000065'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>register</span>
+                  <span class='arguments'>(token, secret)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000065-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000065-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 337</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">RuntimeError</span>, <span class="ruby-value str">&quot;Could not generate token&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">token</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">token?</span>(<span class="ruby-identifier">token</span>)&#x000A;        <span class="ruby-constant">Token</span>.<span class="ruby-identifier">tokens</span>.<span class="ruby-identifier">add</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">utc</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">token</span>&#x000A;        <span class="ruby-identifier">t</span> = <span class="ruby-constant">Token</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">token</span>).<span class="ruby-identifier">secret</span> = <span class="ruby-identifier">secret</span>&#x000A;        <span class="ruby-identifier">token</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000067'>
+                <a name='M000067'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>secret</span>
+                  <span class='arguments'>(token)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000067-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000067-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 354</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">secret</span> <span class="ruby-identifier">token</span>&#x000A;        <span class="ruby-constant">Token</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">token</span>).<span class="ruby-identifier">secret</span>.<span class="ruby-identifier">value</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000061'>
+                <a name='M000061'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>set</span>
+                  <span class='arguments'>(token, secret, name, value)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000061-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000061-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 322</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)&#x000A;        <span class="ruby-constant">Key</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">name</span>).<span class="ruby-identifier">value</span> = <span class="ruby-identifier">value</span>&#x000A;        <span class="ruby-constant">Token</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">token</span>).<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">add</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">utc</span>.<span class="ruby-identifier">to_f</span>, <span class="ruby-identifier">name</span>&#x000A;        <span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000068'>
+                <a name='M000068'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>token?</span>
+                  <span class='arguments'>(token, secret=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000068-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000068-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 357</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">token?</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-constant">Token</span>.<span class="ruby-identifier">tokens</span>.<span class="ruby-identifier">member?</span>(<span class="ruby-identifier">token</span>.<span class="ruby-identifier">to_s</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

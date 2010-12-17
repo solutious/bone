@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>File: README.md [Get Bones]</title>
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <title>File: README.md [bone 0.3.0.]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
@@ -31,19 +31,17 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2010-01-25 19:52:44 -0500</span>
+          <span class='datetime'>2010-12-17 16:06:28 -0500</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
             <p>
-            ## <a href="../classes/Bone.html">Bone</a> - 0.2 ##
+            ## <a href="../classes/Bone.html">Bone</a> - 0.3 ##
             </p>
             <p>
-            **Environment variables in the &#8220;visible mass of condensed water
-            vapour floating in the atmosphere, typically high above the
-            ground.&#8221;**
+            **Remote environment variables**
             </p>
             <p>
             ## Features
@@ -52,30 +50,58 @@
             <li>Store variables and files remotely
             
             </li>
-            <li>Simple interface
+            <li>A command-line and ruby interface
+            
+            </li>
+            <li>Secure REST API (based on AWS sig)
+            
+            </li>
+            <li>Also supports direct [Redis](<a
+            href="http://code.google.com/p/redis/">code.google.com/p/redis/</a>)
+            access.
             
             </li>
             </ul>
             <p>
             ## CLI Example
             </p>
-            <pre># Specify arbitrary keys and values.&#x000A;$ bone set cust_id c397d204aa4e94f566d7f78c&#x000A;$ bone cust_id&#x000A;c397d204aa4e94f566d7f78c&#x000A;&#x000A;# File contents are read automatically...&#x000A;$ bone set redis_conf config/redis-server.conf&#x000A;$ bone redis_conf&#x000A;# Redis configuration file example&#x000A;...&#x000A;&#x000A;# unless you specify -s&#x000A;$ bone set -s redis_conf config/redis-server.conf&#x000A;$ bone redis_conf&#x000A;config/redis-server.conf&#x000A;&#x000A;# Show all available keys&#x000A;$ bone keys&#x000A;cust_id&#x000A;redis_conf</pre>
+            <pre># Specify arbitrary keys and values.&#x000A;$ bone set cust_id c397d204aa4e94f566d7f78c&#x000A;$ bone cust_id&#x000A;c397d204aa4e94f566d7f78c&#x000A;&#x000A;# Set values from STDIN&#x000A;$ &gt;config/redis-server.conf bone set redis_conf&#x000A;$ bone redis_conf&#x000A;[content of redis-server.conf]&#x000A;&#x000A;# The data doesn't have to be text&#x000A;$ &gt;path/2/dog.jpg bone set dog_picture&#x000A;$ bone dog_picture &gt; dog.jpg&#x000A;$ open dog.jpg&#x000A;&#x000A;# Show all available keys&#x000A;$ bone keys&#x000A;cust_id&#x000A;redis_conf&#x000A;dog_picture</pre>
             <p>
             ## Ruby Example
             </p>
-            <pre>require 'bone'&#x000A;&#x000A;ENV['BONE_TOKEN'] ||= Bone.generate_token&#x000A;&#x000A;Bone[:cust_id] = 'c397d204aa4e94f566d7f78c'&#x000A;Bone[:redis_conf] = File.read('config/redis-server.conf')&#x000A;&#x000A;Bone[:cust_id]                    # =&gt; &quot;c397d204aa4e94f566d7f78c&quot;&#x000A;Bone[:redis_conf]                 # =&gt; &quot;# Redis configuration file example...&quot;</pre>
+            <pre>require 'bone'&#x000A;&#x000A;Bone[:cust_id] = 'c397d204aa4e94f566d7f78c'&#x000A;Bone[:redis_conf] = File.read('config/redis-server.conf')&#x000A;&#x000A;Bone[:cust_id]                    # =&gt; &quot;c397d204aa4e94f566d7f78c&quot;&#x000A;Bone[:redis_conf]                 # =&gt; &quot;[content of redis-server.conf]&quot;&#x000A;&#x000A;# OR&#x000A;&#x000A;bone = Bone.new&#x000A;bone[:latest_backup] = 'redis.rdb-2011-01-01'&#x000A;bone.keys                         # =&gt; ['cust_id', 'latest_backup', 'redis_conf']</pre>
+            <p>
+            ## Setting BONE_SOURCE ##
+            </p>
+            <p>
+            <a href="../classes/Bone.html">Bone</a> can store data via a REST API or
+            directly to Redis. The default source is redis://127.0.0.1:6379.
+            </p>
+            <p>
+            ### Redis ###
+            </p>
+            <p>
+            If you are running [Redis](<a
+            href="http://code.google.com/p/redis/">code.google.com/p/redis/</a>) at a
+            different address or port, you can change it by setting the BONE_SOURCE
+            environment variable or by explicitly setting in Ruby with `<a
+            href="../classes/Bone.html#M000001">Bone.source=</a>&#8216;redis://anotherhost:6379&#8217;`.
+            </p>
+            <p>
+            ### HTTP ###
+            </p>
+            <p>
+            If you want to use the REST API, you need to run an instance of [boned](<a
+            href="http://github.com/solutious/boned">github.com/solutious/boned</a>)
+            (the bone daemon).You&#8217;d then set your bone source to something like
+            `<a href="https://somehost:3073">somehost:3073</a>`. **Note: unless your
+            bone client and server are on a private network, it is highly recommended
+            to use HTTPS.**
+            </p>
             <p>
             ## Installation
             </p>
-            <pre>$ sudo gem install bone&#x000A;$ bone token&#x000A;$ export BONE_TOKEN=YOURTOKEN</pre>
-            <p>
-            You also need to running instance of [boned](<a
-            href="http://github.com/solutious/boned">github.com/solutious/boned</a>)
-            (the bone daemon).
-            </p>
-            <p>
-            ## More Information
-            </p>
+            <pre>$ sudo gem install bone&#x000A;&#x000A;$ bone generate&#x000A;# Your token for http://localhost:3073&#x000A;BONE_TOKEN=LBL6PEGVWLFR3PJIOFQG01GN&#x000A;BONE_SECRET=tXvhnban0HD.Aqj$goK9a2oW$T/L8le9460cfXR1t^RfMXq.5vQ2^lHd-c.WND6V&#x000A;&#x000A;[Add BONE_TOKEN and BONE_SECRET to your .bashrc or equivalent]&#x000A;&#x000A;$ bone</pre>
             <p>
             ## Credits
             </p>
@@ -83,12 +109,16 @@
             <li>Delano Mandelbaum (<a href="http://solutious.com">solutious.com</a>)
             
             </li>
+            <li>Query signatures for the HTTP API are based on / stolen from: <a
+            href="https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb">github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb</a>
+            
+            </li>
             </ul>
             <p>
             ## Thanks
             </p>
             <ul>
-            <li>Kalin Harvey for the early feedback.
+            <li>Kalin Harvey and Marc-André Cournoyer for the early feedback.
             
             </li>
             </ul>
@@ -96,7 +126,10 @@
             ## License
             </p>
             <p>
-            See <a href="LICENSE_txt.html">LICENSE.txt</a>
+            Copyright &#169; 2009-2011 Delano Mandelbaum, Solutious Inc.
+            </p>
+            <p>
+            Distributes under the same terms as Ruby
             </p>
           </div>
           <div id='section'>

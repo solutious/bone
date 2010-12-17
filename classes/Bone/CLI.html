@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Bone::CLI [Get Bones]</title>
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <title>: Bone::CLI [bone 0.3.0.]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
@@ -41,101 +41,125 @@
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='description'>
+            <p>
+            TODO: finish this
+            </p>
+          </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000020">check!</a></li>
-              <li><a href="#M000022">del</a></li>
-              <li><a href="#M000021">get</a></li>
-              <li><a href="#M000024">keys</a></li>
-              <li><a href="#M000023">set</a></li>
-              <li><a href="#M000025">token</a></li>
+              <li><a href="#M000085">check!</a></li>
+              <li><a href="#M000091">generate</a></li>
+              <li><a href="#M000086">get</a></li>
+              <li><a href="#M000088">keys</a></li>
+              <li><a href="#M000090">secret</a></li>
+              <li><a href="#M000087">set</a></li>
+              <li><a href="#M000089">token</a></li>
             </ol>
           </div>
           <div id='section'>
-            <div id='class-list'>
-              <h2>Classes and Modules</h2>
-              Class <a href="CLI/Definition.html" class="link">Bone::CLI::Definition</a><br />
-            </div>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000020'>
-                <a name='M000020'>      </a>
+              <div class='method public-instance' id='method-M000085'>
+                <a name='M000085'>      </a>
                 <div class='synopsis'>
                   <span class='name'>check!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000020-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000085-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000020-source'>   <span class="ruby-comment cmt"># File lib/bone/cli.rb, line 6</span>&#x000A;6:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check!</span>&#x000A;7:     <span class="ruby-ivar">@token</span> = <span class="ruby-ivar">@global</span>.<span class="ruby-identifier">t</span> <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'BONE_TOKEN'</span>]&#x000A;8:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">BadBone</span>, <span class="ruby-ivar">@token</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">valid_token?</span>(<span class="ruby-ivar">@token</span>)&#x000A;9:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000085-source'><span class="ruby-comment cmt"># File lib/bone/cli.rb, line 7</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check!</span>&#x000A;    <span class="ruby-ivar">@token</span> = <span class="ruby-ivar">@global</span>.<span class="ruby-identifier">token</span> <span class="ruby-operator">||</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'BONE_TOKEN'</span>]&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">NoToken</span>, <span class="ruby-ivar">@token</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">token?</span>(<span class="ruby-ivar">@token</span>)&#x000A;    <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">token</span> = <span class="ruby-ivar">@token</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000022'>
-                <a name='M000022'>      </a>
+              <div class='method public-instance' id='method-M000091'>
+                <a name='M000091'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>del</span>
+                  <span class='name'>generate</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000022-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000091-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000022-source'>    <span class="ruby-comment cmt"># File lib/bone/cli.rb, line 18</span>&#x000A;18:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">del</span>&#x000A;19:     <span class="ruby-identifier">check!</span>&#x000A;20:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;No key specified&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">first</span>&#x000A;21:     <span class="ruby-identifier">puts</span> <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">del</span>(<span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">first</span>)&#x000A;22:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000091-source'><span class="ruby-comment cmt"># File lib/bone/cli.rb, line 69</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">generate</span>&#x000A;    <span class="ruby-identifier">t</span>, <span class="ruby-identifier">s</span> = <span class="ruby-operator">*</span><span class="ruby-constant">Bone</span>.<span class="ruby-identifier">generate</span>&#x000A;    <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;# Your token for #{Bone.source}&quot;</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;BONE_TOKEN=#{t}&quot;</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;BONE_SECRET=#{s}&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-comment cmt">#rescue Bone::NoToken =&gt; ex</span>&#x000A;  <span class="ruby-comment cmt">#  update_token_dialog</span>&#x000A;  <span class="ruby-comment cmt">#  exit 1</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000021'>
-                <a name='M000021'>      </a>
+              <div class='method public-instance' id='method-M000086'>
+                <a name='M000086'>      </a>
                 <div class='synopsis'>
                   <span class='name'>get</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000021-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000086-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000021-source'>    <span class="ruby-comment cmt"># File lib/bone/cli.rb, line 11</span>&#x000A;11:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>&#x000A;12:     <span class="ruby-identifier">check!</span>&#x000A;13:     <span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">unshift</span> <span class="ruby-ivar">@alias</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@alias</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'get'</span>&#x000A;14:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;No key specified&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">first</span>&#x000A;15:     <span class="ruby-identifier">puts</span> <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">first</span>)&#x000A;16:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000086-source'><span class="ruby-comment cmt"># File lib/bone/cli.rb, line 13</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>&#x000A;    <span class="ruby-identifier">check!</span>&#x000A;    <span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">unshift</span> <span class="ruby-ivar">@alias</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@alias</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'get'</span>&#x000A;    <span class="ruby-comment cmt">## TODO: handle bone name=value</span>&#x000A;    <span class="ruby-comment cmt">##if @alias.index('=') &gt; 0</span>&#x000A;    <span class="ruby-comment cmt">##  a = @alias.gsub(/\s+=\s+/, '=')</span>&#x000A;    <span class="ruby-comment cmt">##  name, value = *( ? @argv.first.split('=') : @argv)</span>&#x000A;    <span class="ruby-comment cmt">##end</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">Problem</span>, <span class="ruby-value str">&quot;No key specified&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">first</span>&#x000A;    <span class="ruby-identifier">ret</span> = <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">first</span>)&#x000A;    <span class="ruby-identifier">puts</span> <span class="ruby-identifier">ret</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">nil?</span> &#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000024'>
-                <a name='M000024'>      </a>
+              <div class='method public-instance' id='method-M000088'>
+                <a name='M000088'>      </a>
                 <div class='synopsis'>
                   <span class='name'>keys</span>
                   <span class='arguments'>()</span>
                 </div>
+                <div class='description'>
+                  <p>
+                  def del
+                  </p>
+                  <pre>check!&#x000A;raise Bone::Problem, &quot;No key specified&quot; unless @argv.first&#x000A;puts Bone.delete(@argv.first)</pre>
+                  <p>
+                  end
+                  </p>
+                </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000024-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000088-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000024-source'>    <span class="ruby-comment cmt"># File lib/bone/cli.rb, line 37</span>&#x000A;37:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keys</span>&#x000A;38:     <span class="ruby-identifier">check!</span>&#x000A;39:     <span class="ruby-identifier">list</span> = <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">keys</span>(<span class="ruby-ivar">@argv</span>[<span class="ruby-value">0</span>])&#x000A;40:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">list</span>.<span class="ruby-identifier">empty?</span> &#x000A;41:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@global</span>.<span class="ruby-identifier">quiet</span>&#x000A;42:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;No keys&quot;</span> &#x000A;43:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Try: bone set keyname=keyvalue&quot;</span>&#x000A;44:     <span class="ruby-keyword kw">else</span>&#x000A;45:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">list</span>&#x000A;46:     <span class="ruby-keyword kw">end</span>&#x000A;47:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000088-source'><span class="ruby-comment cmt"># File lib/bone/cli.rb, line 47</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keys</span>&#x000A;    <span class="ruby-identifier">check!</span>&#x000A;    <span class="ruby-identifier">list</span> = <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">keys</span>(<span class="ruby-ivar">@argv</span>[<span class="ruby-value">0</span>])&#x000A;    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">list</span>.<span class="ruby-identifier">empty?</span> &#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@global</span>.<span class="ruby-identifier">quiet</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;No keys&quot;</span> &#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Try: bone set keyname=keyvalue&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-identifier">list</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000023'>
-                <a name='M000023'>      </a>
+              <div class='method public-instance' id='method-M000090'>
+                <a name='M000090'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>secret</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000090-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000090-source'><span class="ruby-comment cmt"># File lib/bone/cli.rb, line 64</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">secret</span>&#x000A;    <span class="ruby-identifier">check!</span>&#x000A;    <span class="ruby-identifier">puts</span> <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">secret</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000087'>
+                <a name='M000087'>      </a>
                 <div class='synopsis'>
                   <span class='name'>set</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000023-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000087-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000023-source'>    <span class="ruby-comment cmt"># File lib/bone/cli.rb, line 24</span>&#x000A;24:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>&#x000A;25:     <span class="ruby-identifier">check!</span>&#x000A;26:     <span class="ruby-identifier">opts</span> = {<span class="ruby-identifier">:token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@token</span> }&#x000A;27:     <span class="ruby-identifier">keyname</span>, <span class="ruby-identifier">value</span> = <span class="ruby-operator">*</span>(<span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'='</span>) <span class="ruby-operator">:</span> <span class="ruby-ivar">@argv</span>)&#x000A;28:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;No key specified&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">keyname</span>&#x000A;29:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;No value specified&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">value</span>&#x000A;30:     <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">value</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@option</span>.<span class="ruby-identifier">string</span>&#x000A;31:       <span class="ruby-identifier">value</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">readlines</span>(<span class="ruby-identifier">value</span>).<span class="ruby-identifier">join</span>&#x000A;32:       <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:file</span>] = <span class="ruby-keyword kw">true</span>&#x000A;33:     <span class="ruby-keyword kw">end</span>&#x000A;34:     <span class="ruby-identifier">puts</span> <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">set</span>(<span class="ruby-identifier">keyname</span>, <span class="ruby-identifier">value</span>, <span class="ruby-identifier">opts</span>)&#x000A;35:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000087-source'><span class="ruby-comment cmt"># File lib/bone/cli.rb, line 26</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>&#x000A;    <span class="ruby-comment cmt"># TODO: use STDIN instead of @option.string</span>&#x000A;    <span class="ruby-identifier">check!</span>&#x000A;    <span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span> = <span class="ruby-operator">*</span>(<span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'='</span>) <span class="ruby-operator">:</span> <span class="ruby-ivar">@argv</span>)&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">Problem</span>, <span class="ruby-value str">&quot;No key specified&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">name</span>&#x000A;    <span class="ruby-identifier">from_stdin</span> = <span class="ruby-keyword kw">false</span>&#x000A;    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">stdin</span>.<span class="ruby-identifier">tty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">stdin</span>.<span class="ruby-identifier">eof?</span>&#x000A;      <span class="ruby-identifier">from_stdin</span> = <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-identifier">value</span> = <span class="ruby-identifier">stdin</span>.<span class="ruby-identifier">read</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">Problem</span>, <span class="ruby-value str">&quot;Cannot set null value&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">value</span>&#x000A;    <span class="ruby-constant">Bone</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">value</span>&#x000A;    <span class="ruby-identifier">puts</span> <span class="ruby-identifier">from_stdin</span> <span class="ruby-operator">?</span> <span class="ruby-value str">'&lt;STDIN&gt;'</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">value</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000025'>
-                <a name='M000025'>      </a>
+              <div class='method public-instance' id='method-M000089'>
+                <a name='M000089'>      </a>
                 <div class='synopsis'>
                   <span class='name'>token</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000025-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000089-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000025-source'>    <span class="ruby-comment cmt"># File lib/bone/cli.rb, line 49</span>&#x000A;49:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">token</span>&#x000A;50:     <span class="ruby-identifier">check!</span>  &#x000A;51:     <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@option</span>.<span class="ruby-identifier">force</span>&#x000A;52:       <span class="ruby-identifier">generate_token_dialog</span>&#x000A;53:     <span class="ruby-keyword kw">else</span>&#x000A;54:       <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@token</span>&#x000A;55:     <span class="ruby-keyword kw">end</span>&#x000A;56:   <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">BadBone</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ex</span>&#x000A;57:     <span class="ruby-identifier">generate_token_dialog</span>&#x000A;58:     <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>&#x000A;59:   <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000089-source'><span class="ruby-comment cmt"># File lib/bone/cli.rb, line 59</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">token</span>&#x000A;    <span class="ruby-identifier">check!</span>&#x000A;    <span class="ruby-identifier">puts</span> <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">token</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

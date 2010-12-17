@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Methods [Get Bones]</title>
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <title>Methods [bone 0.3.0.]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <base target='docwin'>
   </head>
@@ -4331,31 +4331,97 @@
         
         Element.addMethods();
         var search_index = [
-          { method: '[]', module: 'bone', html: '<a href="classes/Bone.html#M000010"><span class="method_name">[]</span> <span class="module_name">(Bone)</span></a>' },
-          { method: '[]=', module: 'bone', html: '<a href="classes/Bone.html#M000011"><span class="method_name">[]=</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'check!', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000020"><span class="method_name">check!</span> <span class="module_name">(Bone::CLI)</span></a>' },
-          { method: 'debug?', module: 'bone', html: '<a href="classes/Bone.html#M000003"><span class="method_name">debug?</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'del', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000022"><span class="method_name">del</span> <span class="module_name">(Bone::CLI)</span></a>' },
-          { method: 'del', module: 'bone', html: '<a href="classes/Bone.html#M000009"><span class="method_name">del</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'digest', module: 'bone', html: '<a href="classes/Bone.html#M000017"><span class="method_name">digest</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'disable_debug', module: 'bone', html: '<a href="classes/Bone.html#M000002"><span class="method_name">disable_debug</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'enable_debug', module: 'bone', html: '<a href="classes/Bone.html#M000001"><span class="method_name">enable_debug</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'generate_token', module: 'bone', html: '<a href="classes/Bone.html#M000018"><span class="method_name">generate_token</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'get', module: 'bone', html: '<a href="classes/Bone.html#M000005"><span class="method_name">get</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'get', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000021"><span class="method_name">get</span> <span class="module_name">(Bone::CLI)</span></a>' },
-          { method: 'get!', module: 'bone', html: '<a href="classes/Bone.html#M000006"><span class="method_name">get!</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'is_sha1?', module: 'bone', html: '<a href="classes/Bone.html#M000015"><span class="method_name">is_sha1?</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'is_sha256?', module: 'bone', html: '<a href="classes/Bone.html#M000016"><span class="method_name">is_sha256?</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'keys', module: 'bone', html: '<a href="classes/Bone.html#M000012"><span class="method_name">keys</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'keys', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000024"><span class="method_name">keys</span> <span class="module_name">(Bone::CLI)</span></a>' },
-          { method: 'ld', module: 'bone', html: '<a href="classes/Bone.html#M000004"><span class="method_name">ld</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'require_vendor', module: 'bone', html: '<a href="classes/Bone.html#M000013"><span class="method_name">require_vendor</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'set', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000023"><span class="method_name">set</span> <span class="module_name">(Bone::CLI)</span></a>' },
-          { method: 'set', module: 'bone', html: '<a href="classes/Bone.html#M000007"><span class="method_name">set</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'set!', module: 'bone', html: '<a href="classes/Bone.html#M000008"><span class="method_name">set!</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'token', module: 'bone', html: '<a href="classes/Bone.html#M000019"><span class="method_name">token</span> <span class="module_name">(Bone)</span></a>' },
-          { method: 'token', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000025"><span class="method_name">token</span> <span class="module_name">(Bone::CLI)</span></a>' },
-          { method: 'valid_token?', module: 'bone', html: '<a href="classes/Bone.html#M000014"><span class="method_name">valid_token?</span> <span class="module_name">(Bone)</span></a>' },
+          { method: '[]', module: 'bone::api::classmethods', html: '<a href="classes/Bone/API/ClassMethods.html#M000031"><span class="method_name">[]</span> <span class="module_name">(Bone::API::ClassMethods)</span></a>' },
+          { method: '[]', module: 'bone::api::instancemethods', html: '<a href="classes/Bone/API/InstanceMethods.html#M000021"><span class="method_name">[]</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a>' },
+          { method: '[]=', module: 'bone::api::instancemethods', html: '<a href="classes/Bone/API/InstanceMethods.html#M000023"><span class="method_name">[]=</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a>' },
+          { method: '[]=', module: 'bone::api::classmethods', html: '<a href="classes/Bone/API/ClassMethods.html#M000033"><span class="method_name">[]=</span> <span class="module_name">(Bone::API::ClassMethods)</span></a>' },
+          { method: 'bytesize', module: 'bone', html: '<a href="classes/Bone.html#M000010"><span class="method_name">bytesize</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'bytesize', module: 'bone', html: '<a href="classes/Bone.html#M000009"><span class="method_name">bytesize</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'canonical_host', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000053"><span class="method_name">canonical_host</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'canonical_sig_string', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000055"><span class="method_name">canonical_sig_string</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'canonical_time', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000052"><span class="method_name">canonical_time</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'check!', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000085"><span class="method_name">check!</span> <span class="module_name">(Bone::CLI)</span></a>' },
+          { method: 'connect', module: 'bone::api::memory', html: '<a href="classes/Bone/API/Memory.html#M000082"><span class="method_name">connect</span> <span class="module_name">(Bone::API::Memory)</span></a>' },
+          { method: 'connect', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000051"><span class="method_name">connect</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'connect', module: 'bone::api::redis', html: '<a href="classes/Bone/API/Redis.html#M000069"><span class="method_name">connect</span> <span class="module_name">(Bone::API::Redis)</span></a>' },
+          { method: 'credentials=', module: 'bone', html: '<a href="classes/Bone.html#M000002"><span class="method_name">credentials=</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'destroy', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000046"><span class="method_name">destroy</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'destroy', module: 'bone::api::instancemethods', html: '<a href="classes/Bone/API/InstanceMethods.html#M000028"><span class="method_name">destroy</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a>' },
+          { method: 'destroy', module: 'bone::api::memory', html: '<a href="classes/Bone/API/Memory.html#M000077"><span class="method_name">destroy</span> <span class="module_name">(Bone::API::Memory)</span></a>' },
+          { method: 'destroy', module: 'bone::api::classmethods', html: '<a href="classes/Bone/API/ClassMethods.html#M000038"><span class="method_name">destroy</span> <span class="module_name">(Bone::API::ClassMethods)</span></a>' },
+          { method: 'destroy', module: 'bone::api::redis', html: '<a href="classes/Bone/API/Redis.html#M000064"><span class="method_name">destroy</span> <span class="module_name">(Bone::API::Redis)</span></a>' },
+          { method: 'digest', module: 'bone', html: '<a href="classes/Bone.html#M000013"><span class="method_name">digest</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'encode', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000056"><span class="method_name">encode</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'generate', module: 'bone::api::redis', html: '<a href="classes/Bone/API/Redis.html#M000066"><span class="method_name">generate</span> <span class="module_name">(Bone::API::Redis)</span></a>' },
+          { method: 'generate', module: 'bone::api::classmethods', html: '<a href="classes/Bone/API/ClassMethods.html#M000037"><span class="method_name">generate</span> <span class="module_name">(Bone::API::ClassMethods)</span></a>' },
+          { method: 'generate', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000049"><span class="method_name">generate</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'generate', module: 'bone::api::memory', html: '<a href="classes/Bone/API/Memory.html#M000080"><span class="method_name">generate</span> <span class="module_name">(Bone::API::Memory)</span></a>' },
+          { method: 'generate', module: 'bone::api::instancemethods', html: '<a href="classes/Bone/API/InstanceMethods.html#M000027"><span class="method_name">generate</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a>' },
+          { method: 'generate', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000091"><span class="method_name">generate</span> <span class="module_name">(Bone::CLI)</span></a>' },
+          { method: 'generate_signature', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000059"><span class="method_name">generate_signature</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'get', module: 'bone::api::memory', html: '<a href="classes/Bone/API/Memory.html#M000073"><span class="method_name">get</span> <span class="module_name">(Bone::API::Memory)</span></a>' },
+          { method: 'get', module: 'bone::api::classmethods', html: '<a href="classes/Bone/API/ClassMethods.html#M000030"><span class="method_name">get</span> <span class="module_name">(Bone::API::ClassMethods)</span></a>' },
+          { method: 'get', module: 'bone::api::redis', html: '<a href="classes/Bone/API/Redis.html#M000060"><span class="method_name">get</span> <span class="module_name">(Bone::API::Redis)</span></a>' },
+          { method: 'get', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000086"><span class="method_name">get</span> <span class="module_name">(Bone::CLI)</span></a>' },
+          { method: 'get', module: 'bone::api::instancemethods', html: '<a href="classes/Bone/API/InstanceMethods.html#M000020"><span class="method_name">get</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a>' },
+          { method: 'get', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000042"><span class="method_name">get</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'index', module: 'bone::api::redis::key', html: '<a href="classes/Bone/API/Redis/Key.html#M000071"><span class="method_name">index</span> <span class="module_name">(Bone::API::Redis::Key)</span></a>' },
+          { method: 'info', module: 'bone', html: '<a href="classes/Bone.html#M000005"><span class="method_name">info</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'is_sha1?', module: 'bone', html: '<a href="classes/Bone.html#M000011"><span class="method_name">is_sha1?</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'is_sha256?', module: 'bone', html: '<a href="classes/Bone.html#M000012"><span class="method_name">is_sha256?</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'key?', module: 'bone::api::redis', html: '<a href="classes/Bone/API/Redis.html#M000063"><span class="method_name">key?</span> <span class="module_name">(Bone::API::Redis)</span></a>' },
+          { method: 'key?', module: 'bone::api::instancemethods', html: '<a href="classes/Bone/API/InstanceMethods.html#M000025"><span class="method_name">key?</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a>' },
+          { method: 'key?', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000045"><span class="method_name">key?</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'key?', module: 'bone::api::classmethods', html: '<a href="classes/Bone/API/ClassMethods.html#M000035"><span class="method_name">key?</span> <span class="module_name">(Bone::API::ClassMethods)</span></a>' },
+          { method: 'key?', module: 'bone::api::memory', html: '<a href="classes/Bone/API/Memory.html#M000076"><span class="method_name">key?</span> <span class="module_name">(Bone::API::Memory)</span></a>' },
+          { method: 'keys', module: 'bone::api::memory', html: '<a href="classes/Bone/API/Memory.html#M000075"><span class="method_name">keys</span> <span class="module_name">(Bone::API::Memory)</span></a>' },
+          { method: 'keys', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000044"><span class="method_name">keys</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'keys', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000088"><span class="method_name">keys</span> <span class="module_name">(Bone::CLI)</span></a>' },
+          { method: 'keys', module: 'bone::api::redis', html: '<a href="classes/Bone/API/Redis.html#M000062"><span class="method_name">keys</span> <span class="module_name">(Bone::API::Redis)</span></a>' },
+          { method: 'keys', module: 'bone::api::instancemethods', html: '<a href="classes/Bone/API/InstanceMethods.html#M000024"><span class="method_name">keys</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a>' },
+          { method: 'keys', module: 'bone::api::classmethods', html: '<a href="classes/Bone/API/ClassMethods.html#M000034"><span class="method_name">keys</span> <span class="module_name">(Bone::API::ClassMethods)</span></a>' },
+          { method: 'ld', module: 'bone', html: '<a href="classes/Bone.html#M000006"><span class="method_name">ld</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'load_config', module: 'bone::version', html: '<a href="classes/Bone/VERSION.html#M000084"><span class="method_name">load_config</span> <span class="module_name">(Bone::VERSION)</span></a>' },
+          { method: 'new', module: 'bone::api::instancemethods', html: '<a href="classes/Bone/API/InstanceMethods.html#M000019"><span class="method_name">new</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a>' },
+          { method: 'new', module: 'bone::api::redis::key', html: '<a href="classes/Bone/API/Redis/Key.html#M000070"><span class="method_name">new</span> <span class="module_name">(Bone::API::Redis::Key)</span></a>' },
+          { method: 'new', module: 'bone::api::redis::token', html: '<a href="classes/Bone/API/Redis/Token.html#M000072"><span class="method_name">new</span> <span class="module_name">(Bone::API::Redis::Token)</span></a>' },
+          { method: 'parse_query', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000054"><span class="method_name">parse_query</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'path', module: 'bone::api::helpers', html: '<a href="classes/Bone/API/Helpers.html#M000040"><span class="method_name">path</span> <span class="module_name">(Bone::API::Helpers)</span></a>' },
+          { method: 'prefix', module: 'bone::api::helpers', html: '<a href="classes/Bone/API/Helpers.html#M000041"><span class="method_name">prefix</span> <span class="module_name">(Bone::API::Helpers)</span></a>' },
+          { method: 'prepare_query', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000057"><span class="method_name">prepare_query</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'random_secret', module: 'bone', html: '<a href="classes/Bone.html#M000015"><span class="method_name">random_secret</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'random_token', module: 'bone', html: '<a href="classes/Bone.html#M000014"><span class="method_name">random_token</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'register', module: 'bone::api::instancemethods', html: '<a href="classes/Bone/API/InstanceMethods.html#M000026"><span class="method_name">register</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a>' },
+          { method: 'register', module: 'bone::api::memory', html: '<a href="classes/Bone/API/Memory.html#M000078"><span class="method_name">register</span> <span class="module_name">(Bone::API::Memory)</span></a>' },
+          { method: 'register', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000048"><span class="method_name">register</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'register', module: 'bone::api::redis', html: '<a href="classes/Bone/API/Redis.html#M000065"><span class="method_name">register</span> <span class="module_name">(Bone::API::Redis)</span></a>' },
+          { method: 'register', module: 'bone::api::classmethods', html: '<a href="classes/Bone/API/ClassMethods.html#M000036"><span class="method_name">register</span> <span class="module_name">(Bone::API::ClassMethods)</span></a>' },
+          { method: 'register_api', module: 'bone', html: '<a href="classes/Bone.html#M000017"><span class="method_name">register_api</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'require_vendor', module: 'bone', html: '<a href="classes/Bone.html#M000018"><span class="method_name">require_vendor</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'secret', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000047"><span class="method_name">secret</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'secret', module: 'bone', html: '<a href="classes/Bone.html#M000004"><span class="method_name">secret</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'secret', module: 'bone::api::redis', html: '<a href="classes/Bone/API/Redis.html#M000067"><span class="method_name">secret</span> <span class="module_name">(Bone::API::Redis)</span></a>' },
+          { method: 'secret', module: 'bone::api::memory', html: '<a href="classes/Bone/API/Memory.html#M000079"><span class="method_name">secret</span> <span class="module_name">(Bone::API::Memory)</span></a>' },
+          { method: 'secret', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000090"><span class="method_name">secret</span> <span class="module_name">(Bone::CLI)</span></a>' },
+          { method: 'select_api', module: 'bone', html: '<a href="classes/Bone.html#M000016"><span class="method_name">select_api</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'set', module: 'bone::api::redis', html: '<a href="classes/Bone/API/Redis.html#M000061"><span class="method_name">set</span> <span class="module_name">(Bone::API::Redis)</span></a>' },
+          { method: 'set', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000043"><span class="method_name">set</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'set', module: 'bone::api::memory', html: '<a href="classes/Bone/API/Memory.html#M000074"><span class="method_name">set</span> <span class="module_name">(Bone::API::Memory)</span></a>' },
+          { method: 'set', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000087"><span class="method_name">set</span> <span class="module_name">(Bone::CLI)</span></a>' },
+          { method: 'set', module: 'bone::api::classmethods', html: '<a href="classes/Bone/API/ClassMethods.html#M000032"><span class="method_name">set</span> <span class="module_name">(Bone::API::ClassMethods)</span></a>' },
+          { method: 'set', module: 'bone::api::instancemethods', html: '<a href="classes/Bone/API/InstanceMethods.html#M000022"><span class="method_name">set</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a>' },
+          { method: 'sign_query', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000058"><span class="method_name">sign_query</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'source=', module: 'bone', html: '<a href="classes/Bone.html#M000001"><span class="method_name">source=</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'to_s', module: 'bone::version', html: '<a href="classes/Bone/VERSION.html#M000083"><span class="method_name">to_s</span> <span class="module_name">(Bone::VERSION)</span></a>' },
+          { method: 'token', module: 'bone::cli', html: '<a href="classes/Bone/CLI.html#M000089"><span class="method_name">token</span> <span class="module_name">(Bone::CLI)</span></a>' },
+          { method: 'token', module: 'bone', html: '<a href="classes/Bone.html#M000003"><span class="method_name">token</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'token?', module: 'bone::api::redis', html: '<a href="classes/Bone/API/Redis.html#M000068"><span class="method_name">token?</span> <span class="module_name">(Bone::API::Redis)</span></a>' },
+          { method: 'token?', module: 'bone::api::classmethods', html: '<a href="classes/Bone/API/ClassMethods.html#M000039"><span class="method_name">token?</span> <span class="module_name">(Bone::API::ClassMethods)</span></a>' },
+          { method: 'token?', module: 'bone::api::http', html: '<a href="classes/Bone/API/HTTP.html#M000050"><span class="method_name">token?</span> <span class="module_name">(Bone::API::HTTP)</span></a>' },
+          { method: 'token?', module: 'bone::api::instancemethods', html: '<a href="classes/Bone/API/InstanceMethods.html#M000029"><span class="method_name">token?</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a>' },
+          { method: 'token?', module: 'bone::api::memory', html: '<a href="classes/Bone/API/Memory.html#M000081"><span class="method_name">token?</span> <span class="module_name">(Bone::API::Memory)</span></a>' },
+          { method: 'uri_escape', module: 'bone', html: '<a href="classes/Bone.html#M000007"><span class="method_name">uri_escape</span> <span class="module_name">(Bone)</span></a>' },
+          { method: 'uri_unescape', module: 'bone', html: '<a href="classes/Bone.html#M000008"><span class="method_name">uri_unescape</span> <span class="module_name">(Bone)</span></a>' },
         ]
         $(document).observe('dom:loaded', function() {
         	// Setup search-during-typing.
@@ -4426,31 +4492,97 @@
       </form>
       <ol class='methods' id='search-results' style='display: none'></ol>
       <ol class='methods' id='index-entries'>
-        <li><a href="classes/Bone.html#M000010"><span class="method_name">[]</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone.html#M000011"><span class="method_name">[]=</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone/CLI.html#M000020"><span class="method_name">check!</span> <span class="module_name">(Bone::CLI)</span></a></li>
-        <li><a href="classes/Bone.html#M000003"><span class="method_name">debug?</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone/CLI.html#M000022"><span class="method_name">del</span> <span class="module_name">(Bone::CLI)</span></a></li>
-        <li><a href="classes/Bone.html#M000009"><span class="method_name">del</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone.html#M000017"><span class="method_name">digest</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone.html#M000002"><span class="method_name">disable_debug</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone.html#M000001"><span class="method_name">enable_debug</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone.html#M000018"><span class="method_name">generate_token</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone.html#M000005"><span class="method_name">get</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone/CLI.html#M000021"><span class="method_name">get</span> <span class="module_name">(Bone::CLI)</span></a></li>
-        <li><a href="classes/Bone.html#M000006"><span class="method_name">get!</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone.html#M000015"><span class="method_name">is_sha1?</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone.html#M000016"><span class="method_name">is_sha256?</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone.html#M000012"><span class="method_name">keys</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone/CLI.html#M000024"><span class="method_name">keys</span> <span class="module_name">(Bone::CLI)</span></a></li>
-        <li><a href="classes/Bone.html#M000004"><span class="method_name">ld</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone.html#M000013"><span class="method_name">require_vendor</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone/CLI.html#M000023"><span class="method_name">set</span> <span class="module_name">(Bone::CLI)</span></a></li>
-        <li><a href="classes/Bone.html#M000007"><span class="method_name">set</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone.html#M000008"><span class="method_name">set!</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone.html#M000019"><span class="method_name">token</span> <span class="module_name">(Bone)</span></a></li>
-        <li><a href="classes/Bone/CLI.html#M000025"><span class="method_name">token</span> <span class="module_name">(Bone::CLI)</span></a></li>
-        <li><a href="classes/Bone.html#M000014"><span class="method_name">valid_token?</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone/API/ClassMethods.html#M000031"><span class="method_name">[]</span> <span class="module_name">(Bone::API::ClassMethods)</span></a></li>
+        <li><a href="classes/Bone/API/InstanceMethods.html#M000021"><span class="method_name">[]</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a></li>
+        <li><a href="classes/Bone/API/InstanceMethods.html#M000023"><span class="method_name">[]=</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a></li>
+        <li><a href="classes/Bone/API/ClassMethods.html#M000033"><span class="method_name">[]=</span> <span class="module_name">(Bone::API::ClassMethods)</span></a></li>
+        <li><a href="classes/Bone.html#M000010"><span class="method_name">bytesize</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone.html#M000009"><span class="method_name">bytesize</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000053"><span class="method_name">canonical_host</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000055"><span class="method_name">canonical_sig_string</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000052"><span class="method_name">canonical_time</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/CLI.html#M000085"><span class="method_name">check!</span> <span class="module_name">(Bone::CLI)</span></a></li>
+        <li><a href="classes/Bone/API/Memory.html#M000082"><span class="method_name">connect</span> <span class="module_name">(Bone::API::Memory)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000051"><span class="method_name">connect</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/Redis.html#M000069"><span class="method_name">connect</span> <span class="module_name">(Bone::API::Redis)</span></a></li>
+        <li><a href="classes/Bone.html#M000002"><span class="method_name">credentials=</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000046"><span class="method_name">destroy</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/InstanceMethods.html#M000028"><span class="method_name">destroy</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a></li>
+        <li><a href="classes/Bone/API/Memory.html#M000077"><span class="method_name">destroy</span> <span class="module_name">(Bone::API::Memory)</span></a></li>
+        <li><a href="classes/Bone/API/ClassMethods.html#M000038"><span class="method_name">destroy</span> <span class="module_name">(Bone::API::ClassMethods)</span></a></li>
+        <li><a href="classes/Bone/API/Redis.html#M000064"><span class="method_name">destroy</span> <span class="module_name">(Bone::API::Redis)</span></a></li>
+        <li><a href="classes/Bone.html#M000013"><span class="method_name">digest</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000056"><span class="method_name">encode</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/Redis.html#M000066"><span class="method_name">generate</span> <span class="module_name">(Bone::API::Redis)</span></a></li>
+        <li><a href="classes/Bone/API/ClassMethods.html#M000037"><span class="method_name">generate</span> <span class="module_name">(Bone::API::ClassMethods)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000049"><span class="method_name">generate</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/Memory.html#M000080"><span class="method_name">generate</span> <span class="module_name">(Bone::API::Memory)</span></a></li>
+        <li><a href="classes/Bone/API/InstanceMethods.html#M000027"><span class="method_name">generate</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a></li>
+        <li><a href="classes/Bone/CLI.html#M000091"><span class="method_name">generate</span> <span class="module_name">(Bone::CLI)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000059"><span class="method_name">generate_signature</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/Memory.html#M000073"><span class="method_name">get</span> <span class="module_name">(Bone::API::Memory)</span></a></li>
+        <li><a href="classes/Bone/API/ClassMethods.html#M000030"><span class="method_name">get</span> <span class="module_name">(Bone::API::ClassMethods)</span></a></li>
+        <li><a href="classes/Bone/API/Redis.html#M000060"><span class="method_name">get</span> <span class="module_name">(Bone::API::Redis)</span></a></li>
+        <li><a href="classes/Bone/CLI.html#M000086"><span class="method_name">get</span> <span class="module_name">(Bone::CLI)</span></a></li>
+        <li><a href="classes/Bone/API/InstanceMethods.html#M000020"><span class="method_name">get</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000042"><span class="method_name">get</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/Redis/Key.html#M000071"><span class="method_name">index</span> <span class="module_name">(Bone::API::Redis::Key)</span></a></li>
+        <li><a href="classes/Bone.html#M000005"><span class="method_name">info</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone.html#M000011"><span class="method_name">is_sha1?</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone.html#M000012"><span class="method_name">is_sha256?</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone/API/Redis.html#M000063"><span class="method_name">key?</span> <span class="module_name">(Bone::API::Redis)</span></a></li>
+        <li><a href="classes/Bone/API/InstanceMethods.html#M000025"><span class="method_name">key?</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000045"><span class="method_name">key?</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/ClassMethods.html#M000035"><span class="method_name">key?</span> <span class="module_name">(Bone::API::ClassMethods)</span></a></li>
+        <li><a href="classes/Bone/API/Memory.html#M000076"><span class="method_name">key?</span> <span class="module_name">(Bone::API::Memory)</span></a></li>
+        <li><a href="classes/Bone/API/Memory.html#M000075"><span class="method_name">keys</span> <span class="module_name">(Bone::API::Memory)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000044"><span class="method_name">keys</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/CLI.html#M000088"><span class="method_name">keys</span> <span class="module_name">(Bone::CLI)</span></a></li>
+        <li><a href="classes/Bone/API/Redis.html#M000062"><span class="method_name">keys</span> <span class="module_name">(Bone::API::Redis)</span></a></li>
+        <li><a href="classes/Bone/API/InstanceMethods.html#M000024"><span class="method_name">keys</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a></li>
+        <li><a href="classes/Bone/API/ClassMethods.html#M000034"><span class="method_name">keys</span> <span class="module_name">(Bone::API::ClassMethods)</span></a></li>
+        <li><a href="classes/Bone.html#M000006"><span class="method_name">ld</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone/VERSION.html#M000084"><span class="method_name">load_config</span> <span class="module_name">(Bone::VERSION)</span></a></li>
+        <li><a href="classes/Bone/API/InstanceMethods.html#M000019"><span class="method_name">new</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a></li>
+        <li><a href="classes/Bone/API/Redis/Key.html#M000070"><span class="method_name">new</span> <span class="module_name">(Bone::API::Redis::Key)</span></a></li>
+        <li><a href="classes/Bone/API/Redis/Token.html#M000072"><span class="method_name">new</span> <span class="module_name">(Bone::API::Redis::Token)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000054"><span class="method_name">parse_query</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/Helpers.html#M000040"><span class="method_name">path</span> <span class="module_name">(Bone::API::Helpers)</span></a></li>
+        <li><a href="classes/Bone/API/Helpers.html#M000041"><span class="method_name">prefix</span> <span class="module_name">(Bone::API::Helpers)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000057"><span class="method_name">prepare_query</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone.html#M000015"><span class="method_name">random_secret</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone.html#M000014"><span class="method_name">random_token</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone/API/InstanceMethods.html#M000026"><span class="method_name">register</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a></li>
+        <li><a href="classes/Bone/API/Memory.html#M000078"><span class="method_name">register</span> <span class="module_name">(Bone::API::Memory)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000048"><span class="method_name">register</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/Redis.html#M000065"><span class="method_name">register</span> <span class="module_name">(Bone::API::Redis)</span></a></li>
+        <li><a href="classes/Bone/API/ClassMethods.html#M000036"><span class="method_name">register</span> <span class="module_name">(Bone::API::ClassMethods)</span></a></li>
+        <li><a href="classes/Bone.html#M000017"><span class="method_name">register_api</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone.html#M000018"><span class="method_name">require_vendor</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000047"><span class="method_name">secret</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone.html#M000004"><span class="method_name">secret</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone/API/Redis.html#M000067"><span class="method_name">secret</span> <span class="module_name">(Bone::API::Redis)</span></a></li>
+        <li><a href="classes/Bone/API/Memory.html#M000079"><span class="method_name">secret</span> <span class="module_name">(Bone::API::Memory)</span></a></li>
+        <li><a href="classes/Bone/CLI.html#M000090"><span class="method_name">secret</span> <span class="module_name">(Bone::CLI)</span></a></li>
+        <li><a href="classes/Bone.html#M000016"><span class="method_name">select_api</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone/API/Redis.html#M000061"><span class="method_name">set</span> <span class="module_name">(Bone::API::Redis)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000043"><span class="method_name">set</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/Memory.html#M000074"><span class="method_name">set</span> <span class="module_name">(Bone::API::Memory)</span></a></li>
+        <li><a href="classes/Bone/CLI.html#M000087"><span class="method_name">set</span> <span class="module_name">(Bone::CLI)</span></a></li>
+        <li><a href="classes/Bone/API/ClassMethods.html#M000032"><span class="method_name">set</span> <span class="module_name">(Bone::API::ClassMethods)</span></a></li>
+        <li><a href="classes/Bone/API/InstanceMethods.html#M000022"><span class="method_name">set</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000058"><span class="method_name">sign_query</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone.html#M000001"><span class="method_name">source=</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone/VERSION.html#M000083"><span class="method_name">to_s</span> <span class="module_name">(Bone::VERSION)</span></a></li>
+        <li><a href="classes/Bone/CLI.html#M000089"><span class="method_name">token</span> <span class="module_name">(Bone::CLI)</span></a></li>
+        <li><a href="classes/Bone.html#M000003"><span class="method_name">token</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone/API/Redis.html#M000068"><span class="method_name">token?</span> <span class="module_name">(Bone::API::Redis)</span></a></li>
+        <li><a href="classes/Bone/API/ClassMethods.html#M000039"><span class="method_name">token?</span> <span class="module_name">(Bone::API::ClassMethods)</span></a></li>
+        <li><a href="classes/Bone/API/HTTP.html#M000050"><span class="method_name">token?</span> <span class="module_name">(Bone::API::HTTP)</span></a></li>
+        <li><a href="classes/Bone/API/InstanceMethods.html#M000029"><span class="method_name">token?</span> <span class="module_name">(Bone::API::InstanceMethods)</span></a></li>
+        <li><a href="classes/Bone/API/Memory.html#M000081"><span class="method_name">token?</span> <span class="module_name">(Bone::API::Memory)</span></a></li>
+        <li><a href="classes/Bone.html#M000007"><span class="method_name">uri_escape</span> <span class="module_name">(Bone)</span></a></li>
+        <li><a href="classes/Bone.html#M000008"><span class="method_name">uri_unescape</span> <span class="module_name">(Bone)</span></a></li>
       </ol>
     </div>
   </body>

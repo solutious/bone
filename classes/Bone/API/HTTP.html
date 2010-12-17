@@ -1,0 +1,381 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Bone::API::HTTP [bone 0.3.0.]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          Bone::API::HTTP
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../files/lib/bone/api_rb.html">lib/bone/api.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000053">canonical_host</a></li>
+              <li><a href="#M000055">canonical_sig_string</a></li>
+              <li><a href="#M000052">canonical_time</a></li>
+              <li><a href="#M000051">connect</a></li>
+              <li><a href="#M000046">destroy</a></li>
+              <li><a href="#M000056">encode</a></li>
+              <li><a href="#M000049">generate</a></li>
+              <li><a href="#M000059">generate_signature</a></li>
+              <li><a href="#M000042">get</a></li>
+              <li><a href="#M000045">key?</a></li>
+              <li><a href="#M000044">keys</a></li>
+              <li><a href="#M000054">parse_query</a></li>
+              <li><a href="#M000057">prepare_query</a></li>
+              <li><a href="#M000048">register</a></li>
+              <li><a href="#M000047">secret</a></li>
+              <li><a href="#M000043">set</a></li>
+              <li><a href="#M000058">sign_query</a></li>
+              <li><a href="#M000050">token?</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>SIGVERSION</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'v2'.freeze unless defined?(Bone::API::HTTP::SIGVERSION)</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>token_suffix</td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='method public-class' id='method-M000053'>
+                <a name='M000053'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>canonical_host</span>
+                  <span class='arguments'>(host)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000053-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000053-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 176</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">canonical_host</span> <span class="ruby-identifier">host</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-constant">URI</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">host</span>&#x000A;            <span class="ruby-identifier">host</span>.<span class="ruby-identifier">port</span> <span class="ruby-operator">||=</span> <span class="ruby-value">80</span>&#x000A;            <span class="ruby-identifier">host</span> = [<span class="ruby-identifier">host</span>.<span class="ruby-identifier">host</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">host</span>.<span class="ruby-identifier">port</span>.<span class="ruby-identifier">to_s</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">':'</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">host</span>.<span class="ruby-identifier">downcase</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000055'>
+                <a name='M000055'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>canonical_sig_string</span>
+                  <span class='arguments'>(host, meth, path, query, body=nil)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Builds the canonical string for signing requests. This strips out all
+                  &#8217;&amp;&#8217;, &#8217;?&#8217;, and &#8217;=&#8217; from the query
+                  string to be signed. The parameters in the path passed in must already be
+                  sorted in case-insensitive alphabetical order and must not be url encoded.
+                  </p>
+                  <p>
+                  Based on / stolen from: <a
+                  href="https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb">github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb</a>
+                  </p>
+                  <p>
+                  See also: <a
+                  href="http://docs.amazonwebservices.com/AWSEC2/2009-04-04/DeveloperGuide/index.html?using-query-api.html">docs.amazonwebservices.com/AWSEC2/2009-04-04/DeveloperGuide/index.html?using-query-api.html</a>
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000055-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000055-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 211</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">canonical_sig_string</span> <span class="ruby-identifier">host</span>, <span class="ruby-identifier">meth</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">body</span>=<span class="ruby-keyword kw">nil</span>&#x000A;          <span class="ruby-comment cmt"># Sort, and encode parameters into a canonical string.</span>&#x000A;          <span class="ruby-identifier">sorted_params</span> = <span class="ruby-identifier">query</span>.<span class="ruby-identifier">sort</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span>,<span class="ruby-identifier">y</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_s</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">y</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_s</span> }&#x000A;          <span class="ruby-identifier">encoded_params</span> = <span class="ruby-identifier">sorted_params</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">encoded</span> = [<span class="ruby-constant">Bone</span>.<span class="ruby-identifier">uri_escape</span>(<span class="ruby-identifier">p</span>[<span class="ruby-value">0</span>]), <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">uri_escape</span>(<span class="ruby-identifier">p</span>[<span class="ruby-value">1</span>])].<span class="ruby-identifier">join</span> <span class="ruby-value str">'='</span>&#x000A;            <span class="ruby-comment cmt"># Ensure spaces are encoded as '%20', not '+'</span>&#x000A;            <span class="ruby-identifier">encoded</span> = <span class="ruby-identifier">encoded</span>.<span class="ruby-identifier">gsub</span> <span class="ruby-value str">'+'</span>, <span class="ruby-value str">'%20'</span>&#x000A;            <span class="ruby-comment cmt"># According to RFC3986 (the scheme for values expected </span>&#x000A;            <span class="ruby-comment cmt"># by signing requests), '~' should not be encoded</span>&#x000A;            <span class="ruby-identifier">encoded</span> = <span class="ruby-identifier">encoded</span>.<span class="ruby-identifier">gsub</span> <span class="ruby-value str">'%7E'</span>, <span class="ruby-value str">'~'</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">querystr</span> = <span class="ruby-identifier">encoded_params</span>.<span class="ruby-identifier">join</span> <span class="ruby-value str">'&amp;'</span>&#x000A;          <span class="ruby-identifier">parts</span> = [<span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>, <span class="ruby-identifier">canonical_host</span>(<span class="ruby-identifier">host</span>), <span class="ruby-identifier">path</span>, <span class="ruby-identifier">querystr</span>]&#x000A;          <span class="ruby-identifier">parts</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">body</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">body</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span>&#x000A;          <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">join</span> <span class="ruby-value str">&quot;\n&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000052'>
+                <a name='M000052'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>canonical_time</span>
+                  <span class='arguments'>(now=Time.now)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000052-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000052-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 172</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">canonical_time</span> <span class="ruby-identifier">now</span>=<span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>&#x000A;          <span class="ruby-identifier">now</span>.<span class="ruby-identifier">utc</span>.<span class="ruby-identifier">to_i</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000051'>
+                <a name='M000051'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>connect</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000051-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000051-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 166</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">connect</span>&#x000A;          <span class="ruby-identifier">require</span> <span class="ruby-value str">'em-http-request'</span>  <span class="ruby-comment cmt"># TODO: catch error, deregister this API</span>&#x000A;          <span class="ruby-ivar">@external_em</span> = <span class="ruby-constant">EM</span>.<span class="ruby-identifier">reactor_running?</span>&#x000A;          <span class="ruby-comment cmt">#@retry_delay, @redirects, @max_retries, @performed_retries = 2, 1, 2, 0</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000046'>
+                <a name='M000046'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>destroy</span>
+                  <span class='arguments'>(token, secret)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000046-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000046-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 140</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">destroy</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>)&#x000A;          <span class="ruby-identifier">query</span> = {}&#x000A;          <span class="ruby-identifier">path</span> = <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">API</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'destroy'</span>, <span class="ruby-identifier">token</span>)&#x000A;          <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">http_request</span> <span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">:delete</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">query</span>&#x000A;          <span class="ruby-operator">!</span><span class="ruby-identifier">ret</span>.<span class="ruby-identifier">nil?</span>  <span class="ruby-comment cmt"># errors return nil</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000056'>
+                <a name='M000056'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>encode</span>
+                  <span class='arguments'>(secret, str, escape=true)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Encodes the given string with the secret_access_key by taking the hmac-sha1
+                  sum, and then base64 encoding it. Optionally, it will also url encode the
+                  result of that to protect the string if it&#8217;s going to be used as a
+                  query string parameter.
+                  </p>
+                  <p>
+                  Based on / stolen from: <a
+                  href="https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb">github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb</a>
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000056-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000056-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 234</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">encode</span> <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">str</span>, <span class="ruby-identifier">escape</span>=<span class="ruby-keyword kw">true</span>&#x000A;          <span class="ruby-identifier">digest</span> = <span class="ruby-constant">OpenSSL</span><span class="ruby-operator">::</span><span class="ruby-constant">HMAC</span>.<span class="ruby-identifier">digest</span> <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">digest_type</span>.<span class="ruby-identifier">new</span>, <span class="ruby-identifier">secret</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">str</span>.<span class="ruby-identifier">to_s</span>&#x000A;          <span class="ruby-identifier">b64_hmac</span> = <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">encode64</span>(<span class="ruby-identifier">digest</span>).<span class="ruby-identifier">tr</span> <span class="ruby-value str">&quot;\n&quot;</span>, <span class="ruby-value str">''</span>&#x000A;          <span class="ruby-identifier">escape</span> <span class="ruby-value">? </span><span class="ruby-constant">Bone</span>.<span class="ruby-identifier">uri_escape</span>(<span class="ruby-identifier">b64_hmac</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">b64_hmac</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000049'>
+                <a name='M000049'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>generate</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000049-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000049-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 155</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">generate</span>&#x000A;          <span class="ruby-identifier">path</span> = <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">API</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'generate'</span>)&#x000A;          <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">http_request</span> <span class="ruby-value str">''</span>, <span class="ruby-value str">''</span>, <span class="ruby-identifier">:post</span>, <span class="ruby-identifier">path</span>, {}&#x000A;          <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">split</span>(<span class="ruby-identifier">$/</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000059'>
+                <a name='M000059'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>generate_signature</span>
+                  <span class='arguments'>(secret, host, meth, path, query, body=nil)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Based on / stolen from: <a
+                  href="https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb">github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb</a>
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000059-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000059-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 254</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">generate_signature</span> <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">host</span>, <span class="ruby-identifier">meth</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">body</span>=<span class="ruby-keyword kw">nil</span>&#x000A;          <span class="ruby-identifier">str</span> = <span class="ruby-identifier">canonical_sig_string</span> <span class="ruby-identifier">host</span>, <span class="ruby-identifier">meth</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">body</span>&#x000A;          <span class="ruby-identifier">sig</span> = <span class="ruby-identifier">encode</span> <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">str</span>&#x000A;          <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">ld</span> [<span class="ruby-identifier">sig</span>, <span class="ruby-identifier">str</span>, <span class="ruby-identifier">body</span>].<span class="ruby-identifier">inspect</span>&#x000A;          <span class="ruby-identifier">sig</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000042'>
+                <a name='M000042'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>get</span>
+                  <span class='arguments'>(token, secret, name)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  /v2/[name]
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000042-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000042-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 122</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">name</span>)&#x000A;          <span class="ruby-identifier">path</span> = <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">API</span>.<span class="ruby-identifier">path</span>(<span class="ruby-identifier">token</span>, <span class="ruby-value str">'key'</span>, <span class="ruby-identifier">name</span>)&#x000A;          <span class="ruby-identifier">query</span> = {}&#x000A;          <span class="ruby-identifier">http_request</span> <span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">:get</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">query</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000045'>
+                <a name='M000045'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>key?</span>
+                  <span class='arguments'>(token, secret, name)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000045-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000045-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 137</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">key?</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">name</span>)&#x000A;          <span class="ruby-operator">!</span><span class="ruby-identifier">get</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">name</span>).<span class="ruby-identifier">nil?</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000044'>
+                <a name='M000044'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>keys</span>
+                  <span class='arguments'>(token, secret, filter='*')</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000044-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000044-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 132</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keys</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">filter</span>=<span class="ruby-value str">'*'</span>)&#x000A;          <span class="ruby-identifier">path</span> = <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">API</span>.<span class="ruby-identifier">path</span>(<span class="ruby-identifier">token</span>, <span class="ruby-value str">'keys'</span>)&#x000A;          <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">http_request</span> <span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">:get</span>, <span class="ruby-identifier">path</span>, {}&#x000A;          (<span class="ruby-identifier">ret</span> <span class="ruby-operator">||</span> <span class="ruby-value str">''</span>).<span class="ruby-identifier">split</span>(<span class="ruby-identifier">$/</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000054'>
+                <a name='M000054'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>parse_query</span>
+                  <span class='arguments'>(qs, d = '&amp;;')</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Based on / stolen from: <a
+                  href="https://github.com/chneukirchen/rack/blob/master/lib/rack/utils.rb">github.com/chneukirchen/rack/blob/master/lib/rack/utils.rb</a>
+                  which was based on / stolen from Mongrel
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000054-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000054-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 186</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_query</span>(<span class="ruby-identifier">qs</span>, <span class="ruby-identifier">d</span> = <span class="ruby-value str">'&amp;;'</span>)&#x000A;          <span class="ruby-identifier">params</span> = {}&#x000A;          (<span class="ruby-identifier">qs</span> <span class="ruby-operator">||</span> <span class="ruby-value str">''</span>).<span class="ruby-identifier">split</span>(<span class="ruby-node">/[#{d}] */n</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span> = <span class="ruby-identifier">p</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'='</span>, <span class="ruby-value">2</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">uri_unescape</span>(<span class="ruby-identifier">x</span>) }&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">cur</span> = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">k</span>]&#x000A;              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">cur</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Array</span>&#x000A;                <span class="ruby-identifier">params</span>[<span class="ruby-identifier">k</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span>&#x000A;              <span class="ruby-keyword kw">else</span>&#x000A;                <span class="ruby-identifier">params</span>[<span class="ruby-identifier">k</span>] = [<span class="ruby-identifier">cur</span>, <span class="ruby-identifier">v</span>]&#x000A;              <span class="ruby-keyword kw">end</span>&#x000A;            <span class="ruby-keyword kw">else</span>&#x000A;              <span class="ruby-identifier">params</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">params</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000057'>
+                <a name='M000057'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>prepare_query</span>
+                  <span class='arguments'>(query={})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000057-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000057-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 240</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prepare_query</span> <span class="ruby-identifier">query</span>={}, <span class="ruby-identifier">token</span>=<span class="ruby-constant">Bone</span>.<span class="ruby-identifier">token</span>, <span class="ruby-identifier">stamp</span>=<span class="ruby-identifier">canonical_time</span>&#x000A;          { <span class="ruby-value str">&quot;sigversion&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">API</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span><span class="ruby-operator">::</span><span class="ruby-constant">SIGVERSION</span>,&#x000A;            <span class="ruby-value str">&quot;apiversion&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">APIVERSION</span>,&#x000A;            <span class="ruby-value str">&quot;token&quot;</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">token</span>,&#x000A;            <span class="ruby-value str">&quot;stamp&quot;</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">stamp</span>&#x000A;          }.<span class="ruby-identifier">merge</span> <span class="ruby-identifier">query</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000048'>
+                <a name='M000048'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>register</span>
+                  <span class='arguments'>(token, secret)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000048-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000048-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 150</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>)&#x000A;          <span class="ruby-identifier">query</span> = {}&#x000A;          <span class="ruby-identifier">path</span> = <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">API</span>.<span class="ruby-identifier">path</span>(<span class="ruby-value str">'register'</span>, <span class="ruby-identifier">token</span>)&#x000A;          <span class="ruby-identifier">http_request</span> <span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">:post</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">secret</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000047'>
+                <a name='M000047'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>secret</span>
+                  <span class='arguments'>(token, secret)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000047-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000047-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 146</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">secret</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>)&#x000A;          <span class="ruby-identifier">path</span> = <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">API</span>.<span class="ruby-identifier">path</span>(<span class="ruby-identifier">token</span>, <span class="ruby-value str">'secret'</span>)&#x000A;          <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">http_request</span> <span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">:get</span>, <span class="ruby-identifier">path</span>, {}&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000043'>
+                <a name='M000043'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>set</span>
+                  <span class='arguments'>(token, secret, name, value)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000043-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000043-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 127</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)&#x000A;          <span class="ruby-identifier">path</span> = <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">API</span>.<span class="ruby-identifier">path</span>(<span class="ruby-identifier">token</span>, <span class="ruby-value str">'key'</span>, <span class="ruby-identifier">name</span>)&#x000A;          <span class="ruby-identifier">query</span> = {}&#x000A;          <span class="ruby-identifier">http_request</span> <span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">:post</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">value</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000058'>
+                <a name='M000058'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>sign_query</span>
+                  <span class='arguments'>(token, secret, meth, path, query, body=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000058-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000058-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 248</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sign_query</span> <span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">meth</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">body</span>=<span class="ruby-keyword kw">nil</span>&#x000A;          <span class="ruby-identifier">sig</span> = <span class="ruby-identifier">generate_signature</span> <span class="ruby-identifier">secret</span>, <span class="ruby-constant">Bone</span>.<span class="ruby-identifier">source</span>, <span class="ruby-identifier">meth</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">query</span>, <span class="ruby-identifier">body</span>&#x000A;          { <span class="ruby-value str">'sig'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">sig</span> }.<span class="ruby-identifier">merge</span> <span class="ruby-identifier">query</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-M000050'>
+                <a name='M000050'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>token?</span>
+                  <span class='arguments'>(token, secret)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000050-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000050-source'><span class="ruby-comment cmt"># File lib/bone/api.rb, line 160</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">token?</span>(<span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>)&#x000A;          <span class="ruby-identifier">path</span> = <span class="ruby-constant">Bone</span><span class="ruby-operator">::</span><span class="ruby-constant">API</span>.<span class="ruby-identifier">path</span>(<span class="ruby-identifier">token</span>)&#x000A;          <span class="ruby-identifier">query</span> = {}&#x000A;          <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">http_request</span> <span class="ruby-identifier">token</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">:get</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">query</span>&#x000A;          <span class="ruby-operator">!</span><span class="ruby-identifier">ret</span>.<span class="ruby-identifier">nil?</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
