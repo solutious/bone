@@ -1,6 +1,72 @@
 
 class Bone
   module API
+    module InstanceMethods
+      attr_accessor :token, :secret
+      def initialize(t, s=nil)
+        # TODO: Add size command
+        @token, @secret = t, s
+      end
+      def get(name)
+        carefully do
+          raise_errors
+          Bone.api.get token, secret, name
+        end
+      end
+      alias_method :[], :get
+      def set(name, value)
+        carefully do
+          raise_errors
+          Bone.api.set token, secret, name, value
+        end
+      end
+      alias_method :[]=, :set
+      def keys(filter='*')
+        carefully do
+          raise_errors
+          Bone.api.keys(token, secret, filter) || []
+        end
+      end
+      def key?(name)
+        carefully do
+          raise_errors
+          Bone.api.key? token, secret, name
+        end
+      end
+      def register(this_token, this_secret)
+        carefully do
+          Bone.api.register this_token, this_secret
+        end
+      end
+      def generate
+        carefully do
+          Bone.api.generate || []
+        end
+      end
+      def destroy(token)
+        carefully do
+          Bone.api.destroy token, secret
+        end
+      end
+      def token?(token)
+        carefully do
+          Bone.api.token? token, secret
+        end
+      end
+      private 
+      def raise_errors
+        raise RuntimeError, "No token" unless token
+        #raise RuntimeError, "Invalid token (#{token})" if !Bone.api.token?(token)
+      end
+      def carefully
+        begin
+          yield
+        rescue => ex
+          Bone.ld "#{ex.class}: #{ex.message}", ex.backtrace
+          nil
+        end
+      end
+    end
     module ClassMethods
       def get(name)
         new(Bone.token, Bone.secret).get name
@@ -29,80 +95,6 @@ class Bone
         new(Bone.token, Bone.secret).token? token
       end
     end
-    module InstanceMethods
-      attr_accessor :token, :secret
-      def initialize(t, s=nil)
-        @token, @secret = t, s
-      end
-      def get(name)
-        carefully do
-          raise_errors
-          Bone.api.get token, secret, name
-        end
-      end
-      alias_method :[], :get
-
-      def set(name, value)
-        carefully do
-          raise_errors
-          Bone.api.set token, secret, name, value
-        end
-      end
-      alias_method :[]=, :set
-
-      def keys(filter='*')
-        carefully do
-          raise_errors
-          Bone.api.keys(token, secret, filter) || []
-        end
-      end
-
-      def key?(name)
-        carefully do
-          raise_errors
-          Bone.api.key? token, secret, name
-        end
-      end
-
-      def register(this_token, this_secret)
-        carefully do
-          Bone.api.register this_token, this_secret
-        end
-      end
-
-      def generate
-        carefully do
-          Bone.api.generate || []
-        end
-      end
-
-      def destroy(token)
-        carefully do
-          Bone.api.destroy token, secret
-        end
-      end
-
-      def token?(token)
-        carefully do
-          Bone.api.token? token, secret
-        end
-      end
-
-      private 
-      def raise_errors
-        raise RuntimeError, "No token" unless token
-        #raise RuntimeError, "Invalid token (#{token})" if !Bone.api.token?(token)
-      end
-      def carefully
-        begin
-          yield
-        rescue => ex
-          Bone.ld "#{ex.class}: #{ex.message}", ex.backtrace
-          nil
-        end
-      end
-    end
-
     module Helpers
       def path(*parts)
         "/#{APIVERSION}/" << parts.flatten.collect { |v| Bone.uri_escape(v) }.join('/')
@@ -258,7 +250,7 @@ class Bone
         def generate_signature secret, host, meth, path, query, body=nil
           str = canonical_sig_string host, meth, path, query, body
           sig = encode secret, str
-          Bone.ld [1, sig, str, body].inspect
+          Bone.ld [sig, str, body].inspect
           sig
         end
         

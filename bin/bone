@@ -40,7 +40,6 @@ class Bone::CLI::Definition
   usage "bone set keyname keyvalue"
   usage "bone set keyname=keyvalue"
   usage "bone set keyname path/2/file"
-  option :s, :string, "Assume value is a string even if file name exists"
   command :set => Bone::CLI
   
   #about "Delete a key/value pair"
@@ -54,9 +53,13 @@ class Bone::CLI::Definition
   usage "bone keys keyname"
   command :keys => Bone::CLI
   
-  about "Display the token or generate a new one"
+  about "Display the current token"
   usage "bone token"
   command :token => Bone::CLI
+
+  about "Display the current secret"
+  usage "bone token"
+  command :secret => Bone::CLI
 
   about "Generate a new token"
   usage "bone generate"

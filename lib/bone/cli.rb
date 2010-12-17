@@ -13,30 +13,36 @@ class Bone::CLI < Drydock::Command
   def get
     check!
     @argv.unshift @alias unless @alias == 'get'
-    raise "No key specified" unless @argv.first
+    ## TODO: handle bone name=value
+    ##if @alias.index('=') > 0
+    ##  a = @alias.gsub(/\s+=\s+/, '=')
+    ##  name, value = *( ? @argv.first.split('=') : @argv)
+    ##end
+    raise Bone::Problem, "No key specified" unless @argv.first
     ret = Bone.get(@argv.first)
     puts ret unless ret.nil? 
-  end
-  
-  def del
-    check!
-    raise "No key specified" unless @argv.first
-    puts Bone.delete(@argv.first)
   end
   
   def set
     # TODO: use STDIN instead of @option.string
     check!
-    opts = {:token => @token }
     name, value = *(@argv.size == 1 ? @argv.first.split('=') : @argv)
-    raise "No key specified" unless name
-    raise "No value specified" unless value
-    if File.exists?(value) && !@option.string
-      value = File.readlines(value).join
-      opts[:file] = true
+    raise Bone::Problem, "No key specified" unless name
+    from_stdin = false
+    if value.nil? && !stdin.tty? && !stdin.eof?
+      from_stdin = true
+      value = stdin.read
     end
-    puts Bone[name] = value
+    raise Bone::Problem, "Cannot set null value" unless value
+    Bone[name] = value
+    puts from_stdin ? '<STDIN>' : value
   end
+  
+  #def del
+  #  check!
+  #  raise Bone::Problem, "No key specified" unless @argv.first
+  #  puts Bone.delete(@argv.first)
+  #end
   
   def keys
     check!
@@ -54,20 +60,22 @@ class Bone::CLI < Drydock::Command
     check!
     puts Bone.token
   end
+
+  def secret
+    check!
+    puts Bone.secret
+  end
   
   def generate
-    puts Bone.generate
+    puts "Your token has been generated:"
+    t, s = *Bone.generate
+    puts "BONE_TOKEN=#{t}"
+    puts "BONE_SECRET=#{s}"
   #rescue Bone::NoToken => ex
   #  update_token_dialog
   #  exit 1
   end
   
   private 
-  def update_token_dialog
-    newtoken = Bone.generate
-    puts newtoken and return if @global.quiet
-    puts "Set the BONE_TOKEN environment variable with the following value"
-    puts newtoken
-  end
   
 end
