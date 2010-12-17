@@ -288,12 +288,13 @@ class Bone
           args[:head] = {}
           args[:body] = body.to_s unless body.nil?
           http = EventMachine::HttpRequest.new(uri).send(meth, args)
-          #http.errback do
-          #  perform_retry(http) do
-          #    http(method, path, data, &callback)
-          #  end
-          #  EventMachine.stop
-          #end
+          http.errback do
+            #perform_retry(http) do
+            #  http(method, path, data, &callback)
+            #end
+            Bone.info "Could not access #{uri}"
+            EventMachine.stop @external_em 
+          end
           http.callback {
             Bone.ld "#{http.response_header.status}: #{http.response_header.inspect}"
             #reset_retries_counter
