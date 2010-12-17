@@ -174,7 +174,7 @@ class Bone
         end
       
         def canonical_time now=Time.now
-          now.utc.iso8601
+          now.utc.to_i
         end
         
         def canonical_host host
