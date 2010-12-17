@@ -13,6 +13,7 @@ Bone.source = 'memory://localhost'
   :a_nil_value => nil,
   :arbitrary => '&+ ~ *%'
 }
+@body = 'nuprin'
 @now = Bone::API::HTTP.canonical_time Time.at(1292396472)
 
 ## Check Bone::API::HTTP.canonical_time
@@ -44,6 +45,11 @@ Bone::API::HTTP.generate_signature @secret, Bone.source, :get, @path, @query
 ## Bone::API::HTTP.sign_query (arbitrary query)
 Bone::API::HTTP.sign_query(Bone.token, @secret, :get, @path, @query)
 #=> {:token=>"atoken", :a_nil_value=>nil, :arbitrary=>"&+ ~ *%", "sig"=>"rfJY5F3j2Ndq9inSbbA2%2FKzvd%2By5eGqR5kMu4HCDM4I%3D", :zang=>:excellent}
+
+## Bone::API::HTTP.encode (arbitrary query, with body)
+str = Bone::API::HTTP.canonical_sig_string Bone.source, :get, @path, @query, @body
+Bone::API::HTTP.encode @secret, str
+#=> 'LK%2FghZKcGwNl7tSnEnr0pKGdBe%2BMwAjl5cl1ZBpT%2F%2F0%3D'
 
 ## Bone::API::HTTP.prepare_query
 query = Bone::API::HTTP.prepare_query @query, Bone.token, @now

@@ -168,22 +168,9 @@ class Bone
           !ret.nil?
         end
         def connect
-          require 'em-http-request'
+          require 'em-http-request'  # TODO: catch error, deregister this API
           @external_em = EM.reactor_running?
           #@retry_delay, @redirects, @max_retries, @performed_retries = 2, 1, 2, 0
-        end
-      
-        def sign_query token, secret, meth, path, query
-          sig = generate_signature secret, Bone.source, meth, path, query
-          { 'sig' => sig }.merge query
-        end
-      
-        # Based on / stolen from: https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb
-        def generate_signature secret, host, meth, path, query
-          str = canonical_sig_string host, meth, path, query
-          sig = encode secret, str
-          Bone.ld [sig, str].inspect
-          sig
         end
       
         def canonical_time now=Time.now
@@ -225,19 +212,21 @@ class Bone
         # 
         # See also: http://docs.amazonwebservices.com/AWSEC2/2009-04-04/DeveloperGuide/index.html?using-query-api.html
         #
-        def canonical_sig_string host, meth, path, query
+        def canonical_sig_string host, meth, path, query, body=nil
           # Sort, and encode parameters into a canonical string.
           sorted_params = query.sort {|x,y| x[0].to_s <=> y[0].to_s }
           encoded_params = sorted_params.collect do |p|
             encoded = [Bone.uri_escape(p[0]), Bone.uri_escape(p[1])].join '='
             # Ensure spaces are encoded as '%20', not '+'
-            encoded = encoded.gsub('+', '%20')
-            # According to RFC3986 (the scheme for values expected by signing requests), '~' 
-            # should not be encoded
-            encoded = encoded.gsub('%7E', '~')
+            encoded = encoded.gsub '+', '%20'
+            # According to RFC3986 (the scheme for values expected 
+            # by signing requests), '~' should not be encoded
+            encoded = encoded.gsub '%7E', '~'
           end
           querystr = encoded_params.join '&'
-          [meth.to_s.downcase, canonical_host(host), path, querystr].join "\n"
+          parts = [meth.to_s.downcase, canonical_host(host), path, querystr]
+          parts << body unless body.to_s.empty?
+          parts.join "\n"
         end
       
         # Encodes the given string with the secret_access_key by taking the
@@ -246,8 +235,8 @@ class Bone
         # be used as a query string parameter.
         #
         # Based on / stolen from: https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb
-        def encode(secret, str, escape=true)
-          digest = OpenSSL::HMAC.digest(Bone.digest_type.new, secret.to_s, str.to_s)
+        def encode secret, str, escape=true
+          digest = OpenSSL::HMAC.digest Bone.digest_type.new, secret.to_s, str.to_s
           b64_hmac = Base64.encode64(digest).tr "\n", ''
           escape ? Bone.uri_escape(b64_hmac) : b64_hmac
         end
@@ -259,7 +248,20 @@ class Bone
             "stamp"      => stamp
           }.merge query
         end
-      
+        
+        def sign_query token, secret, meth, path, query, body=nil
+          sig = generate_signature secret, Bone.source, meth, path, query, body
+          { 'sig' => sig }.merge query
+        end
+        
+        # Based on / stolen from: https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb
+        def generate_signature secret, host, meth, path, query, body=nil
+          str = canonical_sig_string host, meth, path, query, body
+          sig = encode secret, str
+          Bone.ld [1, sig, str, body].inspect
+          sig
+        end
+        
         private
       
         # based on: https://github.com/EmmanuelOga/firering/blob/master/lib/firering/connection.rb
@@ -267,7 +269,7 @@ class Bone
           uri = Bone.source.clone
           uri.path = path
           query = prepare_query query, token
-          signed_query = sign_query token, secret, meth, path, query
+          signed_query = sign_query token, secret, meth, path, query, body
           Bone.ld "#{meth} #{uri} (#{query})"
           content, status, headers = nil
           handler = Proc.new do |http|
