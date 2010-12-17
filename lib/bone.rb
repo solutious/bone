@@ -120,8 +120,11 @@ class Bone
     end
     
     def random_secret 
-      src = [SECRETCHAR, %w'* ^ $ ! / . - _'].flatten
-      (0...64).map{ src[rand(src.length)] }.join;
+      src = [SECRETCHAR, %w'* ^ $ ! / . - _ + %'].flatten
+      p1 = (0...2).map{ SECRETCHAR[rand(SECRETCHAR.length)] }.join;
+      p2 = (0...60).map{ src[rand(src.length)] }.join;
+      p3 = (0...2).map{ SECRETCHAR[rand(SECRETCHAR.length)] }.join;
+      [p1,p2,p3].join
     end
     
     def select_api
