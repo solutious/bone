@@ -64,4 +64,4 @@ query = Bone::API::HTTP.prepare_query @query, Bone.token
 @sig = Bone::API::HTTP.generate_signature @secret, Bone.source, :get, @path, query
 #=> @sig
 
-
+## Bone::API::HTTP.

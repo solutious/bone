@@ -181,7 +181,9 @@ class Bone
         # Based on / stolen from: https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb
         def generate_signature secret, host, meth, path, query
           str = canonical_sig_string host, meth, path, query
-          encode secret, str
+          sig = encode secret, str
+          Bone.ld [sig, str].inspect
+          sig
         end
       
         def canonical_time now=Time.now
@@ -196,6 +198,25 @@ class Bone
           host.downcase
         end
         
+        # Based on / stolen from: https://github.com/chneukirchen/rack/blob/master/lib/rack/utils.rb
+        # which was based on / stolen from Mongrel
+        def parse_query(qs, d = '&;')
+          params = {}
+          (qs || '').split(/[#{d}] */n).each do |p|
+            k, v = p.split('=', 2).map { |x| Bone.uri_unescape(x) }
+            if cur = params[k]
+              if cur.class == Array
+                params[k] << v
+              else
+                params[k] = [cur, v]
+              end
+            else
+              params[k] = v
+            end
+          end
+          return params
+        end
+            
         # Builds the canonical string for signing requests. This strips out all '&', '?', and '='
         # from the query string to be signed.  The parameters in the path passed in must already
         # be sorted in case-insensitive alphabetical order and must not be url encoded.
@@ -267,10 +288,11 @@ class Bone
           end
         end
       
-        def em_request method, uri, query, body, &blk
+        def em_request meth, uri, query, body, &blk
           args = { :query => query, :timeout => 10 }
+          args[:head] = {}
           args[:body] = body.to_s unless body.nil?
-          http = EventMachine::HttpRequest.new(uri).send(method, args)
+          http = EventMachine::HttpRequest.new(uri).send(meth, args)
           #http.errback do
           #  perform_retry(http) do
           #    http(method, path, data, &callback)
