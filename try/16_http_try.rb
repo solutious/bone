@@ -32,6 +32,11 @@ str = Bone::API::HTTP.canonical_sig_string Bone.source, :get, @path, @query
 Bone::API::HTTP.encode @secret, str
 #=> 'rfJY5F3j2Ndq9inSbbA2%2FKzvd%2By5eGqR5kMu4HCDM4I%3D'
 
+## Bone::API::HTTP.encode (arbitrary query, no escape)
+str = Bone::API::HTTP.canonical_sig_string Bone.source, :get, @path, @query
+Bone::API::HTTP.encode @secret, str, false
+#=> 'rfJY5F3j2Ndq9inSbbA2/Kzvd+y5eGqR5kMu4HCDM4I='
+
 ## Bone::API::HTTP.generate_signature (arbitrary query)
 Bone::API::HTTP.generate_signature @secret, Bone.source, :get, @path, @query
 #=> 'rfJY5F3j2Ndq9inSbbA2%2FKzvd%2By5eGqR5kMu4HCDM4I%3D'
@@ -57,7 +62,6 @@ Bone::API::HTTP.sign_query Bone.token, @secret, :get, @path, query
 ## Bone::API::HTTP.generate_signature (an example of unique signatures)
 query = Bone::API::HTTP.prepare_query @query, Bone.token
 @sig = Bone::API::HTTP.generate_signature @secret, Bone.source, :get, @path, query
-@sig
 #=> @sig
 
 

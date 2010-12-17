@@ -225,11 +225,10 @@ class Bone
         # be used as a query string parameter.
         #
         # Based on / stolen from: https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb
-        def encode(secret, str, encode=true)
-          digest_type = OpenSSL::Digest::Digest.new('sha256')
-          digest = OpenSSL::HMAC.digest(digest_type, secret.to_s, str.to_s)
-          b64_hmac = Base64.encode64(digest).gsub("\n","")
-          encode ? Bone.uri_escape(b64_hmac) : b64_hmac
+        def encode(secret, str, escape=true)
+          digest = OpenSSL::HMAC.digest(Bone.digest_type.new, secret.to_s, str.to_s)
+          b64_hmac = Base64.encode64(digest).tr "\n", ''
+          escape ? Bone.uri_escape(b64_hmac) : b64_hmac
         end
       
         def prepare_query query={}, token=Bone.token, stamp=canonical_time

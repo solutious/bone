@@ -12,7 +12,6 @@ local_libs.each { |dir|
 require 'familia'
 require 'base64'
 require 'openssl'
-require 'digest/sha1'
 require 'time'
 
 class Bone
@@ -34,12 +33,13 @@ class Bone
   APIVERSION = 'v2'.freeze unless defined?(Bone::APIVERSION)
   @source = URI.parse(ENV['BONE_SOURCE'] || 'https://api.bonery.com')
   @apis = {}
+  @digest_type = OpenSSL::Digest::SHA256
   class Problem < RuntimeError; end
   class NoToken < Problem; end  
   class << self
     attr_accessor :debug
-    attr_reader :apis, :api, :source
-    attr_writer :token, :secret, :digest_type
+    attr_reader :apis, :api, :source, :digest_type
+    attr_writer :token, :secret
     
     def source=(v)
       @source = URI.parse v
@@ -129,16 +129,6 @@ class Bone
       end
     end
     
-    def select_digest_type
-      if RUBY_PLATFORM == "java"
-        require 'openssl'
-        @digest_type = OpenSSL::Digest::SHA256
-      else
-        require 'digest'
-        @digest_type = Digest::SHA256
-      end
-    end
-    
     def register_api(scheme, klass)
       Bone.apis[scheme.to_sym] = klass
     end
@@ -164,7 +154,6 @@ class Bone
   include Bone::API::InstanceMethods
   extend Bone::API::ClassMethods
   select_api
-  select_digest_type
 end
 
 
