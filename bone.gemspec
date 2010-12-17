@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Delano Mandelbaum"]
-  s.date = %q{2010-12-15}
+  s.date = %q{2010-12-17}
   s.default_executable = %q{bone}
   s.description = %q{A simple store for remote environment variables}
   s.email = %q{delano@solutious.com}
@@ -29,9 +29,12 @@ Gem::Specification.new do |s|
      "VERSION.yml",
      "bin/bone",
      "bone.gemspec",
+     "config/redis-server.conf",
      "lib/bone.rb",
+     "lib/bone/api.rb",
      "lib/bone/cli.rb",
-     "try/15_redis_try.rb",
+     "try/10_generate_try.rb",
+     "try/16_http_try.rb",
      "try/20_instance_try.rb",
      "try/25_key_token_object_try.rb",
      "try/30_api_memory_try.rb",
