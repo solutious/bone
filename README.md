@@ -7,7 +7,7 @@
 * Store variables and files remotely
 * A command-line and ruby interface
 * Secure REST API (based on AWS sig)
-* Also supports direct Redis access.
+* Also supports direct [Redis](http://code.google.com/p/redis/) access.
 
 ## CLI Example
         
@@ -54,7 +54,7 @@ Bone can store data via a REST API or directly to Redis. The default source is r
 
 ### Redis ###
 
-If you are running Redis at a different address or port, you can change it by setting the BONE_SOURCE environment variable or by explicitly setting in Ruby with `Bone.source='redis://anotherhost:6379'`.
+If you are running [Redis](http://code.google.com/p/redis/) at a different address or port, you can change it by setting the BONE_SOURCE environment variable or by explicitly setting in Ruby with `Bone.source='redis://anotherhost:6379'`.
 
 ### HTTP ###
 
