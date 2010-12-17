@@ -115,11 +115,11 @@ class Bone
       type.hexdigest val
     end
     
-    def create_token
+    def random_token
       (0...24).map{ SECRETCHAR[rand(SECRETCHAR.length)] }.join.upcase;
     end
     
-    def create_secret 
+    def random_secret 
       src = [SECRETCHAR, %w'* ^ $ ! / . - _'].flatten
       (0...64).map{ src[rand(src.length)] }.join;
     end

@@ -3,7 +3,7 @@
 require 'bone'
 #Bone.debug = true
 @token = 'atoken'
-@secret = Bone.create_secret
+@secret = Bone.random_secret
 
 ## Can set the base uri without a token
 Bone.source = 'redis://localhost:8045'
