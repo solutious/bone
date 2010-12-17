@@ -2,6 +2,8 @@
 
 **Remote environment variables**
 
+*NOTE: This version is not compatible with previous versions of Bone.*
+
 ## Features
 
 * Store variables and files remotely
