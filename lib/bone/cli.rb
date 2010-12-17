@@ -67,10 +67,12 @@ class Bone::CLI < Drydock::Command
   end
   
   def generate
-    puts "Your token has been generated:"
     t, s = *Bone.generate
-    puts "BONE_TOKEN=#{t}"
-    puts "BONE_SECRET=#{s}"
+    unless t.nil?
+      puts "# Your token for #{Bone.source}"
+      puts "BONE_TOKEN=#{t}"
+      puts "BONE_SECRET=#{s}"
+    end
   #rescue Bone::NoToken => ex
   #  update_token_dialog
   #  exit 1

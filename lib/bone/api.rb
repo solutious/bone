@@ -61,6 +61,9 @@ class Bone
       def carefully
         begin
           yield
+        rescue Errno::ECONNREFUSED => ex
+          Bone.info ex.message
+          nil
         rescue => ex
           Bone.ld "#{ex.class}: #{ex.message}", ex.backtrace
           nil
