@@ -30,7 +30,10 @@ end
 
 
 class Bone
-  APIVERSION = 'v2'.freeze unless defined?(Bone::APIVERSION)
+  unless defined?(Bone::APIVERSION)
+    APIVERSION = 'v2'.freeze 
+    SECRETCHAR = [('a'..'z'),('A'..'Z'),(0..9)].map(&:to_a).flatten.freeze
+  end
   @source = URI.parse(ENV['BONE_SOURCE'] || 'https://api.bonery.com')
   @apis = {}
   @digest_type = OpenSSL::Digest::SHA256
@@ -111,11 +114,14 @@ class Bone
       type ||= @digest_type
       type.hexdigest val
     end
-
-    def random_digest extra=nil, type=nil
-      junk = [$$, self.object_id, `hostname`, `w`, Time.now.to_f]
-      junk.push *extra unless extra.nil?
-      digest junk.join(':'), type
+    
+    def create_token
+      (0...24).map{ SECRETCHAR[rand(SECRETCHAR.length)] }.join.upcase;
+    end
+    
+    def create_secret 
+      src = [SECRETCHAR, %w'* ^ $ ! / . - _'].flatten
+      (0...64).map{ src[rand(src.length)] }.join;
     end
     
     def select_api

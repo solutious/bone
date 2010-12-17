@@ -320,10 +320,10 @@ class Bone
       end
       def generate
         begin 
-          token = Bone.random_digest
+          token = Bone.create_token
           attempts ||= 10
         end while token?(token) && !(attempts -= 1).zero?
-        secret = Bone.random_digest [token, token.object_id]
+        secret = Bone.create_secret
         raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
         Token.tokens.add Time.now.utc.to_i, token
         t = Token.new(token).secret = secret
@@ -397,10 +397,10 @@ class Bone
       end
       def generate
         begin 
-          token = Bone.random_digest
-          secret = Bone.random_digest [token, token.object_id]
+          token = Bone.create_token 
           attemps ||= 10
         end while token?(token) && !(attempts -= 1).zero?
+        secret = Bone.create_secret
         @tokens[token] = secret
         [token, secret]
       end
