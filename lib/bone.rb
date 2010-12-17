@@ -132,10 +132,10 @@ class Bone
     def select_digest_type
       if RUBY_PLATFORM == "java"
         require 'openssl'
-        @digest_type = OpenSSL::Digest::SHA1
+        @digest_type = OpenSSL::Digest::SHA256
       else
         require 'digest'
-        @digest_type = Digest::SHA1
+        @digest_type = Digest::SHA256
       end
     end
     

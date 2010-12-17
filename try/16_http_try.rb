@@ -10,7 +10,7 @@ Bone.source = 'memory://localhost'
 @query = {
   :token => Bone.token,
   :zang => :excellent,
-  :not_used_in_sig => nil,
+  :a_nil_value => nil,
   :arbitrary => '&+ ~ *%'
 }
 @now = Bone::API::HTTP.canonical_time Time.at(1292396472)
@@ -25,34 +25,34 @@ Bone::API::HTTP.canonical_host Bone.source
 
 ## Bone::API::HTTP.canonical_sig_string (arbitrary query)
 Bone::API::HTTP.canonical_sig_string Bone.source, :get, @path, @query
-#=> "get\nlocalhost:80\n/v2/atoken/keys\narbitrary=%26%2B%20~%20%2A%25&token=atoken&zang=excellent"
+#=> "get\nlocalhost:80\n/v2/atoken/keys\na_nil_value=&arbitrary=%26%2B%20~%20%2A%25&token=atoken&zang=excellent"
 
 ## Bone::API::HTTP.encode (arbitrary query)
 str = Bone::API::HTTP.canonical_sig_string Bone.source, :get, @path, @query
 Bone::API::HTTP.encode @secret, str
-#=> 'pMcaC09d8CHa%2BzU4MnOvWlrkn%2FIRNKkL6Ji1cYBySQ4%3D'
+#=> 'rfJY5F3j2Ndq9inSbbA2%2FKzvd%2By5eGqR5kMu4HCDM4I%3D'
 
 ## Bone::API::HTTP.generate_signature (arbitrary query)
 Bone::API::HTTP.generate_signature @secret, Bone.source, :get, @path, @query
-#=> 'pMcaC09d8CHa%2BzU4MnOvWlrkn%2FIRNKkL6Ji1cYBySQ4%3D'
+#=> 'rfJY5F3j2Ndq9inSbbA2%2FKzvd%2By5eGqR5kMu4HCDM4I%3D'
 
 ## Bone::API::HTTP.sign_query (arbitrary query)
 Bone::API::HTTP.sign_query(Bone.token, @secret, :get, @path, @query)
-#=> {:not_used_in_sig=>nil, :arbitrary=>"&+ ~ *%", "sig"=>"pMcaC09d8CHa%2BzU4MnOvWlrkn%2FIRNKkL6Ji1cYBySQ4%3D", :token=>"atoken", :zang=>:excellent}
+#=> {:token=>"atoken", :a_nil_value=>nil, :arbitrary=>"&+ ~ *%", "sig"=>"rfJY5F3j2Ndq9inSbbA2%2FKzvd%2By5eGqR5kMu4HCDM4I%3D", :zang=>:excellent}
 
 ## Bone::API::HTTP.prepare_query
 query = Bone::API::HTTP.prepare_query @query, Bone.token, @now
-#=> {:not_used_in_sig=>nil, "token"=>"atoken", :arbitrary=>"&+ ~ *%", :token=>"atoken", "stamp"=>"2010-12-15T07:01:12Z", "sigversion"=>"v1", :zang=>:excellent, "apiversion"=>"v2"}
+#=> {:token=>"atoken", :a_nil_value=>nil, "token"=>"atoken", :arbitrary=>"&+ ~ *%", "stamp"=>"2010-12-15T07:01:12Z", "sigversion"=>"v2", :zang=>:excellent, "apiversion"=>"v2"}
 
 ## Bone::API::HTTP.generate_signature (prepared query)
 query = Bone::API::HTTP.prepare_query @query, Bone.token, @now
 Bone::API::HTTP.generate_signature @secret, Bone.source, :get, @path, query
-#=> 'D2wTyNysYQE5%2BzXGfHwTf9JlsIYWnrldh1tqwbB7b%2Fg%3D'
+#=> 'DHeliR2G6fycNOQcEk8tyUGugnXGB6hQDAlXv8Adfdo%3D'
 
 ## Bone::API::HTTP.sign_query (prepared query)
 query = Bone::API::HTTP.prepare_query @query, Bone.token, @now
 Bone::API::HTTP.sign_query Bone.token, @secret, :get, @path, query
-#=> {"token"=>"atoken", :not_used_in_sig=>nil, :arbitrary=>"&+ ~ *%", "sig"=>"D2wTyNysYQE5%2BzXGfHwTf9JlsIYWnrldh1tqwbB7b%2Fg%3D", :token=>"atoken", "stamp"=>"2010-12-15T07:01:12Z", "sigversion"=>"v1", "apiversion"=>"v2", :zang=>:excellent}
+#=> {:token=>"atoken", "token"=>"atoken", :a_nil_value=>nil, :arbitrary=>"&+ ~ *%", "sig"=>"DHeliR2G6fycNOQcEk8tyUGugnXGB6hQDAlXv8Adfdo%3D", "stamp"=>"2010-12-15T07:01:12Z", "sigversion"=>"v2", "apiversion"=>"v2", :zang=>:excellent}
 
 ## Bone::API::HTTP.generate_signature (an example of unique signatures)
 query = Bone::API::HTTP.prepare_query @query, Bone.token
