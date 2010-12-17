@@ -23,7 +23,7 @@ class Bone
     alias_method :inspect, :to_s
     def self.load_config
       require 'yaml'
-      @version ||= YAML.load_file(File.join(BONE_HOME, '..', 'VERSION.yml'))
+      @version ||= YAML.load_file(File.join(BONE_HOME, 'VERSION.yml'))
     end
   end
 end

@@ -1,8 +1,8 @@
 #!/usr/bin/ruby
 
 # Put our local lib in first place
-BASE_PATH = File.expand_path File.join(File.dirname(__FILE__), '..')
-lib_dir = File.join(BASE_PATH, 'lib')
+BONE_HOME = File.expand_path File.join(File.dirname(__FILE__), '..')
+lib_dir = File.join(BONE_HOME, 'lib')
 $:.unshift lib_dir
 
 require 'bone'
