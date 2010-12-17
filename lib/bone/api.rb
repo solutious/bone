@@ -119,7 +119,7 @@ class Bone
   module API
   
     module HTTP
-      SIGVERSION = 'v1'.freeze unless defined?(Bone::API::HTTP::SIGVERSION)
+      SIGVERSION = 'v2'.freeze unless defined?(Bone::API::HTTP::SIGVERSION)
     
       class << self 
         # /v2/[name]
@@ -201,8 +201,10 @@ class Bone
         # be sorted in case-insensitive alphabetical order and must not be url encoded.
         #
         # Based on / stolen from: https://github.com/grempe/amazon-ec2/blob/master/lib/AWS.rb
+        # 
+        # See also: http://docs.amazonwebservices.com/AWSEC2/2009-04-04/DeveloperGuide/index.html?using-query-api.html
+        #
         def canonical_sig_string host, meth, path, query
-          query = query.reject { |key, value| value.to_s.empty? }  # remove empties
           # Sort, and encode parameters into a canonical string.
           sorted_params = query.sort {|x,y| x[0].to_s <=> y[0].to_s }
           encoded_params = sorted_params.collect do |p|
@@ -231,7 +233,7 @@ class Bone
         end
       
         def prepare_query query={}, token=Bone.token, stamp=canonical_time
-          { "sigversion" => SIGVERSION,
+          { "sigversion" => Bone::API::HTTP::SIGVERSION,
             "apiversion" => Bone::APIVERSION,
             "token"      => token,
             "stamp"      => stamp
