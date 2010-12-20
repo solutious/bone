@@ -25,7 +25,7 @@ begin
     gem.email = "delano@solutious.com"
     gem.homepage = "https://github.com/solutious/bone"
     gem.authors = ["Delano Mandelbaum"]
-    gem.add_dependency("familia",            ">= 0.6.0")
+    gem.add_dependency("familia",            ">= 0.6.1")
     gem.add_dependency("em-http-request")
   end
   Jeweler::GemcutterTasks.new
