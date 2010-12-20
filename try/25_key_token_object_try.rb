@@ -9,7 +9,7 @@ Bone::API::Redis::Token.redis_objects.keys.collect(&:to_s).sort
 
 ## Bone::API::Redis::Token.redis_objects
 Bone::API::Redis::Token.class_redis_objects.keys
-#=> [:tokens]
+#=> [:tokens, :instances]
 
 ## Bone::API::Redis::Token.new
 @tobj = Bone::API::Redis::Token.new :atoken
@@ -18,7 +18,7 @@ Bone::API::Redis::Token.class_redis_objects.keys
 
 ## Bone::API::Redis::Token#secret
 @tobj.secret.class
-#=> Familia::Object::String
+#=> Familia::String
 
 ## Bone::API::Redis::Token#secret= doesn't exist
 @tobj.secret = :poop
@@ -26,7 +26,7 @@ Bone::API::Redis::Token.class_redis_objects.keys
 
 ## Bone::API::Redis::Token#secret isn't affected by secret=
 @tobj.secret.class
-#=> Familia::Object::String
+#=> Familia::String
 
 ## Bone::API::Redis::Token#secret to_s
 @tobj.secret.to_s
@@ -43,7 +43,7 @@ Bone::API::Redis::Key.redis_objects.keys
 
 ## Bone::API::Redis::Key#value
 @kobj.value.class
-#=> Familia::Object::String
+#=> Familia::String
 
 ## Bone::API::Redis::Key#value to_s returns empty string
 @kobj.value.to_s
@@ -59,7 +59,7 @@ Bone::API::Redis::Key.redis_objects.keys
 
 ## Bone::API::Redis::Key#value set
 @kobj.value.set 'avalue2'
-#=> 'avalue2'
+#=> 'OK'
 
 ## Bone::API::Redis::Key#value clear
 @kobj.value.clear

@@ -1,5 +1,10 @@
 BONE, CHANGES
 
+#### 0.3.2 (2010-12-20) ###############################
+
+* ADDED: Updated canonical_host handling for String input
+
+
 #### 0.3.1 (2010-12-17) ###############################
 
 * FIXED: Bone::VERSION
