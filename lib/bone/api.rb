@@ -174,10 +174,14 @@ class Bone
         end
         
         def canonical_host host
-          if URI === host
-            host.port ||= 80
-            host = [host.host.to_s, host.port.to_s].join(':')
+          unless URI === host
+            host = host.to_s unless String === host
+            host.strip!
+            host = "http://#{host}" unless host.match(/^https?:\/\//)
+            host = URI.parse(host)
           end
+          host.port ||= 80
+          host = [host.host.to_s, host.port.to_s].join(':')
           host.downcase
         end
         
@@ -332,7 +336,7 @@ class Bone
       end
       def destroy(token, secret)
         Token.tokens.delete token
-        Token.new(token).secret.destroy!
+        Token.new(token).secret.delete
       end
       def register(token, secret)
         raise RuntimeError, "Could not generate token" if token.nil? || token?(token)
