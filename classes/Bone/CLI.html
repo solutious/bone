@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>: Bone::CLI [bone 0.3.1.]</title>
+    <title>: Bone::CLI [bone 0.3.2.]</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -85,7 +85,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000091-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000091-source'><span class="ruby-comment cmt"># File lib/bone/cli.rb, line 69</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">generate</span>&#x000A;    <span class="ruby-identifier">t</span>, <span class="ruby-identifier">s</span> = <span class="ruby-operator">*</span><span class="ruby-constant">Bone</span>.<span class="ruby-identifier">generate</span>&#x000A;    <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;# Your token for #{Bone.source}&quot;</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;BONE_TOKEN=#{t}&quot;</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;BONE_SECRET=#{s}&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-comment cmt">#rescue Bone::NoToken =&gt; ex</span>&#x000A;  <span class="ruby-comment cmt">#  update_token_dialog</span>&#x000A;  <span class="ruby-comment cmt">#  exit 1</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000091-source'><span class="ruby-comment cmt"># File lib/bone/cli.rb, line 69</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">generate</span>&#x000A;    <span class="ruby-identifier">t</span>, <span class="ruby-identifier">s</span> = <span class="ruby-operator">*</span><span class="ruby-constant">Bone</span>.<span class="ruby-identifier">generate</span>&#x000A;    <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;# Your token for #{Bone.source}&quot;</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;BONE_TOKEN=#{t}&quot;</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;BONE_SECRET='#{s}'&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-comment cmt">#rescue Bone::NoToken =&gt; ex</span>&#x000A;  <span class="ruby-comment cmt">#  update_token_dialog</span>&#x000A;  <span class="ruby-comment cmt">#  exit 1</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-M000086'>
