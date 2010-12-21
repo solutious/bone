@@ -62,6 +62,10 @@ If you are running [Redis](http://code.google.com/p/redis/) at a different addre
 
 If you want to use the REST API, you need to run an instance of [boned](http://github.com/solutious/boned) (the bone daemon).You'd then set your bone source to something like `https://somehost:3073`. **Note: unless your bone client and server are on a private network, it is highly recommended to use HTTPS.**
 
+### The Bonery ###
+
+You can use the Bone daemon hosted at [The Bonery](http://bonery.com/). You'll need to [generate a token](https://api.bonery.com/signup/alpha) and set your BONE_SOURCE to `https://api.bonery.com/`.
+
 
 ## Installation
 
