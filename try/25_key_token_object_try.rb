@@ -5,11 +5,11 @@ Bone.source = 'redis://localhost:8045'
 
 ## Bone::API::Redis::Token.redis_objects
 Bone::API::Redis::Token.redis_objects.keys.collect(&:to_s).sort
-#=> ['keys', 'secret']
+#=> ['keys', 'object', 'secret']
 
 ## Bone::API::Redis::Token.redis_objects
-Bone::API::Redis::Token.class_redis_objects.keys
-#=> [:tokens, :instances]
+Bone::API::Redis::Token.class_redis_objects.keys.collect(&:to_s).sort
+#=> ['instances', 'tokens']
 
 ## Bone::API::Redis::Token.new
 @tobj = Bone::API::Redis::Token.new :atoken
@@ -33,8 +33,8 @@ Bone::API::Redis::Token.class_redis_objects.keys
 #=> 'poop'
 
 ## Bone::API::Redis::Key.redis_objects
-Bone::API::Redis::Key.redis_objects.keys
-#=> [:value]
+Bone::API::Redis::Key.redis_objects.keys.collect(&:to_s).sort
+#=> ['object', 'value']
 
 ## Bone::API::Redis::Key.new
 @kobj = Bone::API::Redis::Key.new :atoken, :akey
