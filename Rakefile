@@ -20,7 +20,7 @@ begin
     gem.version = "#{config[:MAJOR]}.#{config[:MINOR]}.#{config[:PATCH]}"
     gem.name = name
     gem.rubyforge_project = gem.name
-    gem.summary = "A simple store for remote environment variables"
+    gem.summary = "Rudimentary Redis commands over HTTP(S)"
     gem.description = gem.summary
     gem.email = "delano@solutious.com"
     gem.homepage = "https://github.com/solutious/bone"

@@ -1,6 +1,6 @@
 ## Bone - 0.3 ##
 
-**Remote environment variables**
+**Rudimentary Redis commands over HTTP(S)**
 
 *NOTE: This version is not compatible with previous versions of Bone.*
 
