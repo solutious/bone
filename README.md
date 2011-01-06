@@ -1,6 +1,6 @@
 ## Bone - 0.3 ##
 
-**Rudimentary Redis commands over HTTP(S)**
+**Rudimentary Redis over HTTP(S)**
 
 *NOTE: This version is not compatible with previous versions of Bone.*
 
@@ -14,9 +14,9 @@
 ## CLI Example
         
     # Specify arbitrary keys and values. 
-    $ bone set cust_id c397d204aa4e94f566d7f78c
+    $ bone set cust_id c397d2
     $ bone cust_id
-    c397d204aa4e94f566d7f78c
+    c397d2
     
     # Set values from STDIN
     $ >config/redis-server.conf bone set redis_conf 
@@ -38,7 +38,7 @@
 
     require 'bone'
     
-    Bone[:cust_id] = 'c397d204aa4e94f566d7f78c'
+    Bone[:cust_id] = 'c397d2'
     Bone[:redis_conf] = File.read('config/redis-server.conf')
     
     Bone[:cust_id]                    # => "c397d204aa4e94f566d7f78c"

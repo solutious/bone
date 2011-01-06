@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Delano Mandelbaum"]
-  s.date = %q{2011-01-04}
+  s.date = %q{2011-01-06}
   s.default_executable = %q{bone}
-  s.description = %q{Rudimentary Redis commands over HTTP(S)}
+  s.description = %q{Rudimentary Redis over HTTP(S)}
   s.email = %q{delano@solutious.com}
   s.executables = ["bone"]
   s.extra_rdoc_files = [
@@ -59,7 +59,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{bone}
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{Rudimentary Redis commands over HTTP(S)}
+  s.summary = %q{Rudimentary Redis over HTTP(S)}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
